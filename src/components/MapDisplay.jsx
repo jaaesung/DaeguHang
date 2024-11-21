@@ -4,7 +4,10 @@ const MapDisplay = ({ scheduleItems }) => {
   useEffect(() => {
     if (typeof window.naver !== "undefined") {
       const mapOptions = {
-        center: new window.naver.maps.LatLng(37.5665, 126.978),
+        center: new window.naver.maps.LatLng(
+          35.85349263951054,
+          128.56529586628727
+        ),
         zoom: 12,
       };
 

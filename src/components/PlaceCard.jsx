@@ -53,7 +53,6 @@ const PlaceCard = ({
         </p>
       </div>
 
-      {/* 일정에 추가 버튼 */}
       <button
         onClick={() => onAddToPlan({ name, latitude, longitude })}
         style={{
