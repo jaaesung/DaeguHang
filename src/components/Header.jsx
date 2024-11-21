@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Login and logout handlers
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
 
@@ -39,7 +38,6 @@ const Header = () => {
         대구행
       </div>
 
-      {/* Navigation Menu */}
       <div style={{ display: "flex", gap: "24px" }}>
         {isLoggedIn ? (
           <>

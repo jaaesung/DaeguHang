@@ -1,38 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import "./Popup.css";
 
-const GenderPopup = ({ onGenderSelect }) => {
-  const handleSelectGender = (gender) => {
-    onGenderSelect(gender);
-  };
+const GenderPopup = ({ selectedGender, onGenderSelect, onNext }) => {
+  const [localGender, setLocalGender] = useState(selectedGender);
+
+  const handleSelectGender = (gender) => setLocalGender(gender);
 
   return (
-    <div style={popupStyle}>
-      <button onClick={() => handleSelectGender("남자")} style={buttonStyle}>
-        남자
-      </button>
-      <button onClick={() => handleSelectGender("여자")} style={buttonStyle}>
-        여자
+    <div className="popup">
+      <h2 className="popup-title">성별 선택</h2>
+      <div className="popup-gender-grid">
+        <button
+          onClick={() => handleSelectGender("남자")}
+          className={`popup-gender-button ${
+            localGender === "남자" ? "selected" : ""
+          }`}
+        >
+          남자
+        </button>
+        <button
+          onClick={() => handleSelectGender("여자")}
+          className={`popup-gender-button ${
+            localGender === "여자" ? "selected" : ""
+          }`}
+        >
+          여자
+        </button>
+      </div>
+      <button
+        className="popup-next"
+        onClick={() => {
+          onGenderSelect(localGender);
+          onNext();
+        }}
+        disabled={!localGender}
+      >
+        다음
       </button>
     </div>
   );
-};
-
-const popupStyle = {
-  width: "50%",
-  height: "50%",
-  background: "white",
-  borderRadius: "10px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "20px",
-};
-
-const buttonStyle = {
-  fontSize: "32px",
-  padding: "20px",
-  width: "80%",
 };
 
 export default GenderPopup;

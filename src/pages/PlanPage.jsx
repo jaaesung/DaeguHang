@@ -18,6 +18,30 @@ const PlanPage = () => {
         longitude: 128.693859601329,
       },
       {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+      },
+      {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+      },
+      {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+      },
+      {
         imageUrl:
           "https://search.pstatic.net/common/?autoRotate=true&type=w560_sharpen&src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20221117_109%2F1668659533902XYqos_JPEG%2F7ECDB743-3466-4FB8-A327-524935EA2430.jpeg",
         name: "국립대구박물관 러스티코 우드파이어 키친",
@@ -140,6 +164,33 @@ const PlanPage = () => {
               추천 장소
             </h3>
             <RecommendedPlaces places={places} onAddToPlan={handleAddToPlan} />
+          </div>
+
+          <div
+            style={{
+              padding: "10px",
+              backgroundColor: "#f8f8f8",
+              boxShadow: "0 -1px 3px rgba (0, 0, 0, 0.1)",
+              position: "sticky",
+              bottom: 0,
+              textAlign: "center",
+            }}
+          >
+            <button
+              style={{
+                width: "100%",
+                padding: "20px",
+                backgroundColor: "#2C2C2C",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+              onClick={() => alert("계획 생성 완료")}
+            >
+              계획 생성
+            </button>
           </div>
         </div>
 

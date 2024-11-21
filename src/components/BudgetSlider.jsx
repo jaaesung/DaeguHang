@@ -1,54 +1,28 @@
 import React, { useState } from "react";
+import "./Popup.css";
 
-const BudgetSlider = ({ onComplete }) => {
-  const [sliderValue, setSliderValue] = useState(0);
+const BudgetSlider = ({ selectedBudget, onComplete }) => {
+  const [sliderValue, setSliderValue] = useState(selectedBudget || 0);
 
-  const handleSliderChange = (e) => {
-    setSliderValue(e.target.value);
-  };
-
-  const handleComplete = () => {
-    onComplete(sliderValue);
-  };
+  const handleSliderChange = (e) => setSliderValue(e.target.value);
 
   return (
-    <div
-      style={{
-        width: "50%",
-        height: "50%",
-        background: "white",
-        borderRadius: "10px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-evenly",
-        padding: "20px",
-        gap: "10px",
-      }}
-    >
-      <label style={{ fontSize: "32px" }}>예산: {sliderValue}만원</label>
-      <input
-        type="range"
-        min="10"
-        max="100"
-        step="10"
-        value={sliderValue}
-        onChange={handleSliderChange}
-        style={{ width: "80%" }}
-      />
-      <button
-        onClick={handleComplete}
-        style={{
-          fontSize: "20px",
-          padding: "10px 20px",
-          border: "none",
-          borderRadius: "8px",
-          backgroundColor: "#2C2C2C",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
-        다음
+    <div className="popup">
+      <h2 className="popup-title">예산 설정</h2>
+      <div className="popup-slider">
+        <label className="popup-slider-label">예산: {sliderValue}만원</label>
+        <input
+          type="range"
+          min="10"
+          max="100"
+          step="10"
+          value={sliderValue}
+          onChange={handleSliderChange}
+          className="popup-slider-input"
+        />
+      </div>
+      <button className="popup-next" onClick={() => onComplete(sliderValue)}>
+        확인
       </button>
     </div>
   );

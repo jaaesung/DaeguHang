@@ -1,7 +1,6 @@
 import React from "react";
 
 const Schedule = ({ scheduleItems, onRemoveItem, onUpdateDuration }) => {
-  // Helper function to format time
   const formatTime = (hour) => {
     if (hour < 10) return `0${hour}:00`;
     if (hour >= 24) return "00:00";
@@ -24,7 +23,7 @@ const Schedule = ({ scheduleItems, onRemoveItem, onUpdateDuration }) => {
               borderRadius: "8px",
               padding: "10px",
               backgroundColor: "#fff",
-              maxWidth: "100%", // Card width set to half
+              maxWidth: "100%",
             }}
           >
             <img

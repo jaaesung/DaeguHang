@@ -21,6 +21,7 @@ const TravelTitle = () => {
           value={title}
           onChange={handleTitleChange}
           onBlur={handleBlur}
+          autoFocus
           style={{
             fontSize: "32px",
             fontWeight: "bold",
