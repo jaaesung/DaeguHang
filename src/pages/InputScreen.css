@@ -1,0 +1,70 @@
+/* General Layout */
+.input-screen {
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+  height: calc(100% - 60px);
+  position: relative;
+}
+
+.left-content {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: "Roboto, sans-serif";
+  color: #333;
+}
+
+.selector-text {
+  font-size: 28px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.selector-text span {
+  font-weight: 300;
+}
+
+.selector-text:hover {
+  color: #2c2c2c;
+}
+
+.submit-button {
+  padding: 12px 20px;
+  background: #2c2c2c;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #444;
+}
+
+/* Overlay for Popups */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
