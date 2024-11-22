@@ -10,7 +10,7 @@ const BudgetSlider = ({ selectedBudget, onComplete }) => {
     <div className="popup">
       <h2 className="popup-title">예산 설정</h2>
       <div className="popup-slider">
-        <label className="popup-slider-label">예산: {sliderValue}만원</label>
+        <label className="popup-slider-label">{sliderValue}만원</label>
         <input
           type="range"
           min="10"
