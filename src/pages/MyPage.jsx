@@ -71,7 +71,7 @@ const Mypage = () => {
       </div>
       <div style={{ position: "absolute", left: 400, top: 150, width: 200, height: 200, backgroundColor: "#C4C4C4", borderRadius: 10 }} />
       <div style={{ position: "absolute", left: 650, top: 160, fontSize: 50, fontWeight: "500", color: "black" }}>
-        '대구행'님 안녕하세요!
+        000님 안녕하세요!
       </div>
       <div style={{
         position: "absolute", left: 650, top: 300, width: 200, height: 40, backgroundColor: "#2C2C2C", borderRadius: 30, display: "flex", justifyContent: "center", alignItems: "center", color: "white", fontSize: 16
