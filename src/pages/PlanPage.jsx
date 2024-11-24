@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
@@ -7,41 +7,70 @@ import { useLocation } from "react-router-dom";
 import "./PlanPage.css";
 
 const PlanPage = () => {
-  const [scheduleItemsByDate, setScheduleItemsByDate] = useState({});
   const location = useLocation();
   const { startDate, endDate } = location.state || {};
+  const [scheduleItemsByDate, setScheduleItemsByDate] = useState({});
+  const [selectedDate, setSelectedDate] = useState(startDate || "");
 
-  const [selectedDate, setSelectedDate] = useState(startDate);
-
-  const formatDate = (date) => {
-    return date ? new Date(date).toLocaleDateString() : "날짜 없음";
+  // Calculate range of dates between startDate and endDate
+  const calculateDateRange = (start, end) => {
+    const dateArray = [];
+    let currentDate = new Date(start);
+    while (currentDate <= new Date(end)) {
+      dateArray.push(currentDate.toISOString().split("T")[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dateArray;
   };
 
+  // Initialize schedule for all dates
+  useEffect(() => {
+    if (startDate && endDate) {
+      const allDates = calculateDateRange(startDate, endDate);
+      const initializedSchedule = allDates.reduce(
+        (acc, date) => ({ ...acc, [date]: [] }),
+        {}
+      );
+      setScheduleItemsByDate(initializedSchedule);
+      setSelectedDate(startDate); // Set the initial selected date
+    }
+  }, [startDate, endDate]);
+
+  // Handlers for navigating between dates
   const handlePreviousDate = () => {
     const previousDate = new Date(selectedDate);
     previousDate.setDate(previousDate.getDate() - 1);
+    const newDate = previousDate.toISOString().split("T")[0];
     if (previousDate >= new Date(startDate)) {
-      setSelectedDate(previousDate.toISOString().split("T")[0]);
+      setSelectedDate(newDate);
     }
   };
 
   const handleNextDate = () => {
     const nextDate = new Date(selectedDate);
     nextDate.setDate(nextDate.getDate() + 1);
+    const newDate = nextDate.toISOString().split("T")[0];
     if (nextDate <= new Date(endDate)) {
-      setSelectedDate(nextDate.toISOString());
+      setSelectedDate(newDate);
     }
   };
 
+  // Add a new item to the schedule
   const handleAddToPlan = (place) => {
-    let startTime = 10;
-    const dateKey = selectedDate.split("T")[0]; // 날짜만 키로 사용
+    const dateKey = selectedDate.split("T")[0];
     const existingSchedule = scheduleItemsByDate[dateKey] || [];
+    let startTime = 10;
 
     if (existingSchedule.length > 0) {
       const lastItem = existingSchedule[existingSchedule.length - 1];
       startTime = lastItem.startTime + lastItem.duration;
-      if (startTime >= 24) startTime = 10;
+    }
+
+    if (startTime >= 24) {
+      alert(
+        "Cannot add more plans for this date. The start time exceeds 24:00."
+      );
+      return;
     }
 
     const newScheduleItem = {
@@ -50,122 +79,50 @@ const PlanPage = () => {
       duration: 2,
     };
 
-    setScheduleItemsByDate({
-      ...scheduleItemsByDate,
+    setScheduleItemsByDate((prev) => ({
+      ...prev,
       [dateKey]: [...existingSchedule, newScheduleItem],
-    });
+    }));
   };
 
-  const handleUpdateDuration = (index, newDuration) => {
-    const dateKey = selectedDate.split("T")[0];
-    const existingSchedule = scheduleItemsByDate[dateKey] || [];
-
-    const updatedSchedule = [...existingSchedule];
-    updatedSchedule[index].duration = newDuration;
-
-    for (let i = index + 1; i < updatedSchedule.length; i++) {
-      const previousEndTime =
-        updatedSchedule[i - 1].startTime + updatedSchedule[i - 1].duration;
-
-      if (previousEndTime >= 24) {
-        updatedSchedule.splice(i); // 이후 일정 제거
-        break;
-      }
-
-      updatedSchedule[i].startTime = previousEndTime;
-    }
-
-    setScheduleItemsByDate({
-      ...scheduleItemsByDate,
-      [dateKey]: updatedSchedule,
-    });
-  };
-
+  // Mark the plan creation as complete
   const handlePlanComplete = () => {
-    alert("계획이 생성되었습니다!");
-    console.log("전체 일정:", scheduleItemsByDate);
+    alert("Plan successfully created!");
+    console.log("Full Schedule:", scheduleItemsByDate);
   };
 
-  const handleRemoveFromPlan = (index) => {
-    const dateKey = selectedDate.split("T")[0];
-    const existingSchedule = scheduleItemsByDate[dateKey] || [];
-
-    const updatedSchedule = [...existingSchedule];
-    updatedSchedule.splice(index, 1);
-
-    for (let i = index; i < updatedSchedule.length; i++) {
-      if (i === 0) {
-        updatedSchedule[i].startTime = 10;
-      } else {
-        updatedSchedule[i].startTime =
-          updatedSchedule[i - 1].startTime + updatedSchedule[i - 1].duration;
-      }
-    }
-
-    setScheduleItemsByDate({
-      ...scheduleItemsByDate,
-      [dateKey]: updatedSchedule,
-    });
-  };
-
+  // Recommended places mock data
   const places = {
     명소: [
       {
-        name: "대박집 월배역직영점",
-        latitude: 35.8535,
-        longitude: 128.5653,
-        description: "대구의 멋진 돼지 고기 전문점입니다.",
-      },
-      {
-        name: "러스티코우드파이어",
-        latitude: 35.840418899999,
-        longitude: 128.628765475332,
-        description: "대구의 인기 있는 한식당입니다.",
-      },
-      {
         imageUrl: "https://via.placeholder.com/100",
-        name: "장소 A",
-        review: 1,
-        rating: 3,
-        latitude: 35.8535,
-        longitude: 128.5653,
-        description: "대구의 멋진 장소입니다.",
-      },
-      {
-        name: "장소 B",
-        review: 1,
-        rating: 3,
-        latitude: 35.8571,
-        longitude: 128.5699,
-        description: "대구의 또 다른 명소입니다.",
-      },
-      {
-        name: "장소 C",
-        review: 1,
-        rating: 3,
-        latitude: 35.8502,
-        longitude: 128.5611,
-        description: "자연과 어우러진 장소.",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+        searchUrl:
+          "https://map.naver.com/p/smart-around/place/37327760?c=15.00,0,0,0,dh",
       },
     ],
     식당: [
       {
         imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
+        name: "식당 1",
+        reviews: 150,
+        rating: 4.5,
+        latitude: 37.555665,
+        longitude: 126.936888,
       },
     ],
     숙소: [
       {
         imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
+        name: "숙소 1",
+        reviews: 300,
+        rating: 4.7,
+        latitude: 37.523988,
+        longitude: 126.973259,
       },
     ],
   };
@@ -175,14 +132,13 @@ const PlanPage = () => {
       <Header />
 
       <div className="main-content">
-        {/* 추천 장소 영역 */}
+        {/* Recommended Places Section */}
         <div className="recommended-places">
           <div className="recommended-places-list">
             <h3 className="recommended-places-title">추천 장소</h3>
             <RecommendedPlaces places={places} onAddToPlan={handleAddToPlan} />
           </div>
 
-          {/* 계획 생성 버튼 */}
           <div className="plan-complete-button-container">
             <button
               className="plan-complete-button"
@@ -193,19 +149,35 @@ const PlanPage = () => {
           </div>
         </div>
 
-        {/* 일정 목록 영역 */}
+        {/* Schedule Section */}
         <div className="schedule-section">
           <Schedule
             scheduleItemsByDate={scheduleItemsByDate}
             selectedDate={selectedDate}
             onPreviousDate={handlePreviousDate}
             onNextDate={handleNextDate}
-            onRemoveItem={handleRemoveFromPlan}
-            onUpdateDuration={handleUpdateDuration} // 전달
+            onRemoveItem={(index) => {
+              const dateKey = selectedDate.split("T")[0];
+              const updatedSchedule = [...(scheduleItemsByDate[dateKey] || [])];
+              updatedSchedule.splice(index, 1);
+              setScheduleItemsByDate((prev) => ({
+                ...prev,
+                [dateKey]: updatedSchedule,
+              }));
+            }}
+            onUpdateDuration={(index, newDuration) => {
+              const dateKey = selectedDate.split("T")[0];
+              const updatedSchedule = [...(scheduleItemsByDate[dateKey] || [])];
+              updatedSchedule[index].duration = newDuration;
+              setScheduleItemsByDate((prev) => ({
+                ...prev,
+                [dateKey]: updatedSchedule,
+              }));
+            }}
           />
         </div>
 
-        {/* 지도 영역 */}
+        {/* Map Section */}
         <div className="map-display-section">
           <MapDisplay scheduleItems={scheduleItemsByDate[selectedDate] || []} />
         </div>
