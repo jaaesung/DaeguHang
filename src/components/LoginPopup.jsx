@@ -149,3 +149,4 @@ const LoginPopup = ({ isOpen, onClose }) => {
 };
 
 export default LoginPopup;
+
