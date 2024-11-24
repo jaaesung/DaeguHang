@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const MapDisplay = ({ scheduleItems }) => {
+const MapDisplay = ({ scheduleItems, hoveredItemIndex }) => {
   useEffect(() => {
     if (typeof window.naver !== "undefined") {
       const mapOptions = {
@@ -22,7 +22,7 @@ const MapDisplay = ({ scheduleItems }) => {
       const bounds = new window.naver.maps.LatLngBounds();
 
       // Add markers for each schedule item
-      window.markers = scheduleItems.map((item) => {
+      window.markers = scheduleItems.map((item, index) => {
         const position = new window.naver.maps.LatLng(
           item.latitude,
           item.longitude
@@ -31,31 +31,53 @@ const MapDisplay = ({ scheduleItems }) => {
           position,
           map: map,
           title: item.name,
+          icon: {
+            url:
+              hoveredItemIndex === index
+                ? "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png"
+                : "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
+            size: new window.naver.maps.Size(
+              hoveredItemIndex === index ? 40 : 20,
+              hoveredItemIndex === index ? 40 : 20
+            ),
+            scaledSize: new window.naver.maps.Size(
+              hoveredItemIndex === index ? 40 : 20,
+              hoveredItemIndex === index ? 40 : 20
+            ),
+          },
         });
 
         // Extend map bounds
         bounds.extend(position);
 
-        // Attach click event to navigate to Naver Maps search
+        // Attach click event to navigate to the provided URL
         window.naver.maps.Event.addListener(marker, "click", () => {
-          const searchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(
-            item.name
-          )}`;
-          window.open(searchUrl, "_blank"); // Open the URL in a new tab
+          if (item.searchUrl) {
+            console.log("Navigating to URL:", item.searchUrl);
+            window.open(item.searchUrl, "_blank"); // Open the provided URL in a new tab
+          } else {
+            console.error("Search URL is missing for:", item);
+            alert("이 장소의 검색 URL이 제공되지 않았습니다.");
+          }
         });
 
         return marker;
       });
 
-      // Adjust map to fit all markers
+      // Adjust map to fit all markers or move to added marker
       if (scheduleItems.length > 0) {
-        map.fitBounds(bounds);
+        if (scheduleItems.length === 1) {
+          map.setCenter(bounds.getCenter());
+          map.setZoom(Math.max(10, mapOptions.zoom));
+        } else {
+          map.fitBounds(bounds);
+        }
       } else {
         map.setCenter(new window.naver.maps.LatLng(37.5665, 126.978));
         map.setZoom(12);
       }
     }
-  }, [scheduleItems]);
+  }, [scheduleItems, hoveredItemIndex]);
 
   return (
     <div
