@@ -1,27 +1,57 @@
+/* :root에서 색상과 크기 변수 관리 */
+:root {
+  --primary-color: #2c2c2c;
+  --secondary-color: #f0f0f0;
+  --hover-color: #e0e0e0;
+  --white: #ffffff;
+  --font-size-large: 32px;
+  --font-size-medium: 24px;
+  --border-radius: 12px;
+  --box-shadow-light: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  --box-shadow-dark: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Popup Box */
 .popup {
-  width: 50%;
-  max-width: 500px;
-  height: 60%;
-  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-  border-radius: 20px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  width: 60vw;
+  max-width: 600px;
+  height: 20vw;
+  max-height: 800px;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-dark);
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
-  box-sizing: border-box;
+  gap: 20px;
 }
 
 .popup-title {
-  font-size: 24px;
+  font-size: var(--font-size-medium);
   font-weight: 600;
-  margin-bottom: 10px;
-  color: #333;
+  color: var(--primary-color);
   text-align: center;
+  margin-bottom: 0px;
 }
 
-/* GenderPopup Styles */
+/* Gender Popup Styles */
 .popup-gender-grid {
   display: flex;
   gap: 20px;
@@ -35,28 +65,29 @@
   font-size: 18px;
   font-weight: 500;
   border: none;
-  border-radius: 12px;
-  background-color: #f0f0f0;
+  border-radius: var(--border-radius);
+  background-color: var(--secondary-color);
   color: #333;
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
 }
 
 .popup-gender-button:hover {
-  background-color: #e0e0e0;
+  background-color: var(--hover-color);
   transform: scale(1.05);
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-light);
 }
 
 .popup-gender-button.selected {
-  background-color: #2c2c2c;
-  color: white;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: var(--box-shadow-dark);
 }
 
+/* Age Popup Styles */
 .popup-age-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 */
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   width: 100%;
 }
@@ -67,26 +98,26 @@
   font-size: 20px;
   font-weight: 500;
   border: none;
-  border-radius: 12px;
-  background-color: #f0f0f0;
+  border-radius: var(--border-radius);
+  background-color: var(--secondary-color);
   color: #333;
   cursor: pointer;
   transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
 }
 
 .popup-age-button:hover {
-  background-color: #e0e0e0;
+  background-color: var(--hover-color);
   transform: scale(1.05);
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-light);
 }
 
 .popup-age-button.selected {
-  background-color: #2c2c2c;
-  color: white;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: var(--box-shadow-dark);
 }
 
-/* BudgetSlider Styles */
+/* Budget Slider Styles */
 .popup-slider {
   display: flex;
   flex-direction: column;
@@ -96,7 +127,7 @@
 }
 
 .popup-slider-label {
-  font-size: 32px;
+  font-size: var(--font-size-large);
   font-weight: 500;
   color: #333;
 }
@@ -112,9 +143,9 @@
   font-size: 18px;
   font-weight: 600;
   border: none;
-  border-radius: 25px;
-  background-color: #2c2c2c;
-  color: white;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--white);
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
 }
@@ -127,4 +158,45 @@
 .popup-next:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+/* Date Selector Styles */
+.date-display {
+  font-size: var(--font-size-large);
+  font-weight: 500;
+  cursor: pointer;
+  margin: 20px 0;
+  color: var(--primary-color);
+}
+
+.date-range-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  width: 100%;
+  height: auto;
+  margin-top: 0;
+}
+
+.rdrCalendarWrapper {
+  margin: 0 !important; /* 기본 마진 제거 */
+  padding: 0 !important; /* 기본 패딩 제거 */
+}
+.rdrDateDisplayWrapper {
+  display: none; /* Remove input display to simplify */
+}
+
+/* Global Button Styles */
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: scale(1.05);
 }
