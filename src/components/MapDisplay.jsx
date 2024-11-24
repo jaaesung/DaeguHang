@@ -13,11 +13,15 @@ const MapDisplay = ({ scheduleItems }) => {
 
       const map = new window.naver.maps.Map("map", mapOptions);
 
+      // Clear existing markers if any
       if (window.markers) {
         window.markers.forEach((marker) => marker.setMap(null));
       }
 
+      // Create bounds for auto-fit
       const bounds = new window.naver.maps.LatLngBounds();
+
+      // Add markers for each schedule item
       window.markers = scheduleItems.map((item) => {
         const position = new window.naver.maps.LatLng(
           item.latitude,
@@ -29,10 +33,21 @@ const MapDisplay = ({ scheduleItems }) => {
           title: item.name,
         });
 
+        // Extend map bounds
         bounds.extend(position);
+
+        // Attach click event to navigate to Naver Maps search
+        window.naver.maps.Event.addListener(marker, "click", () => {
+          const searchUrl = `https://map.naver.com/v5/search/${encodeURIComponent(
+            item.name
+          )}`;
+          window.open(searchUrl, "_blank"); // Open the URL in a new tab
+        });
+
         return marker;
       });
 
+      // Adjust map to fit all markers
       if (scheduleItems.length > 0) {
         map.fitBounds(bounds);
       } else {

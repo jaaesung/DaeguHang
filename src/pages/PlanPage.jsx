@@ -3,216 +3,211 @@ import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
+import { useLocation } from "react-router-dom";
+import "./PlanPage.css";
 
 const PlanPage = () => {
-  const [schedule, setSchedule] = useState([]);
+  const [scheduleItemsByDate, setScheduleItemsByDate] = useState({});
+  const location = useLocation();
+  const { startDate, endDate } = location.state || {};
 
-  const places = {
-    명소: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-      {
-        imageUrl:
-          "https://search.pstatic.net/common/?autoRotate=true&type=w560_sharpen&src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20221117_109%2F1668659533902XYqos_JPEG%2F7ECDB743-3466-4FB8-A327-524935EA2430.jpeg",
-        name: "국립대구박물관 러스티코 우드파이어 키친",
-        reviews: 85,
-        rating: 5,
-        latitude: 35.840418899999,
-        longitude: 128.628765475332,
-      },
-    ],
-    식당: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "식당 1",
-        reviews: 150,
-        rating: 4.5,
-        latitude: 37.555665,
-        longitude: 126.936888,
-      },
-    ],
-    숙소: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "숙소 1",
-        reviews: 300,
-        rating: 4.7,
-        latitude: 37.523988,
-        longitude: 126.973259,
-      },
-    ],
+  const [selectedDate, setSelectedDate] = useState(startDate);
+
+  const formatDate = (date) => {
+    return date ? new Date(date).toLocaleDateString() : "날짜 없음";
+  };
+
+  const handlePreviousDate = () => {
+    const previousDate = new Date(selectedDate);
+    previousDate.setDate(previousDate.getDate() - 1);
+    if (previousDate >= new Date(startDate)) {
+      setSelectedDate(previousDate.toISOString().split("T")[0]);
+    }
+  };
+
+  const handleNextDate = () => {
+    const nextDate = new Date(selectedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    if (nextDate <= new Date(endDate)) {
+      setSelectedDate(nextDate.toISOString());
+    }
   };
 
   const handleAddToPlan = (place) => {
     let startTime = 10;
-    if (schedule.length > 0) {
-      const lastItem = schedule[schedule.length - 1];
+    const dateKey = selectedDate.split("T")[0]; // 날짜만 키로 사용
+    const existingSchedule = scheduleItemsByDate[dateKey] || [];
+
+    if (existingSchedule.length > 0) {
+      const lastItem = existingSchedule[existingSchedule.length - 1];
       startTime = lastItem.startTime + lastItem.duration;
       if (startTime >= 24) startTime = 10;
     }
 
     const newScheduleItem = {
       ...place,
-      startTime: startTime,
+      startTime,
       duration: 2,
     };
-    setSchedule([...schedule, newScheduleItem]);
-  };
 
-  const handleRemoveFromPlan = (index) => {
-    const newSchedule = [...schedule];
-    newSchedule.splice(index, 1);
-    for (let i = index; i < newSchedule.length; i++) {
-      if (i === 0) {
-        newSchedule[i].startTime = 10;
-      } else {
-        newSchedule[i].startTime =
-          newSchedule[i - 1].startTime + newSchedule[i - 1].duration;
-      }
-    }
-    setSchedule(newSchedule);
+    setScheduleItemsByDate({
+      ...scheduleItemsByDate,
+      [dateKey]: [...existingSchedule, newScheduleItem],
+    });
   };
 
   const handleUpdateDuration = (index, newDuration) => {
-    const newSchedule = [...schedule];
-    newSchedule[index].duration = newDuration;
-    for (let i = index + 1; i < newSchedule.length; i++) {
-      newSchedule[i].startTime =
-        newSchedule[i - 1].startTime + newSchedule[i - 1].duration;
+    const dateKey = selectedDate.split("T")[0];
+    const existingSchedule = scheduleItemsByDate[dateKey] || [];
+
+    const updatedSchedule = [...existingSchedule];
+    updatedSchedule[index].duration = newDuration;
+
+    for (let i = index + 1; i < updatedSchedule.length; i++) {
+      const previousEndTime =
+        updatedSchedule[i - 1].startTime + updatedSchedule[i - 1].duration;
+
+      if (previousEndTime >= 24) {
+        updatedSchedule.splice(i); // 이후 일정 제거
+        break;
+      }
+
+      updatedSchedule[i].startTime = previousEndTime;
     }
-    setSchedule(newSchedule);
+
+    setScheduleItemsByDate({
+      ...scheduleItemsByDate,
+      [dateKey]: updatedSchedule,
+    });
+  };
+
+  const handlePlanComplete = () => {
+    alert("계획이 생성되었습니다!");
+    console.log("전체 일정:", scheduleItemsByDate);
+  };
+
+  const handleRemoveFromPlan = (index) => {
+    const dateKey = selectedDate.split("T")[0];
+    const existingSchedule = scheduleItemsByDate[dateKey] || [];
+
+    const updatedSchedule = [...existingSchedule];
+    updatedSchedule.splice(index, 1);
+
+    for (let i = index; i < updatedSchedule.length; i++) {
+      if (i === 0) {
+        updatedSchedule[i].startTime = 10;
+      } else {
+        updatedSchedule[i].startTime =
+          updatedSchedule[i - 1].startTime + updatedSchedule[i - 1].duration;
+      }
+    }
+
+    setScheduleItemsByDate({
+      ...scheduleItemsByDate,
+      [dateKey]: updatedSchedule,
+    });
+  };
+
+  const places = {
+    명소: [
+      {
+        name: "대박집 월배역직영점",
+        latitude: 35.8535,
+        longitude: 128.5653,
+        description: "대구의 멋진 돼지 고기 전문점입니다.",
+      },
+      {
+        name: "러스티코우드파이어",
+        latitude: 35.840418899999,
+        longitude: 128.628765475332,
+        description: "대구의 인기 있는 한식당입니다.",
+      },
+      {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "장소 A",
+        review: 1,
+        rating: 3,
+        latitude: 35.8535,
+        longitude: 128.5653,
+        description: "대구의 멋진 장소입니다.",
+      },
+      {
+        name: "장소 B",
+        review: 1,
+        rating: 3,
+        latitude: 35.8571,
+        longitude: 128.5699,
+        description: "대구의 또 다른 명소입니다.",
+      },
+      {
+        name: "장소 C",
+        review: 1,
+        rating: 3,
+        latitude: 35.8502,
+        longitude: 128.5611,
+        description: "자연과 어우러진 장소.",
+      },
+    ],
+    식당: [
+      {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+      },
+    ],
+    숙소: [
+      {
+        imageUrl: "https://via.placeholder.com/100",
+        name: "팔공산갓바위",
+        reviews: 120,
+        rating: 4,
+        latitude: 35.9714721000006,
+        longitude: 128.693859601329,
+      },
+    ],
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="plan-page">
       <Header />
 
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "row",
-          height: "calc(100% - 60px)",
-          position: "relative", // 부모 요소를 기준으로 위치 설정
-        }}
-      >
-        {/* 좌측 추천 장소 영역 */}
-        <div
-          style={{
-            flex: 1,
-            backgroundColor: "#f8f8f8",
-            borderRight: "1px solid #ddd",
-            display: "flex",
-            flexDirection: "column",
-            position: "relative", // 버튼 위치 조정을 위해
-          }}
-        >
-          {/* 상단 추천 장소 영역 */}
-          <div
-            style={{
-              flex: 2,
-              padding: "20px",
-              overflowY: "auto",
-              borderBottom: "1px solid #ddd",
-            }}
-          >
-            <h3
-              style={{
-                fontSize: "20px",
-                fontWeight: "600",
-                marginBottom: "20px",
-                textAlign: "center",
-              }}
-            >
-              추천 장소
-            </h3>
+      <div className="main-content">
+        {/* 추천 장소 영역 */}
+        <div className="recommended-places">
+          <div className="recommended-places-list">
+            <h3 className="recommended-places-title">추천 장소</h3>
             <RecommendedPlaces places={places} onAddToPlan={handleAddToPlan} />
           </div>
 
-          <div
-            style={{
-              padding: "10px",
-              backgroundColor: "#f8f8f8",
-              boxShadow: "0 -1px 3px rgba (0, 0, 0, 0.1)",
-              position: "sticky",
-              bottom: 0,
-              textAlign: "center",
-            }}
-          >
+          {/* 계획 생성 버튼 */}
+          <div className="plan-complete-button-container">
             <button
-              style={{
-                width: "100%",
-                padding: "20px",
-                backgroundColor: "#2C2C2C",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-              onClick={() => alert("계획 생성 완료")}
+              className="plan-complete-button"
+              onClick={handlePlanComplete}
             >
               계획 생성
             </button>
           </div>
         </div>
 
-        {/* 중앙 일정 목록 */}
-        <div
-          style={{
-            flex: 1.5,
-            backgroundColor: "#fff",
-            padding: "20px",
-            overflowY: "auto",
-          }}
-        >
+        {/* 일정 목록 영역 */}
+        <div className="schedule-section">
           <Schedule
-            scheduleItems={schedule}
+            scheduleItemsByDate={scheduleItemsByDate}
+            selectedDate={selectedDate}
+            onPreviousDate={handlePreviousDate}
+            onNextDate={handleNextDate}
             onRemoveItem={handleRemoveFromPlan}
-            onUpdateDuration={handleUpdateDuration}
+            onUpdateDuration={handleUpdateDuration} // 전달
           />
         </div>
 
-        {/* 우측 지도 영역 */}
-        <div style={{ flex: 1.5, backgroundColor: "#e0e0e0" }}>
-          <MapDisplay scheduleItems={schedule} />
+        {/* 지도 영역 */}
+        <div className="map-display-section">
+          <MapDisplay scheduleItems={scheduleItemsByDate[selectedDate] || []} />
         </div>
       </div>
     </div>

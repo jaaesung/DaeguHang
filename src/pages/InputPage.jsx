@@ -25,7 +25,7 @@ const InputPage = () => {
   const [scheduleItems, setScheduleItems] = useState([]);
 
   const handleSubmit = () => {
-    navigate("/plan");
+    navigate("/plan", { state: { startDate, endDate } });
   };
 
   const handleGenderSelect = (gender) => {

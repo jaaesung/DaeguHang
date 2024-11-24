@@ -22,24 +22,24 @@ const LoginPopup = ({ isOpen, onClose }) => {
         {/* Sign Up Form */}
         <div className="login-form-container sign-up-container">
           <form>
-            <h1>Create Account</h1>
-            <span>or use yourID for registration</span>
+            <h1>회원가입</h1>
+            <span>use yourID for registration</span>
             <input type="text" placeholder="Name" />
             <input type="ID" placeholder="ID" />
             <input type="password" placeholder="Password" />
-            <button>Sign Up</button>
+            <button>회원가입</button>
           </form>
         </div>
 
         {/* Sign In Form */}
         <div className="login-form-container sign-in-container">
           <form>
-            <h1>Sign In</h1>
-            <span>or use your account</span>
+            <h1>로그인</h1>
+            <span>use your account</span>
             <input type="ID" placeholder="ID" />
             <input type="password" placeholder="Password" />
             <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+            <button>로그인</button>
           </form>
         </div>
 
@@ -47,25 +47,23 @@ const LoginPopup = ({ isOpen, onClose }) => {
         <div className="login-overlay-container">
           <div className="login-overlay">
             <div className="login-overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>
-                To keep connected with us please login with your personal info
-              </p>
+              <h1>오랜만이에요!</h1>
+              <p>로그인하고 다시 저희와 함께 여행을 계획해봐요!</p>
               <button
                 className="ghost"
                 onClick={() => setIsRightPanelActive(false)}
               >
-                Sign In
+                로그인
               </button>
             </div>
             <div className="login-overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start your journey with us</p>
+              <h1>안녕하세요!</h1>
+              <p>가입하고 저희와 함께 여행을 계획해봐요!</p>
               <button
                 className="ghost"
                 onClick={() => setIsRightPanelActive(true)}
               >
-                Sign Up
+                회원가입
               </button>
             </div>
           </div>
