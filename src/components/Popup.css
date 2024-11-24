@@ -29,7 +29,7 @@
 .popup {
   width: 60vw;
   max-width: 600px;
-  height: 35vw;
+  height: 20vw;
   max-height: 800px;
   background: var(--white);
   border-radius: var(--border-radius);
@@ -48,10 +48,8 @@
   font-weight: 600;
   color: var(--primary-color);
   text-align: center;
-  margin-bottom : 0px
+  margin-bottom: 0px;
 }
-
-
 
 /* Gender Popup Styles */
 .popup-gender-grid {

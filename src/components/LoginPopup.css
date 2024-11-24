@@ -1,0 +1,229 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
+
+/* Reset global styles */
+* {
+  box-sizing: border-box;
+}
+
+/* 팝업 배경 오버레이 */
+.login-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 팝업 컨테이너 */
+.login-popup-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+  display: flex;
+  z-index: 1001;
+}
+
+/* 닫기 버튼 */
+.login-close-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  background: none; /* 배경 제거 */
+  border: none; /* 테두리 제거 */
+  font-size: 24px; /* X 크기 */
+  font-weight: bold; /* X를 굵게 */
+  color: #333; /* 텍스트 색상 */
+  cursor: pointer; /* 클릭 가능 마우스 포인터 */
+  z-index: 1010;
+  transition: color 0.3s ease; /* 색상 전환 애니메이션 */
+}
+
+.login-close-button:hover {
+  color: #ff4b2b; /* 마우스를 올리면 색상 변경 */
+}
+
+.login-close-button:focus {
+  outline: none; /* 포커스 테두리 제거 */
+}
+
+/* 버튼 스타일 */
+.login-popup-container button {
+  border-radius: 20px;
+  border: 1px solid #ff4b2b;
+  background-color: #ff4b2b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.login-popup-container button:hover {
+  background-color: #ffffff;
+  color: #ff4b2b;
+  border-color: #ff4b2b;
+  transform: scale(1.05);
+}
+
+.login-popup-container button:active {
+  transform: scale(0.95);
+}
+
+.login-popup-container button:focus {
+  outline: none;
+}
+
+/* Ghost 버튼 스타일 */
+.login-popup-container button.ghost {
+  background-color: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+.login-popup-container button.ghost:hover {
+  background-color: #ffffff;
+  color: #ff4b2b;
+}
+
+/* 각 폼 컨테이너 */
+.login-form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  padding: 50px;
+  text-align: center;
+  transition: all 0.6s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure proper hiding of Sign In/Sign Up forms during transitions */
+.sign-in-container {
+  left: 0;
+  z-index: 2;
+  opacity: 1;
+  transition: all 0.6s ease-in-out;
+}
+
+.login-popup-container.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+  opacity: 0;
+  z-index: 1;
+}
+
+.sign-up-container {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+  transition: all 0.6s ease-in-out;
+}
+
+.login-popup-container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* 입력 폼 스타일 */
+.login-popup-container input {
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+  border-radius: 5px;
+}
+
+/* 애니메이션 */
+@keyframes show {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+/* 오버레이 컨테이너 */
+.login-overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.login-popup-container.right-panel-active .login-overlay-container {
+  transform: translateX(-100%);
+}
+
+/* 오버레이 */
+.login-overlay {
+  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  color: #fff;
+  position: relative;
+  height: 100%;
+  width: 200%;
+  left: -100%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.login-popup-container.right-panel-active .login-overlay {
+  transform: translateX(50%);
+}
+
+/* 오버레이 패널 */
+.login-overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+
+.login-popup-container.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.login-popup-container.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}

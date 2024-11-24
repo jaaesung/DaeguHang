@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginPopup from "./LoginPopup";
 
 const Header = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
   const handleLogout = () => setIsLoggedIn(false);
 
   return (
@@ -94,7 +98,7 @@ const Header = () => {
               }}
               onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
               onMouseOut={(e) => (e.target.style.background = "none")}
-              onClick={handleLogin}
+              onClick={() => setIsPopupOpen(true)}
             >
               로그인
             </button>
@@ -118,6 +122,7 @@ const Header = () => {
           </>
         )}
       </div>
+      <LoginPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
     </div>
   );
 };

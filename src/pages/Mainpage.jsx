@@ -15,7 +15,7 @@ export default function Mainpage() {
       style={{
         width: "100%",
         height: "100vh",
-        background: "#FEF7FF",
+        background: "#FFF",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",

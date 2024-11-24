@@ -46,7 +46,7 @@ const InputPage = () => {
       <div className="main-content">
         <div className="left-content">
           <TravelTitle />
-          
+
           {/* 날짜 디스플레이 */}
           <div className="selector-text">
             날짜:{" "}

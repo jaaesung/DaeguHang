@@ -1,0 +1,175 @@
+/* 전체 컨테이너 */
+.mypage-container {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 레이아웃 구분 */
+.mypage-layout {
+  display: flex;
+  height: calc(100vh - 60px); /* 헤더 높이를 제외한 나머지 영역 */
+  padding: 20px; /* 전체 레이아웃의 바깥 여백 추가 */
+}
+
+/* 왼쪽 사이드바 */
+.mypage-sidebar {
+  width: 25%;
+  background-color: transparent; /* 배경 제거 */
+  padding: 0 10px; /* 사이드 내부 여백 최소화 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-summary {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.profile-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.profile-id {
+  font-size: 14px;
+  color: #777;
+}
+
+/* 오른쪽 메인 콘텐츠 */
+.mypage-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* 섹션 간의 간격 증가 */
+  margin-left: 20px; /* 사이드바와 메인 콘텐츠 간 여백 */
+}
+
+/* 내 정보 카드 */
+.basic-info-card {
+  flex: 1; /* 남은 높이의 절반 */
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow-y: auto; /* 카드 내부 스크롤 */
+  margin-top: 50px; /* 상단 여백 추가 */
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.editable {
+  color: #555;
+  flex: 1;
+  margin-left: 10px;
+}
+
+.edit-button {
+  background-color: #ff6f61;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #b9544b;
+}
+
+/* 내 계획 섹션 */
+.mypage-plans-section {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative;
+  overflow: hidden; /* 아래 잘림 방지 */
+}
+
+.plans-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.plans-carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.plans-carousel {
+  display: flex;
+  gap: 60px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+  scrollbar-width: none; /* Firefox */
+  align-items: center;
+}
+
+.plans-carousel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* 좌우 화살표 버튼 */
+.scroll-button {
+  background-color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.scroll-button.left {
+  left: -10px; /* 버튼이 겹치지 않도록 위치 조정 */
+}
+
+.scroll-button.right {
+  right: -10px; /* 버튼이 겹치지 않도록 위치 조정 */
+}
+
+.scroll-button:hover {
+  background-color: #f0f0f0;
+}
