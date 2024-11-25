@@ -36,14 +36,14 @@ const InputPage = () => {
         age: parseInt(selectedAge.replace("대", ""), 10), // "20대" => 20
         budget: parseInt(selectedBudget.replace("만원", ""), 10), // "50만원" => 50
       });
-      console.log("API 응답:", response.data);
+      console.log("API 응답:", response.data); 
 
       // 성공적으로 완료되었을 경우, 계획 페이지로 이동
       navigate("/plan", { state: { startDate, endDate, scheduleItems: response.data } });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
       alert("계획을 생성하는 도중 오류가 발생했습니다.");
-    }
+    } 
   };
 
   const handleGenderSelect = (gender) => {
