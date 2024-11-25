@@ -1,9 +1,44 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import axios from "axios";  // axios 임포트
 import "./LoginPopup.css";
 
 const LoginPopup = ({ isOpen, onClose }) => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
+  const [loginId, setLoginId] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8082/api/user/login', {
+        loginId,
+        password,
+      });
+      alert(response.data); // 로그인 성공 메시지
+      onClose(); // 로그인 후 팝업 닫기
+    } catch (error) {
+      console.error("Login failed", error);
+      alert("로그인 실패!");
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:8082/api/user/register', {
+        username,
+        userLoginId: loginId,
+        password,
+      });
+      alert(response.data); // 회원가입 성공 메시지
+      onClose(); // 회원가입 후 팝업 닫기
+    } catch (error) {
+      console.error("Registration failed", error);
+      alert("회원가입 실패!");
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -21,25 +56,50 @@ const LoginPopup = ({ isOpen, onClose }) => {
 
         {/* Sign Up Form */}
         <div className="login-form-container sign-up-container">
-          <form>
+          <form onSubmit={handleRegister}>
             <h1>회원가입</h1>
             <span>use yourID for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="ID" placeholder="ID" />
-            <input type="password" placeholder="Password" />
-            <button>회원가입</button>
+            <input
+              type="text"
+              placeholder="Name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="ID"
+              value={loginId}
+              onChange={(e) => setLoginId(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">회원가입</button>
           </form>
         </div>
 
         {/* Sign In Form */}
         <div className="login-form-container sign-in-container">
-          <form>
+          <form onSubmit={handleLogin}>
             <h1>로그인</h1>
             <span>use your account</span>
-            <input type="ID" placeholder="ID" />
-            <input type="password" placeholder="Password" />
+            <input
+              type="text"
+              placeholder="ID"
+              value={loginId}
+              onChange={(e) => setLoginId(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <a href="#">Forgot your password?</a>
-            <button>로그인</button>
+            <button type="submit">로그인</button>
           </form>
         </div>
 

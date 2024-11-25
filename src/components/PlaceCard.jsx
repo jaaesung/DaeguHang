@@ -1,10 +1,10 @@
 import React from "react";
 
 const PlaceCard = ({
-  imageUrl,
-  name,
-  reviews,
-  rating,
+  imageUrl,//imageURL
+  name,//가맴정명
+  reviews,//리뷰 수
+  rating,//별점
   latitude,
   longitude,
   onAddToPlan,

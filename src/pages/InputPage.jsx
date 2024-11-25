@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Axios 임포트
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import TravelTitle from "../components/TravelTitle";
@@ -24,8 +25,25 @@ const InputPage = () => {
   const [endDate, setEndDate] = useState(null);
   const [scheduleItems, setScheduleItems] = useState([]);
 
-  const handleSubmit = () => {
-    navigate("/plan", { state: { startDate, endDate } });
+  const handleSubmit = async () => {
+    // API 호출 로직
+    try {
+      const response = await axios.post("http://localhost:8082/api/plan", {
+        userId: 1, // 예시 사용자 ID
+        startDate: startDate.toISOString().split("T")[0], // ISO 형식으로 변환
+        endDate: endDate.toISOString().split("T")[0],
+        sex: selectedGender === "남자" ? "MALE" : "FEMALE",
+        age: parseInt(selectedAge.replace("대", ""), 10), // "20대" => 20
+        budget: parseInt(selectedBudget.replace("만원", ""), 10), // "50만원" => 50
+      });
+      console.log("API 응답:", response.data);
+
+      // 성공적으로 완료되었을 경우, 계획 페이지로 이동
+      navigate("/plan", { state: { startDate, endDate, scheduleItems: response.data } });
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+      alert("계획을 생성하는 도중 오류가 발생했습니다.");
+    }
   };
 
   const handleGenderSelect = (gender) => {
