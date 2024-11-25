@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
 import { useLocation } from "react-router-dom";
 import { useSchedule } from "../hooks/useSchedule";
+import { useRef } from "react";
 import "./PlanPage.css";
 
 const PlanPage = () => {
@@ -60,6 +61,16 @@ const PlanPage = () => {
       },
     ],
   };
+
+  // `handleNextDate`를 추적하는 Ref 생성
+  const handleNextDateRef = useRef(handleNextDate);
+  useEffect(() => {
+    handleNextDateRef.current = handleNextDate;
+  }, [handleNextDate]);
+
+  useEffect(() => {
+    handleNextDateRef.current();
+  }, []);
 
   return (
     <div className="plan-page">

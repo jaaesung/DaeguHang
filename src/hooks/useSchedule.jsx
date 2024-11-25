@@ -8,10 +8,18 @@ export const useSchedule = (startDate, endDate) => {
   const calculateDateRange = (start, end) => {
     const dateArray = [];
     let currentDate = new Date(start);
-    while (currentDate <= new Date(end)) {
+
+    // 하루 추가 (하루만 선택된 경우 제외)
+    const adjustedEnd = new Date(end);
+    if (startDate !== endDate) {
+      adjustedEnd.setDate(adjustedEnd.getDate() + 1);
+    }
+
+    while (currentDate <= adjustedEnd) {
       dateArray.push(currentDate.toISOString().split("T")[0]);
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
     return dateArray;
   };
 
@@ -43,7 +51,14 @@ export const useSchedule = (startDate, endDate) => {
     const nextDate = new Date(selectedDate);
     nextDate.setDate(nextDate.getDate() + 1);
     const newDate = nextDate.toISOString().split("T")[0];
-    if (nextDate <= new Date(endDate)) {
+
+    // Allow navigation to endDate + 1 if multiple days are selected
+    const adjustedEnd = new Date(endDate);
+    if (startDate !== endDate) {
+      adjustedEnd.setDate(adjustedEnd.getDate() + 1);
+    }
+
+    if (nextDate <= adjustedEnd) {
       setSelectedDate(newDate);
     }
   };
