@@ -1,0 +1,57 @@
+.place-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.place-card-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 16px;
+}
+
+.place-card-details {
+  flex: 1;
+}
+
+.place-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #333; /* 하이퍼링크 기본 파란색 제거 */
+  text-decoration: none; /* 밑줄 제거 */
+}
+
+.place-card-title:hover {
+  color: #555; /* 마우스 오버 시 색상 변경 */
+}
+
+.place-card-reviews {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 4px 0;
+}
+
+.place-card-rating {
+  font-size: 14px;
+  color: #777;
+  margin: 0;
+}
+
+.place-card-button {
+  margin-left: auto;
+  padding: 5px 10px;
+  background: #2c2c2c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

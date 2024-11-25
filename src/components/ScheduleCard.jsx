@@ -1,4 +1,5 @@
 import React from "react";
+import "./ScheduleCard.css";
 
 const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
   const formatTime = (hour) => {
@@ -8,81 +9,41 @@ const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "10px",
-        backgroundColor: "#fff",
-        maxWidth: "100%",
-      }}
-    >
+    <div className="schedule-card">
       <img
         src={item.imageUrl}
         alt={item.name}
-        style={{
-          width: "80px",
-          height: "80px",
-          borderRadius: "5px",
-          marginRight: "10px",
-          objectFit: "cover",
-        }}
+        className="schedule-card-image"
       />
-      <div>
+      <div className="schedule-card-details">
         <strong>{item.name}</strong>
-        <div style={{ fontSize: "12px", color: "#777" }}>
+        <div>
           {item.reviews} 리뷰 / ⭐ {item.rating}
         </div>
-        <div style={{ marginTop: "5px", fontSize: "12px" }}>
-          시작 시간: {formatTime(item.startTime)} <br />
-          <span>예정 시간: {item.duration}시간</span>
-        </div>
-        <div style={{ marginTop: "5px", display: "flex", gap: "5px" }}>
-          <button
-            style={{
-              padding: "5px 10px",
-              fontSize: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              cursor: "pointer",
-              background: "#f0f0f0",
-            }}
-            onClick={() =>
-              onUpdateDuration(index, Math.max(1, item.duration - 1))
-            }
-          >
-            -1시간
-          </button>
-          <button
-            style={{
-              padding: "5px 10px",
-              fontSize: "12px",
-              border: "1px solid #ccc",
-              borderRadius: "5px",
-              cursor: "pointer",
-              background: "#f0f0f0",
-            }}
-            onClick={() =>
-              onUpdateDuration(index, Math.min(5, item.duration + 1))
-            }
-          >
-            +1시간
-          </button>
-        </div>
+      </div>
+      <div className="schedule-card-time">
+        <div>시작 시간: {formatTime(item.startTime)}</div>
+        <div>예정 시간: {item.duration}시간</div>
+      </div>
+      <div className="schedule-card-actions">
+        <button
+          onClick={() =>
+            onUpdateDuration(index, Math.max(1, item.duration - 1))
+          }
+        >
+          -1시간
+        </button>
+        <button
+          onClick={() =>
+            onUpdateDuration(index, Math.min(5, item.duration + 1))
+          }
+        >
+          +1시간
+        </button>
       </div>
       <button
         onClick={() => onRemoveItem(index)}
-        style={{
-          marginLeft: "auto",
-          padding: "5px 10px",
-          background: "#ff4d4f",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
+        className="schedule-card-delete"
       >
         삭제
       </button>

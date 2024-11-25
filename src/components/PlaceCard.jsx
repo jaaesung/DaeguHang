@@ -1,4 +1,5 @@
 import React from "react";
+import "./PlaceCard.css";
 
 const PlaceCard = ({
   imageUrl,
@@ -7,63 +8,34 @@ const PlaceCard = ({
   rating,
   latitude,
   longitude,
+  searchUrl,
   onAddToPlan,
 }) => {
+  const handleNameClick = () => {
+    if (searchUrl) {
+      window.open(searchUrl, "_blank"); // 새 탭에서 URL 열기
+    } else {
+      alert("해당 장소의 URL이 없습니다."); // URL이 없는 경우 경고 메시지
+    }
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        padding: "10px",
-        marginBottom: "16px",
-        backgroundColor: "#fff",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <img
-        src={imageUrl}
-        alt={name}
-        style={{
-          width: "100px",
-          height: "100px",
-          borderRadius: "8px",
-          objectFit: "cover",
-          marginRight: "16px",
-        }}
-      />
-      <div style={{ flex: 1 }}>
+    <div className="place-card">
+      <img src={imageUrl} alt={name} className="place-card-image" />
+      <div className="place-card-details">
         <h4
-          style={{
-            fontSize: "16px",
-            fontWeight: "600",
-            margin: "0 0 8px 0",
-            color: "#333",
-          }}
+          className="place-card-title"
+          onClick={handleNameClick}
+          style={{ cursor: "pointer" }} // 클릭 가능한 스타일
         >
           {name}
         </h4>
-        <p style={{ fontSize: "14px", color: "#777", margin: "0 0 4px 0" }}>
-          {reviews} 리뷰
-        </p>
-        <p style={{ fontSize: "14px", color: "#FFD700", margin: 0 }}>
-          {`⭐`.repeat(rating)}
-        </p>
+        <p className="place-card-reviews">{reviews} 리뷰</p>
+        <p className="place-card-rating">⭐ {rating}</p>
       </div>
-
       <button
+        className="place-card-button"
         onClick={() => onAddToPlan({ name, latitude, longitude })}
-        style={{
-          marginLeft: "auto",
-          padding: "5px 10px",
-          background: "#2C2C2C",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
       >
         일정에 추가
       </button>
