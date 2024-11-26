@@ -4,10 +4,7 @@ const MapDisplay = ({ scheduleItems, hoveredItemIndex }) => {
   useEffect(() => {
     if (typeof window.naver !== "undefined") {
       const mapOptions = {
-        center: new window.naver.maps.LatLng(
-          35.85349263951054,
-          128.56529586628727
-        ),
+        center: new window.naver.maps.LatLng(35.87, 128.59),
         zoom: 12,
       };
 
@@ -73,8 +70,8 @@ const MapDisplay = ({ scheduleItems, hoveredItemIndex }) => {
           map.fitBounds(bounds);
         }
       } else {
-        map.setCenter(new window.naver.maps.LatLng(37.5665, 126.978));
-        map.setZoom(12);
+        map.setCenter(new window.naver.maps.LatLng(35.87, 128.59));
+        map.setZoom(13);
       }
     }
   }, [scheduleItems, hoveredItemIndex]);
