@@ -97,11 +97,12 @@ export const useSchedule = (startDate, endDate) => {
     setHiddenPlaces((prev) => [...prev, place.name]);
   };
 
-  // 일정에서 장소 제거 및 추천 장소 표시
   const handleRemoveItem = (index) => {
     const dateKey = selectedDate.split("T")[0];
     const updatedSchedule = [...(scheduleItemsByDate[dateKey] || [])];
-    const removedItem = updatedSchedule.splice(index, 1)[0]; // 제거된 항목 추출
+
+    // 해당 인덱스의 항목 삭제
+    const removedItem = updatedSchedule.splice(index, 1)[0];
 
     setScheduleItemsByDate((prev) => ({
       ...prev,
@@ -127,6 +128,13 @@ export const useSchedule = (startDate, endDate) => {
     }));
   };
 
+  const handleReorder = (dateKey, newOrder) => {
+    setScheduleItemsByDate((prev) => ({
+      ...prev,
+      [dateKey]: newOrder,
+    }));
+  };
+
   return {
     scheduleItemsByDate,
     selectedDate,
@@ -136,5 +144,6 @@ export const useSchedule = (startDate, endDate) => {
     handleAddToPlan,
     handleRemoveItem,
     handleUpdateDuration,
+    handleReorder,
   };
 };
