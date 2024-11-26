@@ -12,33 +12,58 @@ const LoginPopup = ({ isOpen, onClose }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8082/api/user/login', {
+      const response = await axios.post('http://localhost:8080/api/user/login', {
         loginId,
         password,
       });
-      alert(response.data); // 로그인 성공 메시지
+      const { userId } = response.data; // 응답에서 userId 추출
+      if (userId) {
+        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
+      }
+      alert(response.data.message || "로그인 성공"); // 성공 메시지 표시
       onClose(); // 로그인 후 팝업 닫기
     } catch (error) {
       console.error("Login failed", error);
       alert("로그인 실패!");
     }
   };
-
+  
   const handleRegister = async (e) => {
     e.preventDefault();
+  
     try {
-      const response = await axios.post('http://localhost:8082/api/user/register', {
-        username,
-        userLoginId: loginId,
-        password,
-      });
-      alert(response.data); // 회원가입 성공 메시지
+      const response = await axios.post(
+        'http://127.0.0.1:8080/api/user/register',
+        {
+          username,
+          userLoginId: loginId,
+          password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json', // 명확히 Content-Type을 JSON으로 지정
+          },
+        }
+      );
+  
+      const { userId } = response.data; // 응답에서 userId 추출
+      if (userId) {
+        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
+      }
+  
+      alert("회원가입 성공");
       onClose(); // 회원가입 후 팝업 닫기
     } catch (error) {
       console.error("Registration failed", error);
-      alert("회원가입 실패!");
+  
+      if (error.response && error.response.data) {
+        alert(`회원가입 실패: ${error.response.data.message || "오류가 발생했습니다."}`);
+      } else {
+        alert("회원가입 실패: 서버와 연결할 수 없습니다.");
+      }
     }
   };
+  
 
   if (!isOpen) return null;
 

@@ -18,7 +18,7 @@ const PlaceCard = ({
     // placeId가 주어지면 해당 장소의 상세 정보를 API로 받아옴
     if (placeId) {
       axios
-        .get(`http://localhost:8082/api/place/${placeId}`)
+        .get(`http://localhost:8080/api/place/${placeId}`)
         .then((response) => {
           setPlaceDetails(response.data); // 받아온 상세 정보를 상태에 저장
           setPlaceType(response.data.type); // placeType 정보를 내부 상태에 저장
