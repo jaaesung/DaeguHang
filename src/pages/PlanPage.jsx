@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
 import { useLocation } from "react-router-dom";
 import { useSchedule } from "../hooks/useSchedule";
-import { useRef } from "react";
 import "./PlanPage.css";
 
 const PlanPage = () => {
@@ -19,50 +18,12 @@ const PlanPage = () => {
     handleAddToPlan,
     handleRemoveItem,
     handleUpdateDuration,
+    hiddenPlaces,
+    handleReorder,
   } = useSchedule(startDate, endDate);
 
-  const places = {
-    명소: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-        searchUrl:
-          "https://map.naver.com/p/smart-around/place/37327760?c=15.00,0,0,0,dh",
-      },
-    ],
+  const recommendedPlacesRef = useRef();
 
-    식당: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-        searchUrl:
-          "https://map.naver.com/p/smart-around/place/37327760?c=15.00,0,0,0,dh",
-      },
-    ],
-
-    숙소: [
-      {
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-        searchUrl:
-          "https://map.naver.com/p/smart-around/place/37327760?c=15.00,0,0,0,dh",
-      },
-    ],
-  };
-
-  // `handleNextDate`를 추적하는 Ref 생성
   const handleNextDateRef = useRef(handleNextDate);
   useEffect(() => {
     handleNextDateRef.current = handleNextDate;
@@ -77,19 +38,20 @@ const PlanPage = () => {
       <Header />
       <div className="main-content">
         <div className="recommended-places">
-          <div className="recommended-places-list">
-            <h3 className="recommended-places-title">추천 장소</h3>
-            <RecommendedPlaces places={places} onAddToPlan={handleAddToPlan} />
-          </div>
+          <h3 className="recommended-places-title">추천 장소</h3>
+          <RecommendedPlaces
+            onAddToPlan={handleAddToPlan}
+            hiddenPlaces={hiddenPlaces}
+          />
         </div>
         <div className="schedule-section">
           <Schedule
-            scheduleItemsByDate={scheduleItemsByDate}
-            selectedDate={selectedDate}
+            scheduleItems={scheduleItemsByDate[selectedDate] || []}
             onPreviousDate={handlePreviousDate}
             onNextDate={handleNextDate}
             onRemoveItem={handleRemoveItem}
             onUpdateDuration={handleUpdateDuration}
+            selectedDate={selectedDate}
           />
         </div>
         <div className="map-display-section">
