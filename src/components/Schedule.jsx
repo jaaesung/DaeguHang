@@ -27,17 +27,26 @@ const Schedule = ({
       </div>
       <Reorder.Group
         axis="y"
-        onReorder={onReorder}
+        onReorder={onReorder} // 드래그 이후 순서 업데이트 핸들러
         values={scheduleItems}
         className="schedule-items"
       >
         {scheduleItems.map((item, index) => (
-          <Reorder.Item key={item.name} value={item}>
+          <Reorder.Item
+            key={item.name}
+            value={item} // 고유 값으로 item 객체 전달
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "10px",
+              cursor: "grab",
+            }}
+          >
             <ScheduleCard
               item={item}
               index={index}
               onUpdateDuration={onUpdateDuration}
-              onRemoveItem={() => onRemoveItem(item)}
+              onRemoveItem={() => onRemoveItem(index)}
             />
           </Reorder.Item>
         ))}

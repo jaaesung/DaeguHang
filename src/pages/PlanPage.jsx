@@ -22,8 +22,6 @@ const PlanPage = () => {
     handleReorder,
   } = useSchedule(startDate, endDate);
 
-  const recommendedPlacesRef = useRef();
-
   const handleNextDateRef = useRef(handleNextDate);
   useEffect(() => {
     handleNextDateRef.current = handleNextDate;
@@ -33,24 +31,41 @@ const PlanPage = () => {
     handleNextDateRef.current();
   }, []);
 
+  const handleCreatePlan = () => {
+    alert("계획이 생성되었습니다 ! ");
+  };
+
   return (
     <div className="plan-page">
       <Header />
       <div className="main-content">
-        <div className="recommended-places">
-          <h3 className="recommended-places-title">추천 장소</h3>
-          <RecommendedPlaces
-            onAddToPlan={handleAddToPlan}
-            hiddenPlaces={hiddenPlaces}
-          />
+        <div className="recommended-places-container">
+          <div className="recommended-places">
+            <h3 className="recommended-places-title">추천 장소</h3>
+            <div className="recommended-places-list">
+              <RecommendedPlaces
+                onAddToPlan={handleAddToPlan}
+                hiddenPlaces={hiddenPlaces}
+              />
+            </div>
+          </div>
+          <div className="plan-button-container">
+            <button className="plan-complete-button" onClick={handleCreatePlan}>
+              계획 생성
+            </button>
+          </div>
         </div>
+
         <div className="schedule-section">
           <Schedule
             scheduleItems={scheduleItemsByDate[selectedDate] || []}
             onPreviousDate={handlePreviousDate}
             onNextDate={handleNextDate}
-            onRemoveItem={handleRemoveItem}
+            onRemoveItem={handleRemoveItem} // 삭제 핸들러
             onUpdateDuration={handleUpdateDuration}
+            onReorder={(newOrder) => {
+              handleReorder(selectedDate, newOrder); // 드래그 후 순서 업데이트
+            }}
             selectedDate={selectedDate}
           />
         </div>
