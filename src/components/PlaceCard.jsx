@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./PlaceCard.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const PlaceCard = ({
   imageUrl,
@@ -12,7 +15,7 @@ const PlaceCard = ({
   placeId,
 }) => {
   const [placeDetails, setPlaceDetails] = useState(null);
-  const [placeType, setPlaceType] = useState(""); // placeType을 내부 상태로만 관리
+  const [placeType, setPlaceType] = useState(""); // placeType을 내부 상태로 관리
 
   useEffect(() => {
     // placeId가 주어지면 해당 장소의 상세 정보를 API로 받아옴
@@ -26,6 +29,14 @@ const PlaceCard = ({
         .catch((error) => {
           console.error("API 호출 중 오류 발생:", error);
         });
+    }
+  }, [placeId]); // placeId가 변경될 때마다 API 호출
+
+  const handleNameClick = () => {
+    if (searchUrl) {
+      window.open(searchUrl, "_blank"); // 새 탭에서 URL 열기
+    } else {
+      alert("해당 장소의 URL이 없습니다."); // URL이 없는 경우 경고 메시지
     }
   }, [placeId]); // placeId가 변경될 때마다 API 호출
 
@@ -65,12 +76,11 @@ const PlaceCard = ({
         >
           {name}
         </h4>
-        <p style={{ fontSize: "14px", color: "#777", margin: "0 0 4px 0" }}>
-          {reviews} 리뷰
-        </p>
-        <p style={{ fontSize: "14px", color: "#FFD700", margin: 0 }}>
-          {`⭐`.repeat(rating)}
-        </p>
+        <p className="place-card-reviews">{reviews} 리뷰</p>
+        <p className="place-card-rating">⭐ {rating}</p>
+        {placeDetails && (
+          <p className="place-card-type">Type: {placeType}</p>
+        )}
       </div>
 
       <button
