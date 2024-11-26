@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export const useSchedule = (startDate, endDate) => {
   const [scheduleItemsByDate, setScheduleItemsByDate] = useState({});
   const [selectedDate, setSelectedDate] = useState(startDate || "");
+  const [hiddenPlaces, setHiddenPlaces] = useState([]); // 숨겨진 장소 관리
 
   // 날짜 범위 계산
   const calculateDateRange = (start, end) => {
@@ -63,7 +64,7 @@ export const useSchedule = (startDate, endDate) => {
     }
   };
 
-  // 일정 추가
+  // 일정에 장소 추가 및 추천 장소 숨기기
   const handleAddToPlan = (place) => {
     const dateKey = selectedDate.split("T")[0];
     const existingSchedule = scheduleItemsByDate[dateKey] || [];
@@ -91,17 +92,28 @@ export const useSchedule = (startDate, endDate) => {
       ...prev,
       [dateKey]: [...existingSchedule, newScheduleItem],
     }));
+
+    // 장소를 숨기기
+    setHiddenPlaces((prev) => [...prev, place.name]);
   };
 
-  // 일정 삭제
+  // 일정에서 장소 제거 및 추천 장소 표시
   const handleRemoveItem = (index) => {
     const dateKey = selectedDate.split("T")[0];
     const updatedSchedule = [...(scheduleItemsByDate[dateKey] || [])];
-    updatedSchedule.splice(index, 1);
+    const removedItem = updatedSchedule.splice(index, 1)[0]; // 제거된 항목 추출
+
     setScheduleItemsByDate((prev) => ({
       ...prev,
       [dateKey]: updatedSchedule,
     }));
+
+    // 숨겨진 장소에서 제거하고 다시 표시
+    if (removedItem) {
+      setHiddenPlaces((prev) =>
+        prev.filter((name) => name !== removedItem.name)
+      );
+    }
   };
 
   // 일정 업데이트
@@ -118,6 +130,7 @@ export const useSchedule = (startDate, endDate) => {
   return {
     scheduleItemsByDate,
     selectedDate,
+    hiddenPlaces,
     handlePreviousDate,
     handleNextDate,
     handleAddToPlan,
