@@ -25,21 +25,21 @@ const InputPage = () => {
   const [endDate, setEndDate] = useState(null);
   const [scheduleItems, setScheduleItems] = useState([]);
 
-  // 전역변수로 지금 userId 계속 갖고 있어야해
-  // 처음에 로그인 하거나 회원가입 하면 서버에서 만든 userID 발급이 됨
-  // 서버랑 데이터 조회하거나 할 때는 저 userId 로 해야됨
-
+  // 신버전 handleSubmit (여행 계획을 생성하는 함수)
   const handleSubmit = async () => {
-    // Session Storage에서 userId 가져오기
+    // 세션 스토리지에서 userId 가져오기
     const userId = sessionStorage.getItem("userId");
-  
+
+    // userId가 없는 경우 (로그인되지 않은 경우)
     if (!userId) {
       alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
       navigate("/login"); // 로그인 페이지로 리다이렉트
       return;
     }
-  
+
+    // userId가 있을 경우, 여행 계획을 생성하는 API 호출
     try {
+      // 기존 신버전에서 사용하던 상태값들을 서버로 전송
       const response = await axios.post(`http://localhost:8080/api/plan/${userId}/new`, {
         userId, // userId를 리퀘스트에 포함
         startDate: startDate.toISOString().split("T")[0], // ISO 형식으로 변환
@@ -48,18 +48,16 @@ const InputPage = () => {
         age: parseInt(selectedAge.replace("대", ""), 10), // "20대" => 20
         budget: parseInt(selectedBudget.replace("만원", ""), 10), // "50만원" => 50
       });
-  
+
       console.log("API 응답:", response.data);
-  
-      // 성공적으로 완료되었을 경우, 계획 페이지로 이동
+
+      // 여행 계획 생성 후, 계획 페이지로 이동
       navigate("/plan", { state: { startDate, endDate, scheduleItems: response.data } });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
       alert("계획을 생성하는 도중 오류가 발생했습니다.");
     }
   };
-  
-
 
   const handleGenderSelect = (gender) => {
     setSelectedGender(gender);
@@ -100,8 +98,9 @@ const InputPage = () => {
             예산: <span>{selectedBudget || "선택되지 않음"}</span>
           </div>
 
+          {/* 계획 생성 버튼 */}
           <button className="submit-button" onClick={handleSubmit}>
-            추천 시작
+            계획 생성
           </button>
         </div>
 
@@ -165,3 +164,4 @@ const InputPage = () => {
 };
 
 export default InputPage;
+
