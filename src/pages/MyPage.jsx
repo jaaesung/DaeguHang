@@ -1,9 +1,12 @@
 import React, { useRef } from "react";
+import { useNavigate } from "react-router-dom";  // useNavigate 임포트
 import Header from "../components/Header";
 import PlanItem from "../components/PlanItem";
 import "./Mypage.css";
 
 const Mypage = () => {
+  const navigate = useNavigate();  // navigate 함수 초기화
+
   const myPlans = [
     {
       id: 1,
@@ -39,6 +42,11 @@ const Mypage = () => {
     }
   };
 
+  // 비밀번호 수정 버튼 클릭 시 호출되는 함수
+  const handlePasswordChangeClick = () => {
+    navigate("/repassword");  // RePassword 페이지로 이동
+  };
+
   return (
     <div className="mypage-container">
       <Header />
@@ -71,7 +79,7 @@ const Mypage = () => {
               </div>
               <div className="info-row">
                 <span>비밀번호</span>
-                <button className="edit-button">비밀번호 수정</button>
+                <button className="edit-button" onClick={handlePasswordChangeClick}>비밀번호 수정</button> {/* 클릭 시 비밀번호 수정 페이지로 이동 */}
               </div>
             </div>
           </section>
