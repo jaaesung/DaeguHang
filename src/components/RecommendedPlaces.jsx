@@ -1,52 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlaceCard from "./PlaceCard";
 import "./RecommendedPlaces.css";
 
-const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
-  const [places] = useState({
-    명소: [
-      {
-        id: 1,
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위",
-        reviews: 120,
-        rating: 4,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-      {
-        id: 2,
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산갓바위2",
-        reviews: 150,
-        rating: 4.5,
-        latitude: 35.9714721000006,
-        longitude: 128.693859601329,
-      },
-    ],
-    식당: [
-      {
-        id: 3,
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산 식당",
-        reviews: 80,
-        rating: 4.2,
-        latitude: 35.85,
-        longitude: 128.6,
-      },
-    ],
-    숙소: [
-      {
-        id: 4,
-        imageUrl: "https://via.placeholder.com/100",
-        name: "팔공산 숙소",
-        reviews: 50,
-        rating: 3.8,
-        latitude: 35.855,
-        longitude: 128.61,
-      },
-    ],
+const RecommendedPlaces = () => {
+  const [places, setPlaces] = useState({
+    명소: [],
+    식당: [],
+    숙소: [],
   });
+
+  useEffect(() => {
+    const fetchAndProcessData = async () => {
+      try {
+        // 1. Fetch data from the API
+        const response = await fetch("http://localhost:8080/recommendfdsfation");
+        const data = await response.json();
+
+        // 2. Process the data into desired format
+        const categorizedPlaces = {
+          명소: [],
+          식당: [],
+          숙소: [],
+        };
+
+        data.forEach((item, index) => {
+          const mappedItem = {
+            id: index + 1, // Assign a unique ID
+            imageUrl: item.imageUrl || "https://via.placeholder.com/100", // Placeholder for image
+            name: item.가맹점명 || "Unknown Name",
+            reviews: item.reviews || 0, // Default to 0 if reviews are missing
+            rating: (item.reviews / 20).toFixed(1) || "3.0", // Mock rating calculation
+            latitude: item.latitude || 0.0, // Default to 0.0 if latitude is missing
+            longitude: item.longitude || 0.0, // Default to 0.0 if longitude is missing
+            searchUrl: item.searchUrl || "#", // Fallback URL
+          };
+
+          // Categorize based on "분류"
+          if (item.분류 === "맛집") {
+            categorizedPlaces.식당.push(mappedItem);
+          } else if (item.분류 === "모텔/호텔") {
+            categorizedPlaces.숙소.push(mappedItem);
+          } else {
+            categorizedPlaces.명소.push(mappedItem);
+          }
+        });
+
+        // 3. Update state with categorized places
+        setPlaces(categorizedPlaces);
+      } catch (error) {
+        console.error("Error fetching or processing data:", error);
+      }
+    };
+
+    fetchAndProcessData();
+  }, []);
 
   const [activeTab, setActiveTab] = useState("명소");
 
@@ -68,20 +75,18 @@ const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
       {/* Scrollable content */}
       <div className="scrollable-content">
         {places[activeTab].length > 0 ? (
-          places[activeTab]
-            .filter((place) => !hiddenPlaces.includes(place.name))
-            .map((place) => (
-              <PlaceCard
-                key={place.id}
-                imageUrl={place.imageUrl}
-                name={place.name}
-                reviews={place.reviews}
-                rating={place.rating}
-                latitude={place.latitude}
-                longitude={place.longitude}
-                onAddToPlan={() => onAddToPlan(place)}
-              />
-            ))
+          places[activeTab].map((place) => (
+            <PlaceCard
+              key={place.id}
+              imageUrl={place.imageUrl}
+              name={place.name}
+              reviews={place.reviews}
+              rating={place.rating}
+              latitude={place.latitude}
+              longitude={place.longitude}
+              searchUrl={place.searchUrl}
+            />
+          ))
         ) : (
           <div className="empty-message">추천 장소가 없습니다.</div>
         )}

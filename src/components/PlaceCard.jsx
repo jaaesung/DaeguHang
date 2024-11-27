@@ -11,7 +11,7 @@ const PlaceCard = ({
   longitude,
   searchUrl,
   onAddToPlan,
-  placeId, // 추가된 props
+  placeId,
 }) => {
   const [placeDetails, setPlaceDetails] = useState(null); // API로 받은 상세 정보
   const [placeType, setPlaceType] = useState(""); // placeType을 내부 상태로만 관리

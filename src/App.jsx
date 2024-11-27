@@ -9,14 +9,17 @@ import InputPage from "./pages/InputPage";
 import PlanPage from "./pages/PlanPage";
 import Mainpage from "./pages/MainPage";
 import Mypage from "./pages/MyPage";
+
+
 const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<Navigate to="/mainpage" />} />
-      <Route path="/mainpage" element={<Mainpage />} />{" "}
+      <Route path="/mainpage" element={<Mainpage />} />
       <Route path="/input" element={<InputPage />} />
       <Route path="/plan" element={<PlanPage />} />
-      <Route path="mypage" element={<Mypage />} />
+      <Route path="/mypage" element={<Mypage />} />
+      
     </Routes>
   </Router>
 );

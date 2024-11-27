@@ -1,71 +1,9 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import axios from "axios";
+import "./RePasswordPopup.css";
 
-const styles = {
-  container: {
-    width: 1920,
-    height: 1080,
-    padding: 20,
-    background: "#FEF7FF",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "8px #CAC4D0 solid",
-    borderRadius: 18,
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-  },
-  title: {
-    marginBottom: 50,
-    fontSize: 48,
-    fontFamily: "Roboto",
-    fontWeight: 700,
-    color: "#2C2C2C",
-    textAlign: "center",
-  },
-  formContainer: {
-    width: 400,
-    background: "white",
-    borderRadius: 12,
-    padding: 30,
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 500,
-    marginBottom: 8,
-    display: "block",
-    color: "#2C2C2C",
-  },
-  input: {
-    width: "100%",
-    padding: 12,
-    fontSize: 16,
-    borderRadius: 8,
-    border: "1px solid #CAC4D0",
-    outline: "none",
-  },
-  button: {
-    width: "100%",
-    padding: 12,
-    fontSize: 18,
-    fontWeight: 700,
-    color: "white",
-    background: "#2C2C2C",
-    borderRadius: 8,
-    border: "none",
-    cursor: "pointer",
-    transition: "background 0.3s ease",
-  },
-  buttonHover: {
-    background: "#444",
-  },
-};
-
-const RePassword = () => {
+const RePasswordPopup = ({ isOpen, onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
@@ -88,72 +26,68 @@ const RePassword = () => {
         }
       );
       alert("비밀번호가 성공적으로 변경되었습니다.");
+      onClose(); // 비밀번호 변경 후 팝업 닫기
     } catch (error) {
       setError("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  return (
-    <div style={styles.container}>
-      <div style={styles.title}>비밀번호 변경</div>
-      <div style={styles.formContainer}>
-        <div style={styles.inputGroup}>
-          <label htmlFor="oldpassword" style={styles.label}>
-            기존 비밀번호
-          </label>
-          <input
-            id="oldpassword"
-            type="password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            placeholder="기존 비밀번호를 입력하세요"
-            style={styles.input}
-          />
-        </div>
+  if (!isOpen) return null;
 
-        <div style={styles.inputGroup}>
-          <label htmlFor="newpassword" style={styles.label}>
-            새 비밀번호
-          </label>
-          <input
-            id="newpassword"
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="새 비밀번호를 입력하세요"
-            style={styles.input}
-          />
-        </div>
+  return ReactDOM.createPortal(
+    <div className="repassword-popup-overlay">
+      <div className="repassword-popup-container">
+        <button className="repassword-close-button" onClick={onClose}>
+          ✖
+        </button>
 
-        <div style={{ ...styles.inputGroup, marginBottom: 30 }}>
-          <label htmlFor="newpasswordConfirm" style={styles.label}>
-            새 비밀번호 확인
-          </label>
-          <input
-            id="newpasswordConfirm"
-            type="password"
-            value={newPasswordConfirm}
-            onChange={(e) => setNewPasswordConfirm(e.target.value)}
-            placeholder="새 비밀번호를 다시 입력하세요"
-            style={styles.input}
-          />
-        </div>
+        <div className="repassword-form-container">
+          <h1>비밀번호 변경</h1>
+          <form>
+            <div className="input-group">
+              <label htmlFor="oldpassword">기존 비밀번호</label>
+              <input
+                id="oldpassword"
+                type="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                placeholder="기존 비밀번호를 입력하세요"
+              />
+            </div>
 
-        {error && <div style={{ color: "red", marginBottom: 20 }}>{error}</div>}
+            <div className="input-group">
+              <label htmlFor="newpassword">새 비밀번호</label>
+              <input
+                id="newpassword"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="새 비밀번호를 입력하세요"
+              />
+            </div>
 
-        <div>
-          <button
-            style={styles.button}
-            onMouseOver={(e) => (e.target.style.background = styles.buttonHover.background)}
-            onMouseOut={(e) => (e.target.style.background = styles.button.background)}
-            onClick={handlePasswordChange}
-          >
-            재설정 완료
-          </button>
+            <div className="input-group">
+              <label htmlFor="newpasswordConfirm">새 비밀번호 확인</label>
+              <input
+                id="newpasswordConfirm"
+                type="password"
+                value={newPasswordConfirm}
+                onChange={(e) => setNewPasswordConfirm(e.target.value)}
+                placeholder="새 비밀번호를 다시 입력하세요"
+              />
+            </div>
+
+            {error && <div className="error">{error}</div>}
+
+            <button type="button" className="repassword-submit" onClick={handlePasswordChange}>
+              재설정 완료
+            </button>
+          </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
-export default RePassword;
+export default RePasswordPopup;

@@ -200,3 +200,83 @@
 .button:hover {
   transform: scale(1.05);
 }
+
+.popup-input-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%; /* 레이아웃 정렬 */
+  gap: 10px;
+}
+
+.popup-input-label {
+  flex: 1.5;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--primary-color);
+}
+
+.popup-input {
+  flex: 2;
+  text-align: right;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid var(--hover-color);
+  border-radius: var(--border-radius);
+  outline: none;
+}
+
+.popup-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: var(--box-shadow-light);
+}
+
+.popup-input-unit {
+  flex: 0.5;
+  font-size: 16px;
+  color: #555;
+  margin-left: 5px;
+}
+
+/* Cluster Popup Styles */
+.popup-cluster-grid {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+}
+
+.popup-cluster-button {
+  width: 120px;
+  height: 120px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--secondary-color);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+}
+
+.popup-cluster-button:hover {
+  background-color: var(--hover-color);
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow-light);
+}
+
+.popup-cluster-button.selected {
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: var(--box-shadow-dark);
+}
+
+.popup-cluster-button img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}

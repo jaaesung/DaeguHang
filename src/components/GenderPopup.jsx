@@ -11,17 +11,17 @@ const GenderPopup = ({ selectedGender, onGenderSelect, onNext }) => {
       <h2 className="popup-title">성별 선택</h2>
       <div className="popup-gender-grid">
         <button
-          onClick={() => handleSelectGender("남자")}
+          onClick={() => handleSelectGender("남")}
           className={`popup-gender-button ${
-            localGender === "남자" ? "selected" : ""
+            localGender === "남" ? "selected" : ""
           }`}
         >
           남자
         </button>
         <button
-          onClick={() => handleSelectGender("여자")}
+          onClick={() => handleSelectGender("여")}
           className={`popup-gender-button ${
-            localGender === "여자" ? "selected" : ""
+            localGender === "여" ? "selected" : ""
           }`}
         >
           여자
