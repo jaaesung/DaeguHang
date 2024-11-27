@@ -45,19 +45,23 @@
   color: #333; /* 텍스트 색상 */
   cursor: pointer; /* 클릭 가능 마우스 포인터 */
   z-index: 1010;
+  line-height: 1; /* X의 높이를 자연스럽게 조정 */
+  padding: 0; /* 패딩 제거 */
   transition: color 0.3s ease; /* 색상 전환 애니메이션 */
 }
 
+/* 마우스를 올리면 텍스트 색상만 변경 */
 .login-close-button:hover {
-  color: #ff4b2b; /* 마우스를 올리면 색상 변경 */
+  color: #ff4b2b;
 }
 
+/* 포커스 효과 제거 */
 .login-close-button:focus {
-  outline: none; /* 포커스 테두리 제거 */
+  outline: none;
 }
 
-/* 버튼 스타일 */
-.login-popup-container button {
+/* 버튼 스타일 - 다른 버튼과 구분 */
+.login-popup-container button:not(.login-close-button) {
   border-radius: 20px;
   border: 1px solid #ff4b2b;
   background-color: #ff4b2b;
@@ -71,21 +75,6 @@
   cursor: pointer;
 }
 
-.login-popup-container button:hover {
-  background-color: #ffffff;
-  color: #ff4b2b;
-  border-color: #ff4b2b;
-  transform: scale(1.05);
-}
-
-.login-popup-container button:active {
-  transform: scale(0.95);
-}
-
-.login-popup-container button:focus {
-  outline: none;
-}
-
 /* Ghost 버튼 스타일 */
 .login-popup-container button.ghost {
   background-color: transparent;
@@ -96,6 +85,22 @@
 .login-popup-container button.ghost:hover {
   background-color: #ffffff;
   color: #ff4b2b;
+}
+
+/* Hover 효과 */
+.login-popup-container button:not(.login-close-button):hover {
+  background-color: #ffffff;
+  color: #ff4b2b;
+  border-color: #ff4b2b;
+  transform: scale(1.05);
+}
+
+.login-popup-container button:not(.login-close-button):active {
+  transform: scale(0.95);
+}
+
+.login-popup-container button:not(.login-close-button):focus {
+  outline: none;
 }
 
 /* 각 폼 컨테이너 */

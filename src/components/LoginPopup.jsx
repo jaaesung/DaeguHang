@@ -23,7 +23,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
         <div className="login-form-container sign-up-container">
           <form>
             <h1>회원가입</h1>
-            <span>use yourID for registration</span>
+            <span>enter yourID for registration!</span>
             <input type="text" placeholder="Name" />
             <input type="ID" placeholder="ID" />
             <input type="password" placeholder="Password" />
@@ -35,7 +35,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
         <div className="login-form-container sign-in-container">
           <form>
             <h1>로그인</h1>
-            <span>use your account</span>
+            <span>use your account!</span>
             <input type="ID" placeholder="ID" />
             <input type="password" placeholder="Password" />
             <a href="#">Forgot your password?</a>

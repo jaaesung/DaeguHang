@@ -13,6 +13,8 @@ const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
         rating: 4,
         latitude: 35.9714721000006,
         longitude: 128.693859601329,
+        searchUrl:
+          "https://map.naver.com/p/smart-around/place/16278082?c=15.00,0,0,0,dh",
       },
       {
         id: 2,
@@ -22,6 +24,8 @@ const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
         rating: 4.5,
         latitude: 35.9714721000006,
         longitude: 128.693859601329,
+        searchUrl:
+          "https://map.naver.com/p/smart-around/place/1545023188?c=15.00,0,0,0,dh",
       },
     ],
     식당: [
@@ -33,6 +37,8 @@ const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
         rating: 4.2,
         latitude: 35.85,
         longitude: 128.6,
+        searchUrl:
+          "https://map.naver.com/p/smart-around/place/1644034332?c=15.00,0,0,0,dh",
       },
     ],
     숙소: [
@@ -74,6 +80,7 @@ const RecommendedPlaces = ({ onAddToPlan, hiddenPlaces }) => {
               <PlaceCard
                 key={place.id}
                 imageUrl={place.imageUrl}
+                searchUrl={place.searchUrl}
                 name={place.name}
                 reviews={place.reviews}
                 rating={place.rating}

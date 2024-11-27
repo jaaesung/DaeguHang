@@ -100,24 +100,7 @@ const Header = () => {
               onMouseOut={(e) => (e.target.style.background = "none")}
               onClick={() => setIsPopupOpen(true)}
             >
-              로그인
-            </button>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-            >
-              회원가입
+              로그인 / 회원가입
             </button>
           </>
         )}
