@@ -1,0 +1,94 @@
+.schedule-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌우 컴포넌트 간 간격 균등 */
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: #ffffff;
+    max-width: 100%;
+    cursor: grab;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 추가 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .schedule-card:hover {
+    transform: translateY(-5px); /* 카드가 살짝 떠오르는 효과 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* 그림자 강조 */
+  }
+  
+  .schedule-card-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 8px; /* 이미지 둥글게 */
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .schedule-card-details {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    padding-right: 10px;
+  }
+  
+  .schedule-card-details strong {
+    font-size: 16px; /* 제목 크기 조정 */
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .schedule-card-details div {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .schedule-card-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: 1;
+    font-size: 14px;
+    color: #555;
+    text-align: right; /* 텍스트를 오른쪽 정렬 */
+  }
+  
+  .schedule-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 20px;
+  }
+  
+  .schedule-card-actions button {
+    padding: 8px 12px; /* 버튼 크기 증가 */
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #f9f9f9;
+    margin-right: 10px;
+    transition: background 0.3s ease;
+  }
+  
+  .schedule-card-actions button:hover {
+    background: #eaeaea; /* 버튼 hover 효과 */
+  }
+  
+  .schedule-card-delete {
+    padding: 8px 12px;
+    background: #333;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .schedule-card-delete:hover {
+    background: #ff7875; /* 삭제 버튼 hover 효과 */
+  }
+  

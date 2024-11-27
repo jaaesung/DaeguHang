@@ -1,0 +1,32 @@
+.schedule-container {
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  .schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .schedule-button {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f8f8f8;
+    cursor: pointer;
+  }
+  
+  .schedule-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .schedule-items {
+    display: grid;
+    gap: 10px;
+  }
+  
