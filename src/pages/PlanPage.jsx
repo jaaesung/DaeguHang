@@ -1,15 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
-import { useLocation } from "react-router-dom";
 import { useSchedule } from "../hooks/useSchedule";
 import "./PlanPage.css";
 
 const PlanPage = () => {
   const location = useLocation();
-  const { startDate, endDate } = location.state || {};
+  const { startDate, endDate, scheduleItems } = location.state || {};
+
   const {
     scheduleItemsByDate,
     selectedDate,
@@ -22,17 +23,9 @@ const PlanPage = () => {
     handleReorder,
   } = useSchedule(startDate, endDate);
 
-  const handleNextDateRef = useRef(handleNextDate);
-  useEffect(() => {
-    handleNextDateRef.current = handleNextDate;
-  }, [handleNextDate]);
-
-  useEffect(() => {
-    handleNextDateRef.current();
-  }, []);
-
   const handleCreatePlan = () => {
-    alert("계획이 생성되었습니다 ! ");
+    alert("계획이 생성되었습니다!");
+    // 여기에 계획 저장 및 페이지 이동 로직 추가
   };
 
   return (
@@ -44,8 +37,9 @@ const PlanPage = () => {
             <h3 className="recommended-places-title">추천 장소</h3>
             <div className="recommended-places-list">
               <RecommendedPlaces
-                onAddToPlan={handleAddToPlan}
-                hiddenPlaces={hiddenPlaces}
+                places={scheduleItems} 
+                onAddToPlan={handleAddToPlan} // handleAddToPlan 전달
+                hiddenPlaces={hiddenPlaces} 
               />
             </div>
           </div>
@@ -61,14 +55,13 @@ const PlanPage = () => {
             scheduleItems={scheduleItemsByDate[selectedDate] || []}
             onPreviousDate={handlePreviousDate}
             onNextDate={handleNextDate}
-            onRemoveItem={handleRemoveItem} // 삭제 핸들러
+            onRemoveItem={handleRemoveItem}
             onUpdateDuration={handleUpdateDuration}
-            onReorder={(newOrder) => {
-              handleReorder(selectedDate, newOrder); // 드래그 후 순서 업데이트
-            }}
+            onReorder={(newOrder) => handleReorder(selectedDate, newOrder)}
             selectedDate={selectedDate}
           />
         </div>
+
         <div className="map-display-section">
           <MapDisplay scheduleItems={scheduleItemsByDate[selectedDate] || []} />
         </div>
