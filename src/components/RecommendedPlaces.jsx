@@ -22,7 +22,17 @@ const RecommendedPlaces = ({ places }) => {
       <div className="scrollable-content">
         {places[activeTab].length > 0 ? (
           places[activeTab].map((place) => (
-            <PlaceCard key={place.id} place={place} />
+            <PlaceCard
+                key={place.id}
+                imageUrl={place.imageUrl}
+                searchUrl={place.searchUrl}
+                name={place.name}
+                reviews={place.reviews}
+                rating={place.rating}
+                latitude={place.latitude}
+                longitude={place.longitude}
+                onAddToPlan={() => onAddToPlan(place)}
+              />
           ))
         ) : (
           <div className="no-places">추천 장소가 없습니다.</div>
