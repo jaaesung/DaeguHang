@@ -44,9 +44,9 @@ const InputPage = () => {
       const { shopping = 0, lodging = 0, culture = 0, dining = 0, entertainment = 0 } =
         selectedBudgets;
 
-      const response = await axios.post(`http://127.0.0.1:8080/api/recommendation`, {
+      const response = await axios.post(`http://127.0.0.1:8080/api/recommend`, {
         cluster: parseInt(selectedCluster),  // 선택된 클러스터 값
-        userId,
+        userId : parseInt(userId),
         startDate: startDate.toISOString().split("T")[0],
         endDate: endDate.toISOString().split("T")[0],
         gender: selectedGender === "남" ? "M" : "F",

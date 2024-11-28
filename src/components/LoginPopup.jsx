@@ -24,7 +24,12 @@ const LoginPopup = ({ isOpen, onClose }) => {
       onClose(); // 로그인 후 팝업 닫기
     } catch (error) {
       console.error("Login failed", error);
-      alert("로그인 실패!");
+    // 서버에서 전송된 에러 메시지를 출력
+    if (error.response && error.response.data) {
+      alert(error.response.data); // 서버의 에러 메시지가 문자열 형태로 전달되므로 그대로 출력
+    } else {
+      alert("로그인 실패: 서버와 연결할 수 없습니다."); // 서버와 연결할 수 없을 때의 처리
+    }
     }
   };
   
@@ -57,7 +62,7 @@ const LoginPopup = ({ isOpen, onClose }) => {
       console.error("Registration failed", error);
   
       if (error.response && error.response.data) {
-        alert(`회원가입 실패: ${error.response.data.message || "오류가 발생했습니다."}`);
+        alert(`회원가입 실패: ${error.response.data || "오류가 발생했습니다."}`);
       } else {
         alert("회원가입 실패: 서버와 연결할 수 없습니다.");
       }
