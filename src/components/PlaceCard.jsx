@@ -37,7 +37,7 @@ const PlaceCard = ({
         className="place-card-button"
         onClick={() => onAddToPlan({ name, latitude, longitude })}
       >
-        일정에 추가
+        추가
       </button>
     </div>
   );

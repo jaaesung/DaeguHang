@@ -17,6 +17,7 @@
 
 .left-section {
   flex: 2;
+  min-width: 65vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -30,6 +30,7 @@
   width: 60vw;
   max-width: 600px;
   height: 20vw;
+  min-height: 500px;
   max-height: 800px;
   background: var(--white);
   border-radius: var(--border-radius);
