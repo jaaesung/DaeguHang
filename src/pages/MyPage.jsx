@@ -49,7 +49,7 @@ const Mypage = () => {
           <div className="profile-summary">
             <div className="profile-icon">👤</div>
             <div className="profile-name">배재성</div>
-            <div className="profile-id">jae089265@naver.com</div>
+            <div className="profile-id">jae089265</div>
           </div>
         </aside>
 
@@ -60,15 +60,11 @@ const Mypage = () => {
             <h3 className="card-title">기본 정보</h3>
             <div className="card-content">
               <div className="info-row">
-                <span>전화번호</span>
-                <span className="editable">+82 10-2***-4***</span>
+                <span></span>
+                <span className="editable">배재성</span>
                 <button className="edit-button">수정</button>
               </div>
-              <div className="info-row">
-                <span>이메일</span>
-                <span className="editable">ja*******@n*******.*om</span>
-                <button className="edit-button">등록</button>
-              </div>
+
               <div className="info-row">
                 <span>비밀번호</span>
                 <button className="edit-button">비밀번호 수정</button>

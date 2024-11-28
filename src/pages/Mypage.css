@@ -7,50 +7,54 @@
   flex-direction: column;
 }
 
-/* 레이아웃 구분 */
 .mypage-layout {
   display: flex;
-  height: calc(100vh - 60px); /* 헤더 높이를 제외한 나머지 영역 */
-  padding: 20px; /* 전체 레이아웃의 바깥 여백 추가 */
+  justify-content: center; /* 콘텐츠를 중앙 정렬 */
+  align-items: flex-start; /* 세로 방향에서 상단 정렬 */
+  gap: 20px; /* 왼쪽 사이드바와 오른쪽 콘텐츠 간의 간격 */
+  height: calc(100vh - 60px);
+  padding: 20px;
+  background-color: #f9f9f9;
+  position: relative; /* 선 배치 조정을 위해 relative 추가 */
 }
 
-/* 왼쪽 사이드바 */
 .mypage-sidebar {
-  width: 25%;
-  background-color: transparent; /* 배경 제거 */
-  padding: 0 10px; /* 사이드 내부 여백 최소화 */
+  width: 20%; /* 사이드바 크기 */
+  background-color: transparent;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* 상단에 정렬 */
 }
 
 .profile-summary {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 10px; /* 위쪽 여백을 줄여서 상단으로 이동 */
+  padding-top: 20px; /* 내부 여백을 추가해 배치 조정 */
 }
-
 .profile-icon {
-  font-size: 50px;
+  font-size: 80px; /* 아이콘 크기 축소 */
   margin-bottom: 10px;
 }
 
 .profile-name {
-  font-size: 18px;
+  font-size: 24px; /* 이름 크기 축소 */
   font-weight: bold;
 }
 
 .profile-id {
-  font-size: 14px;
+  font-size: 18px; /* ID 크기 축소 */
   color: #777;
 }
 
 /* 오른쪽 메인 콘텐츠 */
 .mypage-main {
-  flex: 1;
+  width: 60%; /* 메인 콘텐츠 크기 축소 */
   display: flex;
   flex-direction: column;
-  gap: 30px; /* 섹션 간의 간격 증가 */
-  margin-left: 20px; /* 사이드바와 메인 콘텐츠 간 여백 */
+  gap: 20px; /* 섹션 간 간격 줄임 */
+  margin-left: 20px;
 }
 
 /* 내 정보 카드 */
