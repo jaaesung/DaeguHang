@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
@@ -23,9 +23,19 @@ const PlanPage = () => {
     handleReorder,
   } = useSchedule(startDate, endDate);
 
+  // useRef와 useEffect로 handleNextDate 업데이트 및 첫 실행
+  const handleNextDateRef = useRef(handleNextDate);
+  useEffect(() => {
+    handleNextDateRef.current = handleNextDate;
+  }, [handleNextDate]);
+
+  useEffect(() => {
+    handleNextDateRef.current(); // 첫 렌더링 시 handleNextDate 실행
+  }, []);
+
   const handleCreatePlan = () => {
     alert("계획이 생성되었습니다!");
-    // 여기에 계획 저장 및 페이지 이동 로직 추가
+    // 계획 저장 및 페이지 이동 로직 추가
   };
 
   return (
@@ -37,9 +47,9 @@ const PlanPage = () => {
             <h3 className="recommended-places-title">추천 장소</h3>
             <div className="recommended-places-list">
               <RecommendedPlaces
-                places={scheduleItems} 
-                onAddToPlan={handleAddToPlan} // handleAddToPlan 전달
-                hiddenPlaces={hiddenPlaces} 
+                places={scheduleItems} // places props 추가
+                onAddToPlan={handleAddToPlan}
+                hiddenPlaces={hiddenPlaces}
               />
             </div>
           </div>
@@ -71,4 +81,5 @@ const PlanPage = () => {
 };
 
 export default PlanPage;
+
 

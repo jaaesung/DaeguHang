@@ -1,3 +1,15 @@
+/* :root 변수 추가 (반응형 디자인 기반) */
+:root {
+  --primary-color: #2c2c2c;
+  --secondary-color: #f9f9f9;
+  --highlight-color: #ddd;
+  --text-color: #333;
+  --font-size-small: 14px;
+  --font-size-medium: 16px;
+  --font-size-large: 20px;
+  --border-radius: 8px;
+}
+
 /* 전체 페이지 스타일 */
 .plan-page {
   width: 100%;
@@ -21,16 +33,19 @@
   height: 100%;
   box-sizing: border-box;
   padding: 10px;
+  flex: 1; /* 동적 크기 조정 */
+  min-width: 280px; /* 최소 너비 설정 */
 }
 
 /* 추천 장소 목록 */
 .recommended-places {
-  flex: 1; /* 남은 공간을 채움 */
-  overflow-y: hidden; /* 스크롤 가능 */
+  flex: 1;
+  overflow-y: auto; /* 스크롤 가능 */
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  border: 1px solid var(--highlight-color);
+  border-radius: var(--border-radius);
+  background-color: var(--secondary-color);
+  min-height: 200px; /* 최소 높이 설정 */
 }
 
 /* 추천 장소 목록 내부 */
@@ -42,53 +57,39 @@
 
 /* 계획 생성 버튼 컨테이너 */
 .plan-button-container {
-  margin-top: 10px; /* 추천 장소 목록과 간격 */
+  margin-top: 10px;
   padding: 10px 0;
   text-align: center;
+  position: sticky; /* 화면에 고정 */
+  bottom: 0;
+  background-color: var(--secondary-color);
+  border-top: 1px solid var(--highlight-color);
 }
 
 /* 계획 생성 버튼 */
 .plan-complete-button {
   width: 100%;
   padding: 15px;
-  background-color: #2c2c2c;
+  background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 16px;
-  text-align: center;
+  font-size: var(--font-size-medium);
+  transition: background-color 0.3s ease;
+}
+
+.plan-complete-button:hover {
+  background-color: #444;
 }
 
 /* 추천 장소 제목 */
 .recommended-places-title {
-  font-size: 20px;
+  font-size: var(--font-size-large);
   font-weight: 600;
   margin-bottom: 20px;
   text-align: center;
-}
-
-/* 계획 생성 버튼 영역 */
-.plan-complete-button-container {
-  padding: 10px;
-  background-color: #fff;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-  border-top: 1px solid #ddd;
-  position: sticky;
-  bottom: 0;
-  text-align: center;
-}
-
-/* 계획 생성 버튼 */
-.plan-complete-button {
-  width: 100%;
-  padding: 15px;
-  background-color: #2c2c2c;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
+  color: var(--text-color);
 }
 
 /* 일정 목록 영역 */
@@ -103,4 +104,49 @@
 .map-display-section {
   flex: 1.5;
   background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 반응형 디자인 추가 */
+@media (max-width: 1024px) {
+  .recommended-places-container {
+    min-width: 240px;
+    padding: 8px;
+  }
+
+  .recommended-places {
+    padding: 8px;
+    font-size: var(--font-size-small);
+  }
+
+  .plan-complete-button {
+    font-size: var(--font-size-small);
+    padding: 10px;
+  }
+
+  .schedule-section {
+    padding: 15px;
+  }
+
+  .map-display-section {
+    display: none; /* 작은 화면에서는 지도 숨김 */
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column; /* 세로 배열 */
+    height: auto;
+  }
+
+  .recommended-places-container {
+    width: 100%;
+    min-width: unset; /* 제한 해제 */
+  }
+
+  .schedule-section {
+    width: 100%;
+  }
 }
