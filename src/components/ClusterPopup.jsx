@@ -4,38 +4,48 @@ import "./Popup.css";
 const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
   const [localCluster, setLocalCluster] = useState(selectedCluster);
 
-  const handleSelectCluster = (cluster) => setLocalCluster(cluster);
-
   const clusterOptions = [
-    { id: "1", name: "Cluster 1", img: "cluster1.png" },
-    { id: "2", name: "Cluster 2", img: "cluster2.png" },
-    { id: "3", name: "Cluster 3", img: "cluster3.png" },
-    { id: "4", name: "Cluster 4", img: "cluster4.png" },
+    { id: "1", name: "Cluster 1", img: "https://via.placeholder.com/150?text=Cluster+1" },
+    { id: "2", name: "Cluster 2", img: "https://via.placeholder.com/150?text=Cluster+2" },
+    { id: "3", name: "Cluster 3", img: "https://via.placeholder.com/150?text=Cluster+3" },
+    { id: "4", name: "Cluster 4", img: "https://via.placeholder.com/150?text=Cluster+4" },
   ];
+
+  const handleClusterClick = (clusterId) => {
+    setLocalCluster(clusterId);
+  };
+
+  const handleNext = () => {
+    if (localCluster) {
+      onClusterSelect(localCluster);
+      onNext();
+    }
+  };
 
   return (
     <div className="popup">
-      <h2 className="popup-title">클러스터 선택</h2>
-
+      <h2 className="popup-title">클러스터를 선택하세요</h2>
       <div className="popup-cluster-grid">
         {clusterOptions.map((cluster) => (
-          <button
+          <div
             key={cluster.id}
-            onClick={() => handleSelectCluster(cluster.id)}
-            className={`popup-cluster-button ${localCluster === cluster.id ? "selected" : ""}`}
+            className={`popup-cluster-card ${
+              localCluster === cluster.id ? "selected" : ""
+            }`}
+            onClick={() => handleClusterClick(cluster.id)}
           >
-            <img src={cluster.img} alt={cluster.name} />
-            <span>{cluster.name}</span>
-          </button>
+            <img
+              src={cluster.img}
+              alt={cluster.name}
+              className="popup-cluster-image"
+            />
+            <p className="popup-cluster-label">{cluster.name}</p>
+          </div>
         ))}
       </div>
-
       <button
         className="popup-next"
-        onClick={() => {
-          onClusterSelect(localCluster);
-          onNext();
-        }}
+        onClick={handleNext}
         disabled={!localCluster} // 클러스터가 선택되지 않으면 비활성화
       >
         다음

@@ -117,22 +117,49 @@ export const useSchedule = (startDate, endDate) => {
     }
   };
 
-  // 일정 업데이트
   const handleUpdateDuration = (index, newDuration) => {
     const dateKey = selectedDate.split("T")[0];
     const updatedSchedule = [...(scheduleItemsByDate[dateKey] || [])];
     updatedSchedule[index].duration = newDuration;
+
+    // 시작 시간 재계산
+    const recalculatedSchedule = recalculateStartTimes(updatedSchedule);
+
     setScheduleItemsByDate((prev) => ({
       ...prev,
-      [dateKey]: updatedSchedule,
+      [dateKey]: recalculatedSchedule,
     }));
   };
 
   const handleReorder = (dateKey, newOrder) => {
+    const recalculateStartTimes = (items) => {
+      let currentTime = 10; // 시작 시간 기준
+      return items.map((item) => {
+        const updatedItem = { ...item, startTime: currentTime };
+        currentTime += item.duration;
+        return updatedItem;
+      });
+    };
+
     setScheduleItemsByDate((prev) => ({
       ...prev,
-      [dateKey]: newOrder,
+      [dateKey]: recalculateStartTimes(newOrder), // 새로운 순서 기반으로 시작 시간 재계산
     }));
+  };
+
+  const recalculateStartTimes = (items) => {
+    const updatedItems = [];
+    let currentTime = 10; // 첫 시작 시간 (기본: 오전 10시)
+
+    items.forEach((item) => {
+      updatedItems.push({
+        ...item,
+        startTime: currentTime,
+      });
+      currentTime += item.duration;
+    });
+
+    return updatedItems;
   };
 
   return {
@@ -145,5 +172,6 @@ export const useSchedule = (startDate, endDate) => {
     handleRemoveItem,
     handleUpdateDuration,
     handleReorder,
+    recalculateStartTimes,
   };
 };
