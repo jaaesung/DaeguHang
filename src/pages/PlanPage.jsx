@@ -48,7 +48,7 @@ const PlanPage = () => {
             <div className="recommended-places-list">
               <RecommendedPlaces
                 places={scheduleItems} // places props 추가
-                onAddToPlan={handleAddToPlan}
+                onAddToPlan={handleAddToPlan} // onAddToPlan을 전달
                 hiddenPlaces={hiddenPlaces}
               />
             </div>
@@ -81,5 +81,3 @@ const PlanPage = () => {
 };
 
 export default PlanPage;
-
-

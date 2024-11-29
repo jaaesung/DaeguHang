@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PlaceCard from "./PlaceCard";
 import "./RecommendedPlaces.css";
 
-const RecommendedPlaces = ({ places }) => {
+const RecommendedPlaces = ({ places, onAddToPlan }) => {
   const [activeTab, setActiveTab] = useState("명소");
 
   return (
@@ -31,7 +31,7 @@ const RecommendedPlaces = ({ places }) => {
                 rating={place.rating}
                 latitude={place.latitude}
                 longitude={place.longitude}
-                onAddToPlan={() => onAddToPlan(place)}
+                onAddToPlan={() => onAddToPlan(place)} // 여기에서 전달된 함수 호출
               />
           ))
         ) : (
