@@ -7,7 +7,7 @@ import TravelTitle from "../components/TravelTitle";
 import DateSelector from "../components/DateSelector";
 import GenderPopup from "../components/GenderPopup";
 import AgePopup from "../components/AgePopup";
-import BudgetPopup from "../components/BudgetPopup";
+import BudgetSlider from "../components/BudgetSlider"; // BudgetSlider로 대체
 import ClusterPopup from "../components/ClusterPopup";
 import "./InputPage.css";
 
@@ -17,12 +17,18 @@ const InputPage = () => {
   const [showDatePopup, setShowDatePopup] = useState(false);
   const [showGenderPopup, setShowGenderPopup] = useState(false);
   const [showAgePopup, setShowAgePopup] = useState(false);
-  const [showBudgetPopup, setShowBudgetPopup] = useState(false);
+  const [showBudgetPopup, setShowBudgetPopup] = useState(false); // 예산 팝업을 BudgetSlider로 대체
   const [showClusterPopup, setShowClusterPopup] = useState(true);
 
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedAge, setSelectedAge] = useState(null);
-  const [selectedBudgets, setSelectedBudgets] = useState({});
+  const [selectedBudgets, setSelectedBudgets] = useState({
+    shopping: 0,
+    lodging: 0,
+    culture: 0,
+    dining: 0,
+    entertainment: 0,
+  });
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [scheduleItems, setScheduleItems] = useState([]);
@@ -39,7 +45,7 @@ const InputPage = () => {
     }
 
     try {
-      const { shopping = 0, lodging = 0, culture = 0, dining = 0, entertainment = 0 } = selectedBudgets;
+      const { shopping, lodging, culture, dining, entertainment } = selectedBudgets;
 
       const response = await axios.post(`http://127.0.0.1:8080/api/recommendation`, {
         cluster: parseInt(selectedCluster),
@@ -114,6 +120,7 @@ const InputPage = () => {
 
   const handleBudgetComplete = (budgets) => {
     setSelectedBudgets(budgets);
+    setShowBudgetPopup(false); // 예산 설정 후 팝업 닫기
   };
 
   const handleTitleChange = (newTitle) => {
@@ -152,7 +159,7 @@ const InputPage = () => {
             예산 합계:{" "}
             <span>
               {calculateTotalBudget() > 0
-                ? `${calculateTotalBudget().toLocaleString()}원`
+                ? `${calculateTotalBudget().toLocaleString()}만원`
                 : "선택되지 않음"}
             </span>
           </div>
@@ -219,7 +226,7 @@ const InputPage = () => {
             onAgeSelect={handleAgeSelect}
             onNext={() => {
               setShowAgePopup(false);
-              setShowBudgetPopup(true);
+              setShowBudgetPopup(true); // 예산 팝업을 여는 부분
             }}
           />
         </div>
@@ -227,12 +234,9 @@ const InputPage = () => {
 
       {showBudgetPopup && (
         <div className="overlay">
-          <BudgetPopup
-            selectedBudgets={selectedBudgets}
-            onComplete={(budgets) => {
-              handleBudgetComplete(budgets);
-              setShowBudgetPopup(false);
-            }}
+          <BudgetSlider
+            initialBudgets={selectedBudgets}
+            onComplete={handleBudgetComplete} // 예산을 설정하고 팝업을 닫는 함수
           />
         </div>
       )}
