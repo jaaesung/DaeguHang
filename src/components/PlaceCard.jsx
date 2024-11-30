@@ -28,7 +28,16 @@ const PlaceCard = ({
       searchUrl,
       placeId,
     });
-  }, [imageUrl, name, reviews, rating, latitude, longitude, searchUrl, placeId]);
+  }, [
+    imageUrl,
+    name,
+    reviews,
+    rating,
+    latitude,
+    longitude,
+    searchUrl,
+    placeId,
+  ]);
 
   useEffect(() => {
     // placeId가 주어지면 해당 장소의 상세 정보를 API로 받아옴
@@ -81,12 +90,10 @@ const PlaceCard = ({
         </h4>
         <p className="place-card-reviews">{reviews} 리뷰</p>
         <p className="place-card-rating">⭐ {rating}</p>
-        {placeType && <p className="place-card-type">유형: {placeType}</p>} {/* 장소 유형 추가 */}
+        {placeType && <p className="place-card-type">유형: {placeType}</p>}{" "}
+        {/* 장소 유형 추가 */}
       </div>
-      <button
-        className="place-card-button"
-        onClick={handleAddPlace}
-      >
+      <button className="place-card-button" onClick={handleAddPlace}>
         일정에 추가
       </button>
     </div>
@@ -94,4 +101,3 @@ const PlaceCard = ({
 };
 
 export default PlaceCard;
-

@@ -1,112 +1,143 @@
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";  // useNavigate 임포트
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import PlanItem from "../components/PlanItem";
+import axios from "axios";
 import "./Mypage.css";
 
 const Mypage = () => {
-  const navigate = useNavigate();  // navigate 함수 초기화
-
-  const myPlans = [
-    {
-      id: 1,
-      title: "이월드 벚꽃놀이",
-      date: "2024.3.12 ~ 2024.3.12",
-      image: "image1.jpg",
-    },
-    {
-      id: 2,
-      title: "동성로 맛집투어",
-      date: "2024.8.19 ~ 2024.8.20",
-      image: "",
-    },
-    {
-      id: 3,
-      title: "김광석 거리",
-      date: "2024.10.12 ~ 2024.10.12",
-      image: "image3.jpg",
-    },
-  ];
-
+  const navigate = useNavigate();
   const scrollRef = useRef(null);
 
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
+  const [userInfo, setUserInfo] = useState(null); // 사용자 정보를 저장
+  const [myPlans, setMyPlans] = useState([]); // 사용자의 계획 정보를 저장
+  const [loading, setLoading] = useState(true); // 로딩 상태 관리
 
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
+  useEffect(() => {
+    const loginId = sessionStorage.getItem("loginId"); // sessionStorage에서 loginId 가져오기
+    console.log("Session loginId:", loginId);
 
-  // 비밀번호 수정 버튼 클릭 시 호출되는 함수
+    if (!loginId) {
+      alert("로그인이 필요합니다.");
+      navigate("/login"); // loginId가 없으면 로그인 페이지로 이동
+      return;
+    }
+
+    const fetchUserInfo = async () => {
+      try {
+        // 사용자 정보 API 호출
+        const userResponse = await axios.get(
+          `http://localhost:8080/api/user/${loginId}` // loginId를 사용하여 정보 요청
+        );
+        console.log("User Info Response:", userResponse.data);
+        setUserInfo(userResponse.data); // 사용자 정보 상태 업데이트
+
+        // 사용자 계획 정보 API 호출
+        const plansResponse = await axios.get(
+          `http://localhost:8080/api/plans/${loginId}` // loginId를 사용하여 계획 요청
+        );
+        console.log("Plans Response:", plansResponse.data);
+        setMyPlans(plansResponse.data); // 계획 정보 상태 업데이트
+      } catch (error) {
+        console.error(
+          "사용자 정보를 가져오는 중 오류 발생:",
+          error.response || error.message
+        );
+        alert("사용자 정보를 가져올 수 없습니다.");
+      } finally {
+        setLoading(false); // 로딩 완료
+      }
+    };
+
+    fetchUserInfo();
+  }, [navigate]);
+
   const handlePasswordChangeClick = () => {
-    navigate("/repassword");  // RePassword 페이지로 이동
+    navigate("/repassword");
   };
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <div className="mypage-container">
       <Header />
 
       <div className="mypage-layout">
-        {/* 왼쪽 사이드바 */}
         <aside className="mypage-sidebar">
           <div className="profile-summary">
             <div className="profile-icon">👤</div>
-            <div className="profile-name">배재성</div>
-            <div className="profile-id">jae089265@naver.com</div>
+            <div className="profile-name">{userInfo?.name || "사용자"}</div>
+            <div className="profile-id">
+              {userInfo?.username || "아이디 없음"}
+            </div>
           </div>
         </aside>
 
-        {/* 오른쪽 메인 콘텐츠 */}
         <main className="mypage-main">
-          {/* 내 정보 카드 */}
           <section className="basic-info-card">
             <h3 className="card-title">기본 정보</h3>
             <div className="card-content">
               <div className="info-row">
-                <span>전화번호</span>
-                <span className="editable">+82 10-2***-4***</span>
+                <span>이름</span>
+                <span className="editable">{userInfo?.name || "불명"}</span>
                 <button className="edit-button">수정</button>
               </div>
               <div className="info-row">
-                <span>이메일</span>
-                <span className="editable">ja*******@n*******.*om</span>
-                <button className="edit-button">등록</button>
+                <span>아이디</span>
+                <span className="editable">
+                  {userInfo?.username || "아이디 없음"}
+                </span>
               </div>
               <div className="info-row">
                 <span>비밀번호</span>
-                <button className="edit-button" onClick={handlePasswordChangeClick}>비밀번호 수정</button> {/* 클릭 시 비밀번호 수정 페이지로 이동 */}
+                <button
+                  className="edit-button"
+                  onClick={handlePasswordChangeClick}
+                >
+                  비밀번호 수정
+                </button>
               </div>
             </div>
           </section>
 
-          {/* 내 계획 섹션 */}
           <section className="mypage-plans-section">
             <h3 className="plans-title">내 계획</h3>
             <div className="plans-carousel-wrapper">
-              {/* 왼쪽 화살표 버튼 */}
-              <button className="scroll-button left" onClick={scrollLeft}>
+              <button
+                className="scroll-button left"
+                onClick={() =>
+                  scrollRef.current?.scrollBy({
+                    left: -300,
+                    behavior: "smooth",
+                  })
+                }
+              >
                 ◀
               </button>
 
-              {/* 가로 스크롤 영역 */}
               <div className="plans-carousel" ref={scrollRef}>
-                {myPlans.map((plan) => (
-                  <PlanItem
-                    key={plan.id}
-                    title={plan.title}
-                    date={plan.date}
-                    image={plan.image}
-                  />
-                ))}
+                {myPlans.length > 0 ? (
+                  myPlans.map((plan) => (
+                    <PlanItem
+                      key={plan.id}
+                      title={plan.title}
+                      date={plan.date}
+                      image={plan.image}
+                    />
+                  ))
+                ) : (
+                  <p className="no-plans">아직 등록된 계획이 없습니다.</p>
+                )}
               </div>
 
-              {/* 오른쪽 화살표 버튼 */}
-              <button className="scroll-button right" onClick={scrollRight}>
+              <button
+                className="scroll-button right"
+                onClick={() =>
+                  scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" })
+                }
+              >
                 ▶
               </button>
             </div>

@@ -1,79 +1,93 @@
 /* 전체 컨테이너 */
 .mypage-container {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  font-family: "Roboto", sans-serif;
+  background-color: #f5f5f5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  color: #333;
 }
 
 /* 레이아웃 구분 */
 .mypage-layout {
   display: flex;
-  height: calc(100vh - 60px); /* 헤더 높이를 제외한 나머지 영역 */
-  padding: 20px; /* 전체 레이아웃의 바깥 여백 추가 */
+  flex-wrap: wrap;
+  height: calc(100vh - 80px); /* 헤더 높이를 제외한 나머지 영역 */
+  padding: 20px;
+  gap: 20px;
 }
 
 /* 왼쪽 사이드바 */
 .mypage-sidebar {
-  width: 25%;
-  background-color: transparent; /* 배경 제거 */
-  padding: 0 10px; /* 사이드 내부 여백 최소화 */
+  flex: 1 1 20%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: calc(100vh - 100px); /* 화면 높이에 맞추되 아래 여백 추가 */
+  overflow-y: auto; /* 스크롤 활성화 */
 }
 
 .profile-summary {
   text-align: center;
-  margin-top: 30px;
 }
 
 .profile-icon {
-  font-size: 50px;
-  margin-bottom: 10px;
+  font-size: 60px;
+  margin-bottom: 15px;
 }
 
 .profile-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  color: #4a4a4a;
 }
 
 .profile-id {
   font-size: 14px;
-  color: #777;
+  color: #888;
 }
 
 /* 오른쪽 메인 콘텐츠 */
 .mypage-main {
-  flex: 1;
+  flex: 3 1 75%;
   display: flex;
   flex-direction: column;
-  gap: 30px; /* 섹션 간의 간격 증가 */
-  margin-left: 20px; /* 사이드바와 메인 콘텐츠 간 여백 */
+  gap: 20px;
 }
 
 /* 내 정보 카드 */
 .basic-info-card {
-  flex: 1; /* 남은 높이의 절반 */
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  overflow-y: auto; /* 카드 내부 스크롤 */
-  margin-top: 50px; /* 상단 여백 추가 */
+  display: flex;
+  flex-direction: column;
 }
 
 .card-title {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .card-content {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+/* 구별을 위한 그림자 있는 선 */
+.info-row:not(:last-child)::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(to right, #e0e0e0, rgba(255, 255, 255, 0));
+  margin: 10px 0;
 }
 
 .info-row {
@@ -89,28 +103,30 @@
 }
 
 .edit-button {
-  background-color: #ff6f61;
+  background-color: #1e90ff;
   color: #ffffff;
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 8px;
+  padding: 8px 12px;
   font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .edit-button:hover {
-  background-color: #b9544b;
+  background-color: #187bcd;
 }
 
 /* 내 계획 섹션 */
 .mypage-plans-section {
-  flex: 1;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  position: relative;
-  overflow: hidden; /* 아래 잘림 방지 */
+  overflow: hidden;
+  min-height: 20vw; /* 최소 높이를 화면 비율에 따라 설정 */
+  position: relative; /* 버튼 위치 조정을 위한 기준 설정 */
 }
 
 .plans-title {
@@ -118,6 +134,7 @@
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
+  color: #444;
 }
 
 .plans-carousel-wrapper {
@@ -125,29 +142,24 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  width: 100%;
   position: relative;
 }
 
 .plans-carousel {
   display: flex;
-  gap: 60px;
+  gap: 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 10px 0;
-  scrollbar-width: none; /* Firefox */
-  align-items: center;
 }
 
 .plans-carousel::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
 }
 
-/* 좌우 화살표 버튼 */
 .scroll-button {
   background-color: #ffffff;
-  border: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -159,17 +171,31 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1;
-}
-
-.scroll-button.left {
-  left: -10px; /* 버튼이 겹치지 않도록 위치 조정 */
-}
-
-.scroll-button.right {
-  right: -10px; /* 버튼이 겹치지 않도록 위치 조정 */
+  transition: background-color 0.3s ease;
 }
 
 .scroll-button:hover {
   background-color: #f0f0f0;
+}
+
+.scroll-button.left {
+  left: -10px;
+}
+
+.scroll-button.right {
+  right: -10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .mypage-layout {
+    flex-direction: column;
+  }
+  .mypage-sidebar {
+    width: 100%;
+    max-height: none;
+  }
+  .mypage-main {
+    width: 100%;
+  }
 }
