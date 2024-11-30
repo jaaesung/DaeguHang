@@ -9,12 +9,12 @@ const Mypage = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
 
-  const [userInfo, setUserInfo] = useState(null); // 사용자 정보를 저장
+  const loginId = sessionStorage.getItem("loginId"); // sessionStorage에서 loginId 가져오기
+  const [userInfo, setUserInfo] = useState({ username: loginId, name: null }); // loginId를 초기값으로 설정
   const [myPlans, setMyPlans] = useState([]); // 사용자의 계획 정보를 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
 
   useEffect(() => {
-    const loginId = sessionStorage.getItem("loginId"); // sessionStorage에서 loginId 가져오기
     console.log("Session loginId:", loginId);
 
     if (!loginId) {
@@ -50,7 +50,7 @@ const Mypage = () => {
     };
 
     fetchUserInfo();
-  }, [navigate]);
+  }, [navigate, loginId]);
 
   const handlePasswordChangeClick = () => {
     navigate("/repassword");
