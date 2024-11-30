@@ -6,10 +6,10 @@ import "./Mainpage.css";
 const rotatingWords = ["선택", "친구", "도움", "계획"]; // 전환되는 단어 목록
 
 const images = [
-  "https://www.daeguview.com/DATA/photo/thumb_b_2018_02_02.jpg",
-  "https://www.daeguview.com/DATA/photo/thumb_b_20190930095251.jpg",
-  "https://www.daeguview.com/DATA/photo/thumb_b_20231101114824.jpg",
-  "https://www.daeguview.com/DATA/photo/thumb_b_competition_2023_00681_3.jpg",
+  "http://www.daeguview.com/DATA/photo/thumb_b_2018_02_02.jpg",
+  "http://www.daeguview.com/DATA/photo/thumb_b_20190930095251.jpg",
+  "http://www.daeguview.com/DATA/photo/thumb_b_20231101114824.jpg",
+  "http://www.daeguview.com/DATA/photo/thumb_b_competition_2023_00681_3.jpg",
 ];
 
 export default function Mainpage() {

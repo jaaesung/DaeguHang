@@ -1,39 +1,42 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import axios from "axios";  // axios 임포트
+import axios from "axios"; // axios 임포트
 import "./LoginPopup.css";
 
-const LoginPopup = ({ isOpen, onClose }) => {
+const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/user/login', {
-        loginId,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/user/login",
+        {
+          loginId,
+          password,
+        }
+      );
       const { userId } = response.data; // 응답에서 userId 추출
       if (userId) {
-        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
+        sessionStorage.setItem("userId", userId); // Session Storage에 userId 저장
+        onLoginSuccess(); // 로그인 성공 시 부모 상태 변경
       }
-      alert(response.data.message || "로그인 성공"); // 성공 메시지 표시
-      onClose(); // 로그인 후 팝업 닫기
+      alert(response.data.message || "로그인 성공");
     } catch (error) {
       console.error("Login failed", error);
       alert("로그인 실패!");
     }
   };
-  
+
   const handleRegister = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8080/api/user/register',
+        "http://127.0.0.1:8080/api/user/register",
         {
           username,
           userLoginId: loginId,
@@ -41,29 +44,32 @@ const LoginPopup = ({ isOpen, onClose }) => {
         },
         {
           headers: {
-            'Content-Type': 'application/json', // 명확히 Content-Type을 JSON으로 지정
+            "Content-Type": "application/json", // 명확히 Content-Type을 JSON으로 지정
           },
         }
       );
-  
+
       const { userId } = response.data; // 응답에서 userId 추출
       if (userId) {
-        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
+        sessionStorage.setItem("userId", userId); // Session Storage에 userId 저장
       }
-  
+
       alert("회원가입 성공");
       onClose(); // 회원가입 후 팝업 닫기
     } catch (error) {
       console.error("Registration failed", error);
-  
+
       if (error.response && error.response.data) {
-        alert(`회원가입 실패: ${error.response.data.message || "오류가 발생했습니다."}`);
+        alert(
+          `회원가입 실패: ${
+            error.response.data.message || "오류가 발생했습니다."
+          }`
+        );
       } else {
         alert("회원가입 실패: 서버와 연결할 수 없습니다.");
       }
     }
   };
-  
 
   if (!isOpen) return null;
 

@@ -7,10 +7,10 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    sessionStorage.removeItem("userId"); // 로그아웃 시 세션 제거
   };
-  const handleLogout = () => setIsLoggedIn(false);
 
   return (
     <div
@@ -83,31 +83,39 @@ const Header = () => {
             </button>
           </>
         ) : (
-          <>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-              onClick={() => setIsPopupOpen(true)}
-            >
-              로그인 / 회원가입
-            </button>
-          </>
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              color: "black",
+              fontSize: 16,
+              fontWeight: "400",
+              cursor: "pointer",
+              padding: "8px 16px",
+              borderRadius: "5px",
+              transition: "background 0.3s",
+            }}
+            onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
+            onMouseOut={(e) => (e.target.style.background = "none")}
+            onClick={() => setIsPopupOpen(true)}
+          >
+            로그인 / 회원가입
+          </button>
         )}
       </div>
-      <LoginPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+
+      {/* LoginPopup에 상태 전달 */}
+      <LoginPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onLoginSuccess={() => {
+          setIsLoggedIn(true); // 로그인 성공 시 상태 변경
+          setIsPopupOpen(false); // 팝업 닫기
+        }}
+      />
     </div>
   );
 };
 
 export default Header;
+
