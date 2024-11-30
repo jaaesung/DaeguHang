@@ -1,128 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginPopup from "./LoginPopup";
+import "./Header.css";
 
 const Header = () => {
   const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginId, setLoginId] = useState(null); // 로그인 ID 저장
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
+  useEffect(() => {
+    // sessionStorage에서 loginId 가져오기
+    const storedLoginId = sessionStorage.getItem("loginId");
+    if (storedLoginId) {
+      setIsLoggedIn(true);
+      setLoginId(storedLoginId);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setLoginId(null);
+    sessionStorage.removeItem("loginId"); // 로그아웃 시 sessionStorage에서 제거
+    navigate("/"); // 홈으로 이동
   };
-  const handleLogout = () => setIsLoggedIn(false);
+
+  const handleMyPage = () => {
+    if (loginId) {
+      navigate(`/mypage?loginId=${loginId}`); // loginId를 쿼리 파라미터로 전달
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "60px",
-        background: "white",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 40px",
-        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-        borderBottom: "1px solid #e0e0e0",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        style={{
-          fontSize: 20,
-          fontWeight: "500",
-          color: "black",
-          cursor: "pointer",
-        }}
-        onClick={() => navigate("/")}
-      >
+    <div className="header-container">
+      <div className="header-logo" onClick={() => navigate("/")}>
         대구행
       </div>
 
-      <div style={{ display: "flex", gap: "24px" }}>
+      <div className="header-buttons">
         {isLoggedIn ? (
           <>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-              onClick={() => alert("내 정보 페이지로 이동합니다.")}
-            >
+            <button className="header-button" onClick={handleMyPage}>
               내 정보
             </button>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-              onClick={handleLogout}
-            >
+            <button className="header-button" onClick={handleLogout}>
               로그아웃
             </button>
           </>
         ) : (
-          <>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-              onClick={() => setIsPopupOpen(true)}
-            >
-              로그인
-            </button>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "black",
-                fontSize: 16,
-                fontWeight: "400",
-                cursor: "pointer",
-                padding: "8px 16px",
-                borderRadius: "5px",
-                transition: "background 0.3s",
-              }}
-              onMouseOver={(e) => (e.target.style.background = "#f2f2f2")}
-              onMouseOut={(e) => (e.target.style.background = "none")}
-            >
-              회원가입
-            </button>
-          </>
+          <button
+            className="header-button"
+            onClick={() => setIsPopupOpen(true)}
+          >
+            로그인 / 회원가입
+          </button>
         )}
       </div>
-      <LoginPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+
+      <LoginPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        onLoginSuccess={(loginId) => {
+          setIsLoggedIn(true);
+          setLoginId(loginId);
+        }}
+      />
     </div>
   );
 };

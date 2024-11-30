@@ -240,43 +240,50 @@
 
 /* Cluster Popup Styles */
 .popup-cluster-grid {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 구성 */
+  gap: 20px;
   width: 100%;
-}
-
-.popup-cluster-button {
-  width: 120px;
-  height: 120px;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: var(--border-radius);
-  background-color: var(--secondary-color);
-  color: #333;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
 }
 
-.popup-cluster-button:hover {
-  background-color: var(--hover-color);
-  transform: scale(1.05);
+.popup-cluster-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--secondary-color);
+  border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-light);
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-.popup-cluster-button.selected {
-  background-color: var(--primary-color);
-  color: var(--white);
+.popup-cluster-card:hover {
+  transform: scale(1.05);
+  border-color: var(--hover-color);
   box-shadow: var(--box-shadow-dark);
 }
 
-.popup-cluster-button img {
-  width: 60px;
-  height: 60px;
+.popup-cluster-card.selected {
+  border-color: var(--primary-color);
+  background-color: var(--hover-color);
+  box-shadow: var(--box-shadow-dark);
+}
+
+.popup-cluster-image {
+  width: 100%;
+  height: auto;
+  max-width: 150px;
+  border-radius: var(--border-radius);
   margin-bottom: 10px;
+}
+
+.popup-cluster-label {
+  font-size: var(--font-size-medium);
+  font-weight: 500;
+  text-align: center;
+  color: var(--primary-color);
 }

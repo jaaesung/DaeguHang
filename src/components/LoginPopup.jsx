@@ -1,74 +1,64 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import axios from "axios";  // axios 임포트
+import axios from "axios";
 import "./LoginPopup.css";
 
-const LoginPopup = ({ isOpen, onClose }) => {
+const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/user/login', {
-        loginId,
-        password,
-      });
-      const { userId } = response.data; // 응답에서 userId 추출
-      if (userId) {
-        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
+      const response = await axios.post(
+        "http://localhost:8080/api/user/login",
+        {
+          loginId,
+          password,
+        }
+      );
+
+      // 로그인 성공 처리
+      if (response.status === 200) {
+        console.log("Login Successful:", response.data);
+
+        // sessionStorage에 loginId 저장
+        sessionStorage.setItem("loginId", loginId);
+
+        // 부모 컴포넌트에 loginId 전달
+        onLoginSuccess(loginId);
+
+        alert("로그인 성공");
+        onClose(); // 팝업 닫기
+      } else {
+        alert("로그인 실패");
       }
-      alert(response.data.message || "로그인 성공"); // 성공 메시지 표시
-      onClose(); // 로그인 후 팝업 닫기
     } catch (error) {
-      console.error("Login failed", error);
-    // 서버에서 전송된 에러 메시지를 출력
-    if (error.response && error.response.data) {
-      alert(error.response.data); // 서버의 에러 메시지가 문자열 형태로 전달되므로 그대로 출력
-    } else {
-      alert("로그인 실패: 서버와 연결할 수 없습니다."); // 서버와 연결할 수 없을 때의 처리
-    }
+      console.error("Login failed:", error);
+      alert("로그인 실패!");
     }
   };
-  
+
   const handleRegister = async (e) => {
     e.preventDefault();
-  
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8080/api/user/register',
+        "http://localhost:8080/api/user/register",
         {
           username,
           userLoginId: loginId,
           password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json', // 명확히 Content-Type을 JSON으로 지정
-          },
         }
       );
-  
-      const { userId } = response.data; // 응답에서 userId 추출
-      if (userId) {
-        sessionStorage.setItem('userId', userId); // Session Storage에 userId 저장
-      }
-  
       alert("회원가입 성공");
-      onClose(); // 회원가입 후 팝업 닫기
+      onClose();
     } catch (error) {
-      console.error("Registration failed", error);
-  
-      if (error.response && error.response.data) {
-        alert(`회원가입 실패: ${error.response.data || "오류가 발생했습니다."}`);
-      } else {
-        alert("회원가입 실패: 서버와 연결할 수 없습니다.");
-      }
+      console.error("Registration failed:", error);
+      alert("회원가입 실패!");
     }
   };
-  
 
   if (!isOpen) return null;
 
@@ -79,16 +69,14 @@ const LoginPopup = ({ isOpen, onClose }) => {
           isRightPanelActive ? "right-panel-active" : ""
         }`}
       >
-        {/* Close Button */}
         <button className="login-close-button" onClick={onClose}>
           ✖
         </button>
 
-        {/* Sign Up Form */}
+        {/* 회원가입 폼 */}
         <div className="login-form-container sign-up-container">
           <form onSubmit={handleRegister}>
             <h1>회원가입</h1>
-            <span>use yourID for registration</span>
             <input
               type="text"
               placeholder="Name"
@@ -111,11 +99,10 @@ const LoginPopup = ({ isOpen, onClose }) => {
           </form>
         </div>
 
-        {/* Sign In Form */}
+        {/* 로그인 폼 */}
         <div className="login-form-container sign-in-container">
           <form onSubmit={handleLogin}>
             <h1>로그인</h1>
-            <span>use your account</span>
             <input
               type="text"
               placeholder="ID"
@@ -128,12 +115,10 @@ const LoginPopup = ({ isOpen, onClose }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <a href="#">Forgot your password?</a>
             <button type="submit">로그인</button>
           </form>
         </div>
 
-        {/* Overlay */}
         <div className="login-overlay-container">
           <div className="login-overlay">
             <div className="login-overlay-panel overlay-left">

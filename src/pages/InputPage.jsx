@@ -7,10 +7,9 @@ import TravelTitle from "../components/TravelTitle";
 import DateSelector from "../components/DateSelector";
 import GenderPopup from "../components/GenderPopup";
 import AgePopup from "../components/AgePopup";
-import BudgetPopup from "../components/BudgetPopup";
-import ClusterPopup from "../components/ClusterPopup"; // 클러스터 선택 팝업
+import BudgetSlider from "../components/BudgetSlider"; // BudgetSlider로 대체
+import ClusterPopup from "../components/ClusterPopup";
 import "./InputPage.css";
-
 
 const InputPage = () => {
   const navigate = useNavigate();
@@ -18,19 +17,24 @@ const InputPage = () => {
   const [showDatePopup, setShowDatePopup] = useState(false);
   const [showGenderPopup, setShowGenderPopup] = useState(false);
   const [showAgePopup, setShowAgePopup] = useState(false);
-  const [showBudgetPopup, setShowBudgetPopup] = useState(false);
-  const [showClusterPopup, setShowClusterPopup] = useState(true); // 클러스터 팝업을 처음에 표시
+  const [showBudgetPopup, setShowBudgetPopup] = useState(false); // 예산 팝업을 BudgetSlider로 대체
+  const [showClusterPopup, setShowClusterPopup] = useState(true);
 
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedAge, setSelectedAge] = useState(null);
-  const [selectedBudgets, setSelectedBudgets] = useState({});
+  const [selectedBudgets, setSelectedBudgets] = useState({
+    shopping: 0,
+    lodging: 0,
+    culture: 0,
+    dining: 0,
+    entertainment: 0,
+  });
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [scheduleItems, setScheduleItems] = useState([]);
   const [travelTitle, setTravelTitle] = useState("여행 제목 1");
-  const [selectedCluster, setSelectedCluster] = useState(null); // 클러스터 상태 추가
+  const [selectedCluster, setSelectedCluster] = useState(null);
 
-  // 여행 계획 생성 API 호출
   const handleSubmit = async () => {
     const userId = sessionStorage.getItem("userId");
 
@@ -41,12 +45,11 @@ const InputPage = () => {
     }
 
     try {
-      const { shopping = 0, lodging = 0, culture = 0, dining = 0, entertainment = 0 } =
-        selectedBudgets;
+      const { shopping, lodging, culture, dining, entertainment } = selectedBudgets;
 
-      const response = await axios.post(`http://127.0.0.1:8080/api/recommend`, {
-        cluster: parseInt(selectedCluster),  // 선택된 클러스터 값
-        userId : parseInt(userId),
+      const response = await axios.post(`http://127.0.0.1:8080/api/recommendation`, {
+        cluster: parseInt(selectedCluster),
+        userId,
         startDate: startDate.toISOString().split("T")[0],
         endDate: endDate.toISOString().split("T")[0],
         gender: selectedGender === "남" ? "M" : "F",
@@ -56,45 +59,74 @@ const InputPage = () => {
           "숙박": lodging,
           "스포츠 및 문화": culture,
           "외식": dining,
-          "유흥": entertainment
-      },
+          "유흥": entertainment,
+        },
         title: travelTitle,
       });
 
-      console.log("API 응답:", response.data);
-      navigate("/plan", { state: { startDate, endDate, scheduleItems: response.data } });
+      // API 응답을 RecommendedPlaces 양식으로 변환
+      const categorizedPlaces = {
+        명소: [],
+        식당: [],
+        숙소: [],
+      };
+
+      response.data.forEach((item, index) => {
+        const mappedItem = {
+          id: index + 1,
+          imageUrl: item.imageUrl || "https://via.placeholder.com/100",
+          name: item.가맹점명 || "Unknown Name",
+          reviews: item.reviews || 0,
+          rating: (item.reviews / 20).toFixed(1) || "3.0",
+          latitude: item.latitude || 0.0,
+          longitude: item.longitude || 0.0,
+          searchUrl: item.searchUrl || "#",
+        };
+
+        if (item.분류 === "맛집") {
+          categorizedPlaces.식당.push(mappedItem);
+        } else if (item.분류 === "모텔/호텔") {
+          categorizedPlaces.숙소.push(mappedItem);
+        } else {
+          categorizedPlaces.명소.push(mappedItem);
+        }
+      });
+
+      // 변환된 데이터와 함께 PlanPage로 이동
+      navigate("/plan", {
+        state: {
+          startDate,
+          endDate,
+          scheduleItems: categorizedPlaces,
+        },
+      });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
       alert("계획을 생성하는 도중 오류가 발생했습니다.");
     }
   };
 
-  // 클러스터 선택
   const handleClusterSelect = (cluster) => {
     setSelectedCluster(cluster);
   };
 
-  // 성별 선택
   const handleGenderSelect = (gender) => {
     setSelectedGender(gender);
   };
 
-  // 연령 선택
   const handleAgeSelect = (age) => {
     setSelectedAge(age);
   };
 
-  // 예산 팝업 완료 시 호출
   const handleBudgetComplete = (budgets) => {
     setSelectedBudgets(budgets);
+    setShowBudgetPopup(false); // 예산 설정 후 팝업 닫기
   };
 
-  // 여행 제목 변경
   const handleTitleChange = (newTitle) => {
     setTravelTitle(newTitle);
   };
 
-  // 예산 합계 계산
   const calculateTotalBudget = () => {
     return Object.values(selectedBudgets).reduce((sum, value) => sum + value, 0);
   };
@@ -104,10 +136,8 @@ const InputPage = () => {
       <Header />
       <div className="main-content">
         <div className="left-content">
-          {/* 여행 제목 입력 컴포넌트 */}
           <TravelTitle title={travelTitle} onChangeTitle={handleTitleChange} />
 
-          {/* 날짜 디스플레이 */}
           <div className="selector-text" onClick={() => setShowDatePopup(true)}>
             날짜:{" "}
             <span>
@@ -117,27 +147,23 @@ const InputPage = () => {
             </span>
           </div>
 
-          {/* 성별 선택 */}
           <div className="selector-text" onClick={() => setShowGenderPopup(true)}>
             성별: <span>{selectedGender || "선택되지 않음"}</span>
           </div>
 
-          {/* 연령 선택 */}
           <div className="selector-text" onClick={() => setShowAgePopup(true)}>
             연령: <span>{selectedAge || "선택되지 않음"}</span>
           </div>
 
-          {/* 예산 합계 */}
           <div className="selector-text" onClick={() => setShowBudgetPopup(true)}>
             예산 합계:{" "}
             <span>
               {calculateTotalBudget() > 0
-                ? `${calculateTotalBudget().toLocaleString()}원`
+                ? `${calculateTotalBudget().toLocaleString()}만원`
                 : "선택되지 않음"}
             </span>
           </div>
 
-          {/* 클러스터 선택 */}
           <div className="selector-text" onClick={() => setShowClusterPopup(true)}>
             클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
           </div>
@@ -152,7 +178,6 @@ const InputPage = () => {
         </div>
       </div>
 
-      {/* 팝업 컴포넌트들 */}
       {showClusterPopup && (
         <div className="overlay">
           <ClusterPopup
@@ -160,7 +185,7 @@ const InputPage = () => {
             onClusterSelect={handleClusterSelect}
             onNext={() => {
               setShowClusterPopup(false);
-              setShowDatePopup(true); // 클러스터 선택 후 날짜 팝업으로 이동
+              setShowDatePopup(true);
             }}
           />
         </div>
@@ -201,7 +226,7 @@ const InputPage = () => {
             onAgeSelect={handleAgeSelect}
             onNext={() => {
               setShowAgePopup(false);
-              setShowBudgetPopup(true);
+              setShowBudgetPopup(true); // 예산 팝업을 여는 부분
             }}
           />
         </div>
@@ -209,12 +234,9 @@ const InputPage = () => {
 
       {showBudgetPopup && (
         <div className="overlay">
-          <BudgetPopup
-            selectedBudgets={selectedBudgets}
-            onComplete={(budgets) => {
-              handleBudgetComplete(budgets);
-              setShowBudgetPopup(false);
-            }}
+          <BudgetSlider
+            initialBudgets={selectedBudgets}
+            onComplete={handleBudgetComplete} // 예산을 설정하고 팝업을 닫는 함수
           />
         </div>
       )}
