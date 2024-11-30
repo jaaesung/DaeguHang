@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PlaceCard from "./PlaceCard";
 import "./RecommendedPlaces.css";
 
-const RecommendedPlaces = ({ places, onAddToPlan }) => {
+const RecommendedPlaces = ({ places, onAddToPlan, hiddenPlaces }) => {
   const [activeTab, setActiveTab] = useState("명소");
 
   return (
@@ -21,7 +21,10 @@ const RecommendedPlaces = ({ places, onAddToPlan }) => {
 
       <div className="scrollable-content">
         {places[activeTab].length > 0 ? (
-          places[activeTab].map((place) => (
+          places[activeTab]
+          
+          .filter((place) => !hiddenPlaces.includes(place.name))
+          .map((place) => ( 
             <PlaceCard
                 key={place.id}
                 imageUrl={place.imageUrl}
