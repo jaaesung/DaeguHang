@@ -28,7 +28,7 @@ const Header = () => {
 
   const handleMyPage = () => {
     if (userId) {
-      navigate(`/mypage?userId=${userId}`); // userId를 쿼리 파라미터로 전달
+      navigate("/mypage", userId); // userId를 쿼리 파라미터로 전달
     } else {
       alert("로그인이 필요합니다.");
     }

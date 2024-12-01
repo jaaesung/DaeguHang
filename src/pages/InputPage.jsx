@@ -47,22 +47,25 @@ const InputPage = () => {
       const { shopping, lodging, culture, dining, entertainment } =
         selectedBudgets;
 
-      const response = await axios.post(`http://127.0.0.1:8080/api/recommend`, {
-        cluster: parseInt(selectedCluster),
-        userId: parseInt(userId),
-        startDate: startDate.toISOString().split("T")[0],
-        endDate: endDate.toISOString().split("T")[0],
-        gender: selectedGender === "남" ? "M" : "F",
-        age: parseInt(selectedAge.replace("대", ""), 10),
-        spending: {
-          "소매/쇼핑": shopping,
-          숙박: lodging,
-          "스포츠 및 문화": culture,
-          외식: dining,
-          유흥: entertainment,
-        },
-        title: travelTitle,
-      });
+      const response = await axios.post(
+        `http://127.0.0.1:8080/api/recommendation`,
+        {
+          cluster: parseInt(selectedCluster),
+          userId: parseInt(userId),
+          startDate: startDate.toISOString().split("T")[0],
+          endDate: endDate.toISOString().split("T")[0],
+          gender: selectedGender === "남" ? "M" : "F",
+          age: parseInt(selectedAge.replace("대", ""), 10),
+          spending: {
+            "소매/쇼핑": shopping,
+            숙박: lodging,
+            "스포츠 및 문화": culture,
+            외식: dining,
+            유흥: entertainment,
+          },
+          title: travelTitle,
+        }
+      );
 
       // API 응답을 RecommendedPlaces 양식으로 변환
       const categorizedPlaces = {
@@ -92,29 +95,37 @@ const InputPage = () => {
             decodedItem["가게 이미지 URL"] || "https://via.placeholder.com/100",
           name: decodedItem["가맹점명"] || "Unknown Name",
           blogReviews: (() => {
-            // "블로그 리뷰" 값을 추출 (예: "블로그 리뷰 23")
-            const blogReviewMatch =
-              decodedItem["리뷰 수"]?.match(/블로그 리뷰\s?([\d,]+)/);
+            const reviewText = decodedItem["리뷰 수"] || ""; // null/undefined 방지
+            const blogReviewMatch = reviewText.match(/블로그 리뷰\s?([\d,]+)/);
             return blogReviewMatch
-              ? parseInt(blogReviewMatch[1].replace(/,/g, ""), 10) // 쉼표 제거 후 정수로 변환
-              : 0; // 블로그 리뷰가 없는 경우 기본값
+              ? parseInt(blogReviewMatch[1].replace(/,/g, ""), 10)
+              : 0; // 기본값
           })(),
           visitorReviews: (() => {
-            // "방문자 리뷰" 값을 추출 (예: "방문자 리뷰 2,688")
+            // 별점이 없고 방문자 리뷰만 있는 경우도 고려
+            const reviewText = decodedItem["리뷰 수"] || "";
             const visitorReviewMatch =
-              decodedItem["별점"]?.match(/방문자 리뷰\s?([\d,]+)/);
+              decodedItem["별점"]?.match(/방문자 리뷰\s?([\d,]+)/) ||
+              reviewText.match(/방문자 리뷰\s?([\d,]+)/);
             return visitorReviewMatch
-              ? parseInt(visitorReviewMatch[1].replace(/,/g, ""), 10) // 쉼표 제거 후 정수로 변환
-              : 0; // 방문자 리뷰가 없는 경우 기본값
+              ? parseInt(visitorReviewMatch[1].replace(/,/g, ""), 10)
+              : 0; // 기본값
           })(),
           rating: (() => {
-            // 별점에서 숫자형 값 추출
-            const ratingMatch = decodedItem["별점"]?.match(/[\d.]+/); // 숫자와 소수점 추출
-            const rawRating = ratingMatch ? parseFloat(ratingMatch[0]) : null;
-            // 유효한 별점 범위(1.0 ~ 5.0)만 반환
-            return rawRating && rawRating >= 1.0 && rawRating <= 5.0
-              ? rawRating.toFixed(1)
-              : null; // 유효하지 않으면 `null` 반환
+            const ratingText = decodedItem["별점"] || ""; // null/undefined 방지
+            const ratingMatch = ratingText.match(/([\d.]+)점/); // 별점 값 추출
+            if (ratingMatch) {
+              return parseFloat(ratingMatch[1]).toFixed(1); // 유효한 별점 반환
+            }
+
+            // 별점이 없고 방문자 리뷰만 있는 경우
+            const visitorReviewMatch =
+              ratingText.match(/방문자 리뷰\s?([\d,]+)/);
+            if (visitorReviewMatch) {
+              return null; // 별점 대신 null 반환
+            }
+
+            return null; // 기본값
           })(),
           latitude: parseFloat(decodedItem["위도"]) || 0.0,
           longitude: parseFloat(decodedItem["경도"]) || 0.0,
@@ -128,7 +139,6 @@ const InputPage = () => {
         } else if (decodedCategory === "모텔" || decodedCategory === "호텔") {
           categorizedPlaces.숙소.push(mappedItem);
         } else {
-          console.log(categorizedPlaces);
           categorizedPlaces.명소.push(mappedItem);
         }
       });

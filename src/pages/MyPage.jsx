@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import PlanItem from "../components/PlanItem";
+import NameEditPopup from "../components/NameEditPopup";
+import RePasswordPopup from "../components/RePasswordPopup";
 import axios from "axios";
 import "./Mypage.css";
 
@@ -9,47 +11,103 @@ const Mypage = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
 
-  const loginId = sessionStorage.getItem("loginId");
-  const [userInfo, setUserInfo] = useState({ username: loginId, name: null });
+  // 세션에서 userId 가져오기
+  const userId = sessionStorage.getItem("userId");
+  const [userInfo, setUserInfo] = useState({ loginId: null, name: null });
   const [myPlans, setMyPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isNamePopupOpen, setIsNamePopupOpen] = useState(false);
+  const [isPasswordPopupOpen, setIsPasswordPopupOpen] = useState(false);
 
   useEffect(() => {
-    if (!loginId) {
+    if (!userId) {
       alert("로그인이 필요합니다.");
-      navigate("/login");
+      navigate("/"); // 로그인 페이지로 이동
       return;
     }
 
     const fetchUserInfo = async () => {
       try {
         const userResponse = await axios.get(
-          `http://localhost:8080/api/user/${loginId}`
+          `http://localhost:8080/api/user/${userId}/getInfo`
         );
-        setUserInfo(userResponse.data);
 
-        const plansResponse = await axios.get(
-          `http://localhost:8080/api/plans/${loginId}`
-        );
-        setMyPlans(plansResponse.data); // Plan 데이터에는 id, title, date 등 필요한 정보 포함
+        const { userName, loginId } = userResponse.data;
+        setUserInfo({
+          name: userName,
+          loginId: loginId,
+        });
       } catch (error) {
         console.error("사용자 정보를 가져오는 중 오류 발생:", error);
         alert("사용자 정보를 가져올 수 없습니다.");
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchUserInfo();
-  }, [navigate, loginId]);
+    const fetchUserPlans = async () => {
+      try {
+        const plansResponse = await axios.get(
+          `http://localhost:8080/api/plans/${userId}/get`
+        );
+        setMyPlans(plansResponse.data); // Plan 데이터에는 id, title, date 등 필요한 정보 포함
+      } catch (error) {
+        console.error("계획 데이터를 가져오는 중 오류 발생:", error);
+        alert("계획 데이터를 가져올 수 없습니다.");
+      }
+    };
 
-  const handlePasswordChangeClick = () => {
-    navigate("/repassword");
+    const fetchData = async () => {
+      await fetchUserInfo();
+      await fetchUserPlans();
+    };
+
+    fetchData();
+  }, [userId, navigate]);
+
+  const handleNameSave = async (newName) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/user/${userId}/updateName`,
+        newName,
+        {
+          headers: {
+            "Content-Type": "text/plain",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("이름이 성공적으로 변경되었습니다.");
+        setUserInfo((prev) => ({ ...prev, name: newName })); // 상태 업데이트
+      } else {
+        alert("이름 변경에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("이름 변경 중 오류 발생:", error);
+      alert("이름 변경 중 오류가 발생했습니다.");
+    }
   };
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+  const handlePasswordSave = async (currentPassword, newPassword) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/user/${userId}/settings`,
+        { currentPassword, newPassword },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+      } else {
+        alert("비밀번호 변경에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("비밀번호 변경 중 오류 발생:", error);
+      alert("비밀번호 변경 중 오류가 발생했습니다.");
+    }
+  };
 
   return (
     <div className="mypage-container">
@@ -61,7 +119,7 @@ const Mypage = () => {
             <div className="profile-icon">👤</div>
             <div className="profile-name">{userInfo?.name || "사용자"}</div>
             <div className="profile-id">
-              {userInfo?.username || "아이디 없음"}
+              {userInfo?.loginId || "아이디 없음"}
             </div>
           </div>
         </aside>
@@ -73,19 +131,24 @@ const Mypage = () => {
               <div className="info-row">
                 <span>이름</span>
                 <span className="editable">{userInfo?.name || "불명"}</span>
-                <button className="edit-button">수정</button>
+                <button
+                  className="edit-button"
+                  onClick={() => setIsNamePopupOpen(true)} // 팝업 열기
+                >
+                  이름 수정
+                </button>
               </div>
               <div className="info-row">
                 <span>아이디</span>
                 <span className="editable">
-                  {userInfo?.username || "아이디 없음"}
+                  {userInfo?.loginId || "아이디 없음"}
                 </span>
               </div>
               <div className="info-row">
                 <span>비밀번호</span>
                 <button
                   className="edit-button"
-                  onClick={handlePasswordChangeClick}
+                  onClick={() => setIsPasswordPopupOpen(true)} // 비밀번호 팝업 열기
                 >
                   비밀번호 수정
                 </button>
@@ -99,7 +162,10 @@ const Mypage = () => {
               <button
                 className="scroll-button left"
                 onClick={() =>
-                  scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" })
+                  scrollRef.current?.scrollBy({
+                    left: -300,
+                    behavior: "smooth",
+                  })
                 }
               >
                 ◀
@@ -110,9 +176,9 @@ const Mypage = () => {
                   myPlans.map((plan) => (
                     <PlanItem
                       key={plan.id}
-                      id={plan.id} // Plan ID 추가
-                      title={plan.title} // 계획 제목 추가
-                      date={plan.date} // 계획 날짜 추가
+                      id={plan.id}
+                      title={plan.title}
+                      date={plan.date}
                       image={plan.image} // 이미지 URL 추가 (선택 사항)
                     />
                   ))
@@ -131,6 +197,17 @@ const Mypage = () => {
               </button>
             </div>
           </section>
+          <NameEditPopup
+            isOpen={isNamePopupOpen}
+            onClose={() => setIsNamePopupOpen(false)}
+            onSave={handleNameSave}
+            currentName={userInfo?.name || ""}
+          />
+          <RePasswordPopup
+            isOpen={isPasswordPopupOpen}
+            onClose={() => setIsPasswordPopupOpen(false)}
+            onSave={handlePasswordSave}
+          />
         </main>
       </div>
     </div>
@@ -138,4 +215,3 @@ const Mypage = () => {
 };
 
 export default Mypage;
-

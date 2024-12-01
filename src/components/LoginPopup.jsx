@@ -11,34 +11,40 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!loginId || !password) {
+      alert("ID와 비밀번호를 입력해주세요.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:8080/api/user/login",
-        {
-          loginId,
-          password,
-        }
+        { loginId, password }
       );
 
-      // 로그인 성공 처리
-      if (response.status === 200 && response.data.userId) {
-        console.log("Login Successful:", response.data);
+      // API 응답 검증
+      if (response.status === 200 && response.data && response.data.userId) {
+        const { userId } = response.data;
+        console.log("Login successful. Received userId:", userId);
 
         // sessionStorage에 userId 저장
-        const { userId } = response.data;
         sessionStorage.setItem("userId", userId);
+        console.log(
+          "Session Storage userId:",
+          sessionStorage.getItem("userId")
+        );
 
-        // 부모 컴포넌트에 userId 전달
+        // 부모 컴포넌트로 userId 전달
         onLoginSuccess(userId);
 
         alert("로그인 성공");
         onClose(); // 팝업 닫기
       } else {
-        alert("로그인 실패");
+        alert("로그인 실패: 서버 응답이 올바르지 않습니다.");
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("로그인 실패!");
+      alert("로그인 실패: 서버와 통신 중 오류가 발생했습니다.");
     }
   };
 
