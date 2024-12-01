@@ -46,6 +46,9 @@ const PlanPage = () => {
       scheduleItems: scheduleItems,
       clientInfo: clientInfo
     };
+
+    console.log('userId:', userId);
+    console.log('planId:', planId);
     
     // 이제 넘어온 clientInfo에서 이걸 갖고 plan을 만듦
     try {
@@ -63,28 +66,34 @@ const PlanPage = () => {
       )
       
       const planId = responseInitPlan.data.planId; // 여기다가 스케줄 넣기
-      console.log(scheduleItems)
 
+      // 스케줄 저장
+      const dtos = Object.keys(scheduleItemsByDate).flatMap((date) =>
+        scheduleItemsByDate[date].map((item) => ({
+          planId,
+          startTime: new Date(date).setHours(item.startTime, 0, 0),
+          endTime: new Date(date).setHours(item.startTime + item.duration, 0, 0),
+          scheduleText: item.description || "",
+          placeId: item.placeId,
+          type: item.type || "PLACE",
+          name: item.name,
+          address: item.address || "",
+          rate: item.rating || 0,
+          imageURL: item.imageUrl || "",
+        }))
+      );
 
-      console.log(responseInitPlan.data.planId)
+      for (const dto of dtos) {
+        await axios.post(
+          `http://127.0.0.1:8080/api/schedule/${userId}/create/${planId}`,
+          dto
+        );
+      }
 
-    } catch (e){
-      console.error("계획 초기화 중 오류 발생"  , e)
-    }
-
-    try {
-      // plan 안에 scheduleItems를 넣는거지
-      // for (all schedule Items : )
-      // const responseAddSchedule = await axios.post(
-      //   `http://127.0.0.1:8080/api/schedule/${userId}/create/${planId}`,
-      //   // 넣는거지 이걸 만들어서 
-
-      // )
-
-
+      alert("계획 및 일정이 성공적으로 저장되었습니다.");
     } catch (error) {
-      console.error("Error saving plan:", error);
-      alert("계획 저장 중 오류가 발생했습니다.");
+      console.error("Error creating plan or schedules:", error);
+      alert("계획 생성 중 오류가 발생했습니다.");
     }
   };
 
