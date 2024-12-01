@@ -9,43 +9,34 @@ const Mypage = () => {
   const navigate = useNavigate();
   const scrollRef = useRef(null);
 
-  const loginId = sessionStorage.getItem("loginId"); // sessionStorage에서 loginId 가져오기
-  const [userInfo, setUserInfo] = useState({ username: loginId, name: null }); // loginId를 초기값으로 설정
-  const [myPlans, setMyPlans] = useState([]); // 사용자의 계획 정보를 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태 관리
+  const loginId = sessionStorage.getItem("loginId");
+  const [userInfo, setUserInfo] = useState({ username: loginId, name: null });
+  const [myPlans, setMyPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("Session loginId:", loginId);
-
     if (!loginId) {
       alert("로그인이 필요합니다.");
-      navigate("/login"); // loginId가 없으면 로그인 페이지로 이동
+      navigate("/login");
       return;
     }
 
     const fetchUserInfo = async () => {
       try {
-        // 사용자 정보 API 호출
         const userResponse = await axios.get(
-          `http://localhost:8080/api/user/${loginId}` // loginId를 사용하여 정보 요청
+          `http://localhost:8080/api/user/${loginId}`
         );
-        console.log("User Info Response:", userResponse.data);
-        setUserInfo(userResponse.data); // 사용자 정보 상태 업데이트
+        setUserInfo(userResponse.data);
 
-        // 사용자 계획 정보 API 호출
         const plansResponse = await axios.get(
-          `http://localhost:8080/api/plans/${loginId}` // loginId를 사용하여 계획 요청
+          `http://localhost:8080/api/plans/${loginId}`
         );
-        console.log("Plans Response:", plansResponse.data);
-        setMyPlans(plansResponse.data); // 계획 정보 상태 업데이트
+        setMyPlans(plansResponse.data); // Plan 데이터에는 id, title, date 등 필요한 정보 포함
       } catch (error) {
-        console.error(
-          "사용자 정보를 가져오는 중 오류 발생:",
-          error.response || error.message
-        );
+        console.error("사용자 정보를 가져오는 중 오류 발생:", error);
         alert("사용자 정보를 가져올 수 없습니다.");
       } finally {
-        setLoading(false); // 로딩 완료
+        setLoading(false);
       }
     };
 
@@ -108,10 +99,7 @@ const Mypage = () => {
               <button
                 className="scroll-button left"
                 onClick={() =>
-                  scrollRef.current?.scrollBy({
-                    left: -300,
-                    behavior: "smooth",
-                  })
+                  scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" })
                 }
               >
                 ◀
@@ -122,9 +110,10 @@ const Mypage = () => {
                   myPlans.map((plan) => (
                     <PlanItem
                       key={plan.id}
-                      title={plan.title}
-                      date={plan.date}
-                      image={plan.image}
+                      id={plan.id} // Plan ID 추가
+                      title={plan.title} // 계획 제목 추가
+                      date={plan.date} // 계획 날짜 추가
+                      image={plan.image} // 이미지 URL 추가 (선택 사항)
                     />
                   ))
                 ) : (
@@ -149,3 +138,4 @@ const Mypage = () => {
 };
 
 export default Mypage;
+

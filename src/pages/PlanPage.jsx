@@ -33,9 +33,32 @@ const PlanPage = () => {
     handleNextDateRef.current(); // 첫 렌더링 시 handleNextDate 실행
   }, []);
 
-  const handleCreatePlan = () => {
-    alert("계획이 생성되었습니다!");
-    // 계획 저장 및 페이지 이동 로직 추가
+  const handleCreatePlan = async () => {
+    const planData = {
+      startDate,
+      endDate,
+      scheduleItems: scheduleItemsByDate,
+    };
+
+    try {
+      const response = await fetch("/api/savePlan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(planData),
+      });
+
+      if (response.ok) {
+        alert("계획이 성공적으로 저장되었습니다!");
+        // 페이지 이동 또는 추가 액션 수행
+      } else {
+        alert("계획 저장 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Error saving plan:", error);
+      alert("계획 저장 중 오류가 발생했습니다.");
+    }
   };
 
   return (
