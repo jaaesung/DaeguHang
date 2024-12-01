@@ -48,7 +48,7 @@ const InputPage = () => {
         selectedBudgets;
 
       const response = await axios.post(
-        `http://127.0.0.1:8080/api/recommendation`,
+        "http://127.0.0.1:8080/api/recommendation",
         {
           cluster: parseInt(selectedCluster),
           userId: parseInt(userId),
@@ -66,6 +66,7 @@ const InputPage = () => {
           title: travelTitle,
         }
       );
+      
 
       // API 응답을 RecommendedPlaces 양식으로 변환
       const categorizedPlaces = {
@@ -143,12 +144,32 @@ const InputPage = () => {
         }
       });
 
-      // 변환된 데이터와 함께 PlanPage로 이동
+          // 여행 계획을 생성하기 위한 API 호출
+    const responseFromPlanAPI = await axios.post(
+      `http://127.0.0.1:8080/api/plan/${userId}/new`,
+      {
+        userId: parseInt(userId),
+        title: travelTitle,
+        startDate: startDate.toISOString().split("T")[0],
+        endDate: endDate.toISOString().split("T")[0],
+        sex: selectedGender === "남" ? "MALE" : "FEMALE",
+        age: parseInt(selectedAge.replace("대", ""), 10),
+        budget: shopping + lodging + culture + dining + entertainment, // 예산 합산
+      }
+    );
+
+    // 받은 planId를 상태에 저장
+    const newPlanId = responseFromPlanAPI.data.planId;
+    setPlanId(newPlanId); // planId 상태에 저장
+
+    
+      // PlanPage로 이동 (planId 포함)
       navigate("/plan", {
         state: {
           startDate,
           endDate,
           scheduleItems: categorizedPlaces,
+          planId: newPlanId, // planId를 state로 전달
         },
       });
     } catch (error) {
@@ -192,44 +213,36 @@ const InputPage = () => {
         <div className="left-content">
           <TravelTitle title={travelTitle} onChangeTitle={handleTitleChange} />
 
-          <div className="selector-text" onClick={() => setShowDatePopup(true)}>
-            날짜:{" "}
-            <span>
-              {startDate && endDate
-                ? `${startDate.toLocaleDateString()} ~ ${endDate.toLocaleDateString()}`
-                : "날짜를 선택하세요"}
-            </span>
-          </div>
+        <div className="selector-text" onClick={() => setShowDatePopup(true)}>
+          날짜:{" "}
+          <span>
+            {startDate && endDate
+              ? `${startDate.toLocaleDateString()} ~ ${endDate.toLocaleDateString()}`
+              : "날짜를 선택하세요"}
+          </span>
+        </div>
 
-          <div
-            className="selector-text"
-            onClick={() => setShowGenderPopup(true)}
-          >
-            성별: <span>{selectedGender || "선택되지 않음"}</span>
-          </div>
+        <div className="selector-text" onClick={() => setShowGenderPopup(true)}>
+          성별: <span>{selectedGender || "선택되지 않음"}</span>
+        </div>
 
-          <div className="selector-text" onClick={() => setShowAgePopup(true)}>
-            연령: <span>{selectedAge || "선택되지 않음"}</span>
-          </div>
+        <div className="selector-text" onClick={() => setShowAgePopup(true)}>
+          연령: <span>{selectedAge || "선택되지 않음"}</span>
+        </div>
 
-          <div
-            className="selector-text"
-            onClick={() => setShowBudgetPopup(true)}
-          >
-            예산 합계:{" "}
-            <span>
-              {calculateTotalBudget() > 0
-                ? `${calculateTotalBudget().toLocaleString()}만원`
-                : "선택되지 않음"}
-            </span>
-          </div>
+        <div className="selector-text" onClick={() => setShowBudgetPopup(true)}>
+          예산 합계:{" "}
+          <span>
+            {calculateTotalBudget() > 0
+              ? `${calculateTotalBudget().toLocaleString()}만원`
+              : "선택되지 않음"}
+          </span>
+        </div>
 
-          <div
-            className="selector-text"
-            onClick={() => setShowClusterPopup(true)}
-          >
-            클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
-          </div>
+        <div className="selector-text" onClick={() => setShowClusterPopup(true)}>
+          클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
+        </div>
+
 
           <button className="submit-button" onClick={handleSubmit}>
             계획 생성
