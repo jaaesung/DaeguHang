@@ -32,7 +32,7 @@ const InputPage = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [scheduleItems, setScheduleItems] = useState([]);
-  const [travelTitle, setTravelTitle] = useState("여행 제목 1");
+  const [travelTitle, setTravelTitle] = useState("");
   const [selectedCluster, setSelectedCluster] = useState(null);
 
   const handleSubmit = async () => {
@@ -75,9 +75,14 @@ const InputPage = () => {
         식당: [],
         숙소: [],
       };
-      const itemsArray = Object.values(responseRecommend.data);
-      console.log("응답 data : ",  itemsArray)
-      itemsArray.forEach((item, index) => {
+    
+      // console.log("응답 data : ",  itemsArray)
+      console.log("응답 data type: ", responseRecommend.data)
+      if(typeof responseRecommend.data === 'string'){
+        responseRecommend.data = responseRecommend.data.replace(/NaN/g, 'null');
+        responseRecommend.data = JSON.parse(responseRecommend.data);
+      }
+      responseRecommend.data.forEach((item, index) => {
         // 유니코드 디코딩 함수
         const decodeUnicode = (obj) => {
           const jsonString = JSON.stringify(obj); // 객체를 JSON 문자열로 변환

@@ -11,7 +11,7 @@ const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
   return (
     <div className="schedule-card">
       <img
-        src={item.imageUrl}
+        src={item.imageURL}
         alt={item.name}
         className="schedule-card-image"
       />
