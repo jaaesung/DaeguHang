@@ -21,14 +21,15 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
       );
 
       // 로그인 성공 처리
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.userId) {
         console.log("Login Successful:", response.data);
 
-        // sessionStorage에 loginId 저장
-        sessionStorage.setItem("loginId", loginId);
+        // sessionStorage에 userId 저장
+        const { userId } = response.data;
+        sessionStorage.setItem("userId", userId);
 
-        // 부모 컴포넌트에 loginId 전달
-        onLoginSuccess(loginId);
+        // 부모 컴포넌트에 userId 전달
+        onLoginSuccess(userId);
 
         alert("로그인 성공");
         onClose(); // 팝업 닫기

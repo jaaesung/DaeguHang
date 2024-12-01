@@ -22,21 +22,22 @@ const RecommendedPlaces = ({ places, onAddToPlan, hiddenPlaces }) => {
       <div className="scrollable-content">
         {places[activeTab].length > 0 ? (
           places[activeTab]
-          
-          .filter((place) => !hiddenPlaces.includes(place.name))
-          .map((place) => ( 
-            <PlaceCard
+
+            .filter((place) => !hiddenPlaces.includes(place.name))
+            .map((place) => (
+              <PlaceCard
                 key={place.id}
                 imageUrl={place.imageUrl}
                 searchUrl={place.searchUrl}
                 name={place.name}
-                reviews={place.reviews}
+                blogReviews={place.blogReviews}
+                visitorReviews={place.visitorReviews}
                 rating={place.rating}
                 latitude={place.latitude}
                 longitude={place.longitude}
                 onAddToPlan={() => onAddToPlan(place)} // 여기에서 전달된 함수 호출
               />
-          ))
+            ))
         ) : (
           <div className="no-places">추천 장소가 없습니다.</div>
         )}
@@ -46,4 +47,3 @@ const RecommendedPlaces = ({ places, onAddToPlan, hiddenPlaces }) => {
 };
 
 export default RecommendedPlaces;
-

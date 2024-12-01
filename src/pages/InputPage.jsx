@@ -40,26 +40,26 @@ const InputPage = () => {
 
     if (!userId) {
       alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
-      navigate("/login");
       return;
     }
 
     try {
-      const { shopping, lodging, culture, dining, entertainment } = selectedBudgets;
+      const { shopping, lodging, culture, dining, entertainment } =
+        selectedBudgets;
 
-      const response = await axios.post(`http://127.0.0.1:8080/api/recommendation`, {
+      const response = await axios.post(`http://127.0.0.1:8080/api/recommend`, {
         cluster: parseInt(selectedCluster),
-        userId,
+        userId: parseInt(userId),
         startDate: startDate.toISOString().split("T")[0],
         endDate: endDate.toISOString().split("T")[0],
         gender: selectedGender === "남" ? "M" : "F",
         age: parseInt(selectedAge.replace("대", ""), 10),
         spending: {
           "소매/쇼핑": shopping,
-          "숙박": lodging,
+          숙박: lodging,
           "스포츠 및 문화": culture,
-          "외식": dining,
-          "유흥": entertainment,
+          외식: dining,
+          유흥: entertainment,
         },
         title: travelTitle,
       });
@@ -72,22 +72,63 @@ const InputPage = () => {
       };
 
       response.data.forEach((item, index) => {
-        const mappedItem = {
-          id: index + 1,
-          imageUrl: item.imageUrl || "https://via.placeholder.com/100",
-          name: item.가맹점명 || "Unknown Name",
-          reviews: item.reviews || 0,
-          rating: (item.reviews / 20).toFixed(1) || "3.0",
-          latitude: item.latitude || 0.0,
-          longitude: item.longitude || 0.0,
-          searchUrl: item.searchUrl || "#",
+        // 유니코드 디코딩 함수
+        const decodeUnicode = (obj) => {
+          const jsonString = JSON.stringify(obj); // 객체를 JSON 문자열로 변환
+          const decodedString = jsonString.replace(
+            /\\u[\dA-Fa-f]{4}/g,
+            (match) =>
+              String.fromCharCode(parseInt(match.replace("\\u", ""), 16))
+          );
+          return JSON.parse(decodedString); // 디코딩된 문자열을 다시 객체로 변환
         };
 
-        if (item.분류 === "맛집") {
+        // item 디코딩
+        const decodedItem = decodeUnicode(item);
+
+        const mappedItem = {
+          id: index + 1,
+          imageUrl:
+            decodedItem["가게 이미지 URL"] || "https://via.placeholder.com/100",
+          name: decodedItem["가맹점명"] || "Unknown Name",
+          blogReviews: (() => {
+            // "블로그 리뷰" 값을 추출 (예: "블로그 리뷰 23")
+            const blogReviewMatch =
+              decodedItem["리뷰 수"]?.match(/블로그 리뷰\s?([\d,]+)/);
+            return blogReviewMatch
+              ? parseInt(blogReviewMatch[1].replace(/,/g, ""), 10) // 쉼표 제거 후 정수로 변환
+              : 0; // 블로그 리뷰가 없는 경우 기본값
+          })(),
+          visitorReviews: (() => {
+            // "방문자 리뷰" 값을 추출 (예: "방문자 리뷰 2,688")
+            const visitorReviewMatch =
+              decodedItem["별점"]?.match(/방문자 리뷰\s?([\d,]+)/);
+            return visitorReviewMatch
+              ? parseInt(visitorReviewMatch[1].replace(/,/g, ""), 10) // 쉼표 제거 후 정수로 변환
+              : 0; // 방문자 리뷰가 없는 경우 기본값
+          })(),
+          rating: (() => {
+            // 별점에서 숫자형 값 추출
+            const ratingMatch = decodedItem["별점"]?.match(/[\d.]+/); // 숫자와 소수점 추출
+            const rawRating = ratingMatch ? parseFloat(ratingMatch[0]) : null;
+            // 유효한 별점 범위(1.0 ~ 5.0)만 반환
+            return rawRating && rawRating >= 1.0 && rawRating <= 5.0
+              ? rawRating.toFixed(1)
+              : null; // 유효하지 않으면 `null` 반환
+          })(),
+          latitude: parseFloat(decodedItem["위도"]) || 0.0,
+          longitude: parseFloat(decodedItem["경도"]) || 0.0,
+          searchUrl: decodedItem["위치값 주소"] || "#",
+        };
+
+        const decodedCategory = decodedItem["분류"]?.trim();
+
+        if (decodedCategory === "맛집") {
           categorizedPlaces.식당.push(mappedItem);
-        } else if (item.분류 === "모텔/호텔") {
+        } else if (decodedCategory === "모텔" || decodedCategory === "호텔") {
           categorizedPlaces.숙소.push(mappedItem);
         } else {
+          console.log(categorizedPlaces);
           categorizedPlaces.명소.push(mappedItem);
         }
       });
@@ -128,7 +169,10 @@ const InputPage = () => {
   };
 
   const calculateTotalBudget = () => {
-    return Object.values(selectedBudgets).reduce((sum, value) => sum + value, 0);
+    return Object.values(selectedBudgets).reduce(
+      (sum, value) => sum + value,
+      0
+    );
   };
 
   return (
@@ -147,7 +191,10 @@ const InputPage = () => {
             </span>
           </div>
 
-          <div className="selector-text" onClick={() => setShowGenderPopup(true)}>
+          <div
+            className="selector-text"
+            onClick={() => setShowGenderPopup(true)}
+          >
             성별: <span>{selectedGender || "선택되지 않음"}</span>
           </div>
 
@@ -155,7 +202,10 @@ const InputPage = () => {
             연령: <span>{selectedAge || "선택되지 않음"}</span>
           </div>
 
-          <div className="selector-text" onClick={() => setShowBudgetPopup(true)}>
+          <div
+            className="selector-text"
+            onClick={() => setShowBudgetPopup(true)}
+          >
             예산 합계:{" "}
             <span>
               {calculateTotalBudget() > 0
@@ -164,7 +214,10 @@ const InputPage = () => {
             </span>
           </div>
 
-          <div className="selector-text" onClick={() => setShowClusterPopup(true)}>
+          <div
+            className="selector-text"
+            onClick={() => setShowClusterPopup(true)}
+          >
             클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
           </div>
 

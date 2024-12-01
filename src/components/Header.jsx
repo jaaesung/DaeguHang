@@ -7,28 +7,28 @@ const Header = () => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginId, setLoginId] = useState(null); // 로그인 ID 저장
+  const [userId, setUserId] = useState(null); // userId 저장
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
-    // sessionStorage에서 loginId 가져오기
-    const storedLoginId = sessionStorage.getItem("loginId");
-    if (storedLoginId) {
+    // sessionStorage에서 userId 가져오기
+    const storedUserId = sessionStorage.getItem("userId");
+    if (storedUserId) {
       setIsLoggedIn(true);
-      setLoginId(storedLoginId);
+      setUserId(storedUserId);
     }
   }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setLoginId(null);
-    sessionStorage.removeItem("loginId"); // 로그아웃 시 sessionStorage에서 제거
+    setUserId(null);
+    sessionStorage.removeItem("userId"); // 로그아웃 시 sessionStorage에서 제거
     navigate("/"); // 홈으로 이동
   };
 
   const handleMyPage = () => {
-    if (loginId) {
-      navigate(`/mypage?loginId=${loginId}`); // loginId를 쿼리 파라미터로 전달
+    if (userId) {
+      navigate(`/mypage?userId=${userId}`); // userId를 쿼리 파라미터로 전달
     } else {
       alert("로그인이 필요합니다.");
     }
@@ -63,9 +63,11 @@ const Header = () => {
       <LoginPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        onLoginSuccess={(loginId) => {
+        onLoginSuccess={(userId) => {
           setIsLoggedIn(true);
-          setLoginId(loginId);
+          setUserId(userId);
+          sessionStorage.setItem("userId", userId); // userId 저장
+          setIsPopupOpen(false); // 팝업 닫기
         }}
       />
     </div>

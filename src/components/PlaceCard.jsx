@@ -5,7 +5,8 @@ import "./PlaceCard.css";
 const PlaceCard = ({
   imageUrl,
   name,
-  reviews,
+  blogReviews,
+  visitorReviews,
   rating,
   latitude,
   longitude,
@@ -21,7 +22,8 @@ const PlaceCard = ({
     console.log("PlaceCard Props:", {
       imageUrl,
       name,
-      reviews,
+      blogReviews,
+      visitorReviews,
       rating,
       latitude,
       longitude,
@@ -31,7 +33,8 @@ const PlaceCard = ({
   }, [
     imageUrl,
     name,
-    reviews,
+    blogReviews,
+    visitorReviews,
     rating,
     latitude,
     longitude,
@@ -70,7 +73,8 @@ const PlaceCard = ({
     const placeData = {
       name,
       imageUrl,
-      reviews,
+      blogReviews,
+      visitorReviews,
       rating,
       latitude,
       longitude,
@@ -88,7 +92,8 @@ const PlaceCard = ({
         <h4 className="place-card-title" onClick={handleNameClick}>
           {name}
         </h4>
-        <p className="place-card-reviews">{reviews} 리뷰</p>
+        <p className="place-card-reviews">{blogReviews} 블로그 리뷰</p>
+        <p className="place-card-reviews">{visitorReviews} 방문자 리뷰</p>
         <p className="place-card-rating">⭐ {rating}</p>
         {placeType && <p className="place-card-type">유형: {placeType}</p>}{" "}
         {/* 장소 유형 추가 */}
