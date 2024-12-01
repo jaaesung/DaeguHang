@@ -44,7 +44,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      alert("로그인 실패: 서버와 통신 중 오류가 발생했습니다.");
+      alert(error.response.data);
     }
   };
 
@@ -63,7 +63,7 @@ const LoginPopup = ({ isOpen, onClose, onLoginSuccess }) => {
       onClose();
     } catch (error) {
       console.error("Registration failed:", error);
-      alert("회원가입 실패!");
+      alert(error.response.data);
     }
   };
 

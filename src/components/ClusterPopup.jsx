@@ -5,10 +5,10 @@ const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
   const [localCluster, setLocalCluster] = useState(selectedCluster);
 
   const clusterOptions = [
-    { id: "1", name: "Cluster 0", img: "/images/클러스터0.png" },
-    { id: "2", name: "Cluster 1", img: "/images/클러스터1.png" },
-    { id: "3", name: "Cluster 2", img: "/images/클러스터2.png" },
-    { id: "4", name: "Cluster 3", img: "/images/클러스터3.png" },
+    { id: "0", name: "Cluster 0", img: "/images/클러스터0.png" },
+    { id: "1", name: "Cluster 1", img: "/images/클러스터1.png" },
+    { id: "2", name: "Cluster 2", img: "/images/클러스터2.png" },
+    { id: "3", name: "Cluster 3", img: "/images/클러스터3.png" },
   ];
 
   const handleClusterClick = (clusterId) => {

@@ -3,7 +3,7 @@ import axios from "axios";
 import "./PlaceCard.css";
 
 const PlaceCard = ({
-  imageUrl,
+  imageURL,
   name,
   blogReviews,
   visitorReviews,
@@ -20,7 +20,7 @@ const PlaceCard = ({
   // 콘솔 로그 추가: props로 전달된 데이터 확인
   useEffect(() => {
     console.log("PlaceCard Props:", {
-      imageUrl,
+      imageURL,
       name,
       blogReviews,
       visitorReviews,
@@ -31,7 +31,7 @@ const PlaceCard = ({
       placeId,
     });
   }, [
-    imageUrl,
+    imageURL,
     name,
     blogReviews,
     visitorReviews,
@@ -72,7 +72,7 @@ const PlaceCard = ({
     // 장소를 일정에 추가할 때 필요한 정보 전체를 전달
     const placeData = {
       name,
-      imageUrl,
+      imageURL,
       blogReviews,
       visitorReviews,
       rating,
@@ -87,7 +87,7 @@ const PlaceCard = ({
 
   return (
     <div className="place-card">
-      <img src={imageUrl} alt={name} className="place-card-image" />
+      <img src={imageURL} alt={name} className="place-card-image" />
       <div className="place-card-details">
         <h4 className="place-card-title" onClick={handleNameClick}>
           {name}
