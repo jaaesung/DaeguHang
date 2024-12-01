@@ -48,7 +48,7 @@ const PlanPage = () => {
     };
 
     console.log('userId:', userId);
-    console.log('planId:', planId);
+    // console.log('planId:', planId);
     
     // 이제 넘어온 clientInfo에서 이걸 갖고 plan을 만듦
     try {
@@ -68,6 +68,7 @@ const PlanPage = () => {
       const planId = responseInitPlan.data.planId; // 여기다가 스케줄 넣기
 
       // 스케줄 저장
+      console.log("스케줄 만들기 : ", scheduleItemsByDate)
       const dtos = Object.keys(scheduleItemsByDate).flatMap((date) =>
         scheduleItemsByDate[date].map((item) => ({
           planId,
@@ -78,10 +79,12 @@ const PlanPage = () => {
           type: item.type || "PLACE",
           name: item.name,
           address: item.address || "",
-          rate: item.rating || 0,
-          imageURL: item.imageUrl || "",
+          rate: item.rate || 0,
+          imageURL: item.imageURL || "",
         }))
       );
+
+      console.log("반복문을 위한 DTO : ", dtos)
 
       for (const dto of dtos) {
         await axios.post(

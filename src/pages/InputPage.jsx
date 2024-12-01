@@ -75,8 +75,9 @@ const InputPage = () => {
         식당: [],
         숙소: [],
       };
-
-      responseRecommend.data.forEach((item, index) => {
+      const itemsArray = Object.values(responseRecommend.data);
+      console.log("응답 data : ",  itemsArray)
+      itemsArray.forEach((item, index) => {
         // 유니코드 디코딩 함수
         const decodeUnicode = (obj) => {
           const jsonString = JSON.stringify(obj); // 객체를 JSON 문자열로 변환
@@ -90,10 +91,10 @@ const InputPage = () => {
 
         // item 디코딩
         const decodedItem = decodeUnicode(item);
-
+        const decodedCategory = decodedItem["분류"]?.trim();
         const mappedItem = {
-          id: index + 1,
-          imageUrl:
+          placeId: index + 1,
+          imageURL:
             decodedItem["가게 이미지 URL"] || "https://via.placeholder.com/100",
           name: decodedItem["가맹점명"] || "Unknown Name",
           blogReviews: (() => {
@@ -113,7 +114,7 @@ const InputPage = () => {
               ? parseInt(visitorReviewMatch[1].replace(/,/g, ""), 10)
               : 0; // 기본값
           })(),
-          rating: (() => {
+          rate: (() => {
             const ratingText = decodedItem["별점"] || ""; // null/undefined 방지
             const ratingMatch = ratingText.match(/([\d.]+)점/); // 별점 값 추출
             if (ratingMatch) {
@@ -132,9 +133,11 @@ const InputPage = () => {
           latitude: parseFloat(decodedItem["위도"]) || 0.0,
           longitude: parseFloat(decodedItem["경도"]) || 0.0,
           searchUrl: decodedItem["위치값 주소"] || "#",
+          // 타입을 여기서 구분하는게 아니라 그냥 넣기만 하고있으니까 여기서 ㄱ부누 해
+          type : decodedCategory,
         };
 
-        const decodedCategory = decodedItem["분류"]?.trim();
+   
 
         if (decodedCategory === "맛집") {
           categorizedPlaces.식당.push(mappedItem);

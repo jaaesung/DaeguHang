@@ -45,7 +45,7 @@ const Mypage = () => {
     const fetchUserPlans = async () => {
       try {
         const plansResponse = await axios.get(
-          `http://localhost:8080/api/plans/${userId}/get`
+          `http://localhost:8080/api/plan/${userId}/get`
         );
         setMyPlans(plansResponse.data); // Plan 데이터에는 id, title, date 등 필요한 정보 포함
       } catch (error) {
