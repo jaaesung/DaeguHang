@@ -6,7 +6,7 @@ import "./popup.css";
 
 const DateSelector = ({ onDateSelect, onNext }) => {
   const [dateRange, setDateRange] = useState([
-    { startDate: new Date(), endDate: new Date(), key: "selection" },
+    { startDate: null, endDate: null, key: "selection" }, // 초기값을 null로 설정
   ]);
 
   const handleSelect = (ranges) => {
@@ -19,19 +19,29 @@ const DateSelector = ({ onDateSelect, onNext }) => {
 
   return (
     <div className="popup">
-      <h2 className="popup-title">날짜 선택</h2>
-      <div className="date-range-container">
-        <DateRange
-          editableDateInputs={true}
-          onChange={handleSelect}
-          moveRangeOnFirstSelection={false}
-          ranges={dateRange}
-          rangeColors={["#2c2c2c"]}
-        />
+      <div className="popup-header">
+        <h2 className="popup-title">날짜 선택</h2>
       </div>
-      <button className="popup-next" onClick={onNext}>
-        다음
-      </button>
+      <div className="popup-content">
+        <div className="date-range-container">
+          <DateRange
+            editableDateInputs={true}
+            onChange={handleSelect}
+            moveRangeOnFirstSelection={false}
+            ranges={dateRange}
+            rangeColors={["#2c2c2c"]}
+          />
+        </div>
+      </div>
+      <div className="popup-footer">
+        <button
+          className="popup-next"
+          onClick={onNext}
+          disabled={!dateRange[0].startDate || !dateRange[0].endDate} // 시작일과 종료일이 선택되지 않으면 비활성화
+        >
+          다음
+        </button>
+      </div>
     </div>
   );
 };

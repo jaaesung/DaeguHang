@@ -5,10 +5,10 @@ const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
   const [localCluster, setLocalCluster] = useState(selectedCluster);
 
   const clusterOptions = [
-    { id: "1", name: "Cluster 1", img: "https://via.placeholder.com/150?text=Cluster+1" },
-    { id: "2", name: "Cluster 2", img: "https://via.placeholder.com/150?text=Cluster+2" },
-    { id: "3", name: "Cluster 3", img: "https://via.placeholder.com/150?text=Cluster+3" },
-    { id: "4", name: "Cluster 4", img: "https://via.placeholder.com/150?text=Cluster+4" },
+    { id: "1", name: "Cluster 0", img: "/images/클러스터0.png" },
+    { id: "2", name: "Cluster 1", img: "/images/클러스터1.png" },
+    { id: "3", name: "Cluster 2", img: "/images/클러스터2.png" },
+    { id: "4", name: "Cluster 3", img: "/images/클러스터3.png" },
   ];
 
   const handleClusterClick = (clusterId) => {
@@ -23,7 +23,7 @@ const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
   };
 
   return (
-    <div className="popup">
+    <div className="popup popup-large">
       <h2 className="popup-title">클러스터를 선택하세요</h2>
       <div className="popup-cluster-grid">
         {clusterOptions.map((cluster) => (
@@ -37,9 +37,8 @@ const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
             <img
               src={cluster.img}
               alt={cluster.name}
-              className="popup-cluster-image"
+              className="popup-cluster-image expanded" // 이미지 크기를 확장
             />
-            <p className="popup-cluster-label">{cluster.name}</p>
           </div>
         ))}
       </div>

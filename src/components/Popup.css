@@ -1,11 +1,11 @@
-/* :root에서 색상과 크기 변수 관리 */
 :root {
   --primary-color: #2c2c2c;
   --secondary-color: #f0f0f0;
   --hover-color: #e0e0e0;
   --white: #ffffff;
-  --font-size-large: 32px;
+  --font-size-large: 36px; /* 제목 크기 키움 */
   --font-size-medium: 24px;
+  --font-size-small: 18px;
   --border-radius: 12px;
   --box-shadow-light: 0px 2px 10px rgba(0, 0, 0, 0.1);
   --box-shadow-dark: 0px 4px 15px rgba(0, 0, 0, 0.2);
@@ -29,26 +29,71 @@
 .popup {
   width: 60vw;
   max-width: 600px;
-  height: 20vw;
-  max-height: 800px;
+  height: auto;
   background: var(--white);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-dark);
   display: flex;
   flex-direction: column;
-  padding: 10px;
   box-sizing: border-box;
   align-items: center;
-  justify-content: space-between;
   gap: 20px;
+  padding: 20px;
+}
+
+/* 제목 영역 */
+.popup-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px; /* 제목과 내용의 간격 */
 }
 
 .popup-title {
-  font-size: var(--font-size-medium);
-  font-weight: 600;
+  font-size: var(--font-size-large);
+  font-weight: bold;
   color: var(--primary-color);
-  text-align: center;
-  margin-bottom: 0px;
+}
+
+/* 내용 영역 */
+.popup-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* 버튼 영역 */
+.popup-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* 내용과 버튼 간격 */
+}
+
+.popup-next {
+  width: 80%;
+  max-width: 300px;
+  height: 50px;
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: var(--white);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.popup-next:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.popup-next:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 /* Gender Popup Styles */
@@ -136,30 +181,6 @@
   width: 80%;
 }
 
-.popup-next {
-  width: 80%;
-  max-width: 300px;
-  height: 50px;
-  font-size: 18px;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--border-radius);
-  background-color: var(--primary-color);
-  color: var(--white);
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.popup-next:hover {
-  background-color: #444;
-  transform: scale(1.05);
-}
-
-.popup-next:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 /* Date Selector Styles */
 .date-display {
   font-size: var(--font-size-large);
@@ -169,19 +190,24 @@
   color: var(--primary-color);
 }
 
+/* DateRange 컨테이너 */
 .date-range-container {
   display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
-  width: 100%;
-  height: auto;
+  justify-content: center;
+  align-items: center;
   margin-top: 0;
+  margin-bottom: 20px; /* 버튼과의 간격 확보 */
+  width: 100%;
 }
 
+/* 캘린더 스타일 */
 .rdrCalendarWrapper {
-  margin: 0 !important; /* 기본 마진 제거 */
-  padding: 0 !important; /* 기본 패딩 제거 */
+  transform: scale(1.1); /* 크기 조정 */
+  transform-origin: top center;
+  margin: 0;
+  padding: 0;
 }
+
 .rdrDateDisplayWrapper {
   display: none; /* Remove input display to simplify */
 }
@@ -192,7 +218,7 @@
   border: none;
   border-radius: var(--border-radius);
   padding: 10px 20px;
-  font-size: 18px;
+  font-size: var(--font-size-medium);
   font-weight: 500;
   transition: all 0.3s ease;
 }
@@ -238,52 +264,55 @@
   margin-left: 5px;
 }
 
-/* Cluster Popup Styles */
+/* 팝업 크기 확장 */
+.popup-large {
+  max-width: 80vw; /* 전체 화면의 80% 너비 */
+  max-height: 80vh; /* 전체 화면의 80% 높이 */
+  padding: 20px;
+}
+
 .popup-cluster-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 구성 */
-  gap: 20px;
-  width: 100%;
-  justify-content: center;
+  grid-template-columns: repeat(2, 1fr); /* 2개씩 표시 */
+  gap: 40px; /* 카드 간격 더 크게 */
+  justify-items: center;
   align-items: center;
+  width: 100%; /* 그리드 너비 확장 */
+  margin: 20px 0;
 }
 
 .popup-cluster-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--secondary-color);
+  border: 2px solid transparent;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow-light);
-  padding: 15px;
   cursor: pointer;
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-}
-
-.popup-cluster-card:hover {
-  transform: scale(1.05);
-  border-color: var(--hover-color);
-  box-shadow: var(--box-shadow-dark);
+  transition: transform 0.3s, border-color 0.3s;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%; /* 카드의 전체 너비 */
 }
 
 .popup-cluster-card.selected {
   border-color: var(--primary-color);
-  background-color: var(--hover-color);
-  box-shadow: var(--box-shadow-dark);
+  transform: scale(1.1); /* 선택 시 확대 */
 }
 
 .popup-cluster-image {
   width: 100%;
   height: auto;
-  max-width: 150px;
+  max-width: 350px; /* 더 큰 크기로 설정 */
+  max-height: 350px; /* 높이도 확장 */
   border-radius: var(--border-radius);
-  margin-bottom: 10px;
+  object-fit: cover; /* 이미지 비율 유지 */
+}
+
+.popup-cluster-image.expanded {
+  max-width: 450px; /* 최대 크기 확장 */
+  max-height: 450px;
 }
 
 .popup-cluster-label {
-  font-size: var(--font-size-medium);
-  font-weight: 500;
-  text-align: center;
-  color: var(--primary-color);
+  display: none; /* 이름 숨김 */
 }
