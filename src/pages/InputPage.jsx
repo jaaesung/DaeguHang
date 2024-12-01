@@ -142,7 +142,7 @@ const InputPage = () => {
           type : decodedCategory,
         };
 
-   
+        console.log(mappedItem.imageURL)
 
         if (decodedCategory === "맛집") {
           categorizedPlaces.식당.push(mappedItem);

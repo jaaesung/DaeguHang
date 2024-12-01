@@ -12,7 +12,7 @@ const PlanPage = () => {
   const location = useLocation();
   const { startDate, endDate, scheduleItems, clientInfo } = location.state || {};
   const userId = sessionStorage.getItem("userId");
-
+  console.log("ScheduleItems", scheduleItems)
   if (!userId) {
     alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
     return;
