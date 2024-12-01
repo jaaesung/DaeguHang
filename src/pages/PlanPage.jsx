@@ -6,11 +6,17 @@ import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
 import { useSchedule } from "../hooks/useSchedule";
 import "./PlanPage.css";
+import axios from 'axios';
 
 const PlanPage = () => {
   const location = useLocation();
-  const { startDate, endDate, scheduleItems } = location.state || {};
+  const { startDate, endDate, scheduleItems, clientInfo } = location.state || {};
+  const userId = sessionStorage.getItem("userId");
 
+  if (!userId) {
+    alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
+    return;
+  }
   const {
     scheduleItemsByDate,
     selectedDate,
@@ -37,24 +43,45 @@ const PlanPage = () => {
     const planData = {
       startDate,
       endDate,
-      scheduleItems: scheduleItemsByDate,
+      scheduleItems: scheduleItems,
+      clientInfo: clientInfo
     };
+    
+    // 이제 넘어온 clientInfo에서 이걸 갖고 plan을 만듦
+    try {
+      const responseInitPlan = await axios.post( // plan 초기화
+        `http://127.0.0.1:8080/api/plan/${userId}/new`,
+        {
+          userId: clientInfo.userId || userId,
+          title: clientInfo.title,
+          startDate: clientInfo.startDate,
+          endDate: clientInfo.endDate,
+          sex: clientInfo.gender,
+          age: clientInfo.age,
+          budget: clientInfo.spending["소매/쇼핑"] + clientInfo.spending.숙박 + clientInfo.spending["스포츠 및 문화"] + clientInfo.spending.외식 + clientInfo.spending.유흥
+        }
+      )
+      
+      const planId = responseInitPlan.data.planId; // 여기다가 스케줄 넣기
+      console.log(scheduleItems)
+
+
+      console.log(responseInitPlan.data.planId)
+
+    } catch (e){
+      console.error("계획 초기화 중 오류 발생"  , e)
+    }
 
     try {
-      const response = await fetch("/api/savePlan", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(planData),
-      });
+      // plan 안에 scheduleItems를 넣는거지
+      // for (all schedule Items : )
+      // const responseAddSchedule = await axios.post(
+      //   `http://127.0.0.1:8080/api/schedule/${userId}/create/${planId}`,
+      //   // 넣는거지 이걸 만들어서 
 
-      if (response.ok) {
-        alert("계획이 성공적으로 저장되었습니다!");
-        // 페이지 이동 또는 추가 액션 수행
-      } else {
-        alert("계획 저장 중 오류가 발생했습니다.");
-      }
+      // )
+
+
     } catch (error) {
       console.error("Error saving plan:", error);
       alert("계획 저장 중 오류가 발생했습니다.");

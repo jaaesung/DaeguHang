@@ -46,25 +46,26 @@ const InputPage = () => {
     try {
       const { shopping, lodging, culture, dining, entertainment } =
         selectedBudgets;
+      const clientInfo = {
+        cluster: parseInt(selectedCluster),
+        userId: parseInt(userId),
+        startDate: startDate.toISOString().split("T")[0],
+        endDate: endDate.toISOString().split("T")[0],
+        gender: selectedGender === "남" ? "M" : "F",
+        age: parseInt(selectedAge.replace("대", ""), 10),
+        spending: {
+          "소매/쇼핑": shopping,
+          숙박: lodging,
+          "스포츠 및 문화": culture,
+          외식: dining,
+          유흥: entertainment,
+        },
+        title: travelTitle,
+      };
 
-      const response = await axios.post(
+      const responseRecommend = await axios.post(
         "http://127.0.0.1:8080/api/recommendation",
-        {
-          cluster: parseInt(selectedCluster),
-          userId: parseInt(userId),
-          startDate: startDate.toISOString().split("T")[0],
-          endDate: endDate.toISOString().split("T")[0],
-          gender: selectedGender === "남" ? "M" : "F",
-          age: parseInt(selectedAge.replace("대", ""), 10),
-          spending: {
-            "소매/쇼핑": shopping,
-            숙박: lodging,
-            "스포츠 및 문화": culture,
-            외식: dining,
-            유흥: entertainment,
-          },
-          title: travelTitle,
-        }
+        clientInfo
       );
       
 
@@ -75,7 +76,7 @@ const InputPage = () => {
         숙소: [],
       };
 
-      response.data.forEach((item, index) => {
+      responseRecommend.data.forEach((item, index) => {
         // 유니코드 디코딩 함수
         const decodeUnicode = (obj) => {
           const jsonString = JSON.stringify(obj); // 객체를 JSON 문자열로 변환
@@ -144,23 +145,7 @@ const InputPage = () => {
         }
       });
 
-          // 여행 계획을 생성하기 위한 API 호출
-    const responseFromPlanAPI = await axios.post(
-      `http://127.0.0.1:8080/api/plan/${userId}/new`,
-      {
-        userId: parseInt(userId),
-        title: travelTitle,
-        startDate: startDate.toISOString().split("T")[0],
-        endDate: endDate.toISOString().split("T")[0],
-        sex: selectedGender === "남" ? "MALE" : "FEMALE",
-        age: parseInt(selectedAge.replace("대", ""), 10),
-        budget: shopping + lodging + culture + dining + entertainment, // 예산 합산
-      }
-    );
 
-    // 받은 planId를 상태에 저장
-    const newPlanId = responseFromPlanAPI.data.planId;
-    setPlanId(newPlanId); // planId 상태에 저장
 
     
       // PlanPage로 이동 (planId 포함)
@@ -169,7 +154,7 @@ const InputPage = () => {
           startDate,
           endDate,
           scheduleItems: categorizedPlaces,
-          planId: newPlanId, // planId를 state로 전달
+          clientInfo : clientInfo
         },
       });
     } catch (error) {
