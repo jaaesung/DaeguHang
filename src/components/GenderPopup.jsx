@@ -8,7 +8,7 @@ const GenderPopup = ({ selectedGender, onGenderSelect, onNext }) => {
 
   return (
     <div className="popup">
-      <h2 className="popup-title">성별 선택</h2>
+      <h2 className="popup-title">누구와 함께 하나요?</h2>
       <div className="popup-gender-grid">
         <button
           onClick={() => handleSelectGender("남")}

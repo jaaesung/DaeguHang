@@ -31,11 +31,13 @@ const BudgetSlider = ({ initialBudgets, onComplete }) => {
 
   return (
     <div className="popup">
-      <h2 className="popup-title">예산 설정</h2>
+      <h2 className="popup-title">1회당 소비 예산을 설정해주세요</h2>
       <div className="popup-slider">
         {Object.entries(budgets).map(([category, value]) => (
           <div key={category} className="popup-input-group">
-            <label className="popup-input-label">{categoryLabels[category]}</label>
+            <label className="popup-input-label">
+              {categoryLabels[category]}
+            </label>
             <div className="popup-slider-group">
               <span className="popup-slider-value">{value}만원</span>
               <input

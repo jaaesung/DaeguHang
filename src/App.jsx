@@ -7,9 +7,8 @@ import {
 } from "react-router-dom";
 import InputPage from "./pages/InputPage";
 import PlanPage from "./pages/PlanPage";
-import Mainpage from "./pages/MainPage";
+import Mainpage from "./pages/Mainpage";
 import Mypage from "./pages/MyPage";
-
 
 const App = () => (
   <Router>
@@ -19,7 +18,6 @@ const App = () => (
       <Route path="/input" element={<InputPage />} />
       <Route path="/plan" element={<PlanPage />} />
       <Route path="/mypage" element={<Mypage />} />
-      
     </Routes>
   </Router>
 );

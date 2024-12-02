@@ -20,7 +20,7 @@ const DateSelector = ({ onDateSelect, onNext }) => {
   return (
     <div className="popup">
       <div className="popup-header">
-        <h2 className="popup-title">날짜 선택</h2>
+        <h2 className="popup-title">언제 가실 예정이신가요?</h2>
       </div>
       <div className="popup-content">
         <div className="date-range-container">

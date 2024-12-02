@@ -67,7 +67,6 @@ const InputPage = () => {
         "http://127.0.0.1:8080/api/recommendation",
         clientInfo
       );
-      
 
       // API 응답을 RecommendedPlaces 양식으로 변환
       const categorizedPlaces = {
@@ -75,11 +74,11 @@ const InputPage = () => {
         식당: [],
         숙소: [],
       };
-    
+
       // console.log("응답 data : ",  itemsArray)
-      console.log("응답 data type: ", responseRecommend.data)
-      if(typeof responseRecommend.data === 'string'){
-        responseRecommend.data = responseRecommend.data.replace(/NaN/g, 'null');
+      console.log("응답 data type: ", responseRecommend.data);
+      if (typeof responseRecommend.data === "string") {
+        responseRecommend.data = responseRecommend.data.replace(/NaN/g, "null");
         responseRecommend.data = JSON.parse(responseRecommend.data);
       }
       responseRecommend.data.forEach((item, index) => {
@@ -139,10 +138,10 @@ const InputPage = () => {
           longitude: parseFloat(decodedItem["경도"]) || 0.0,
           searchUrl: decodedItem["위치값 주소"] || "#",
           // 타입을 여기서 구분하는게 아니라 그냥 넣기만 하고있으니까 여기서 ㄱ부누 해
-          type : decodedCategory,
+          type: decodedCategory,
         };
 
-        console.log(mappedItem.imageURL)
+        console.log(mappedItem.imageURL);
 
         if (decodedCategory === "맛집") {
           categorizedPlaces.식당.push(mappedItem);
@@ -153,17 +152,15 @@ const InputPage = () => {
         }
       });
 
-
-
-    
       // PlanPage로 이동 (planId 포함)
       navigate("/plan", {
         state: {
           startDate,
           endDate,
           scheduleItems: categorizedPlaces,
-          clientInfo : clientInfo
+          clientInfo: clientInfo,
         },
+        travelTitle,
       });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
@@ -206,36 +203,44 @@ const InputPage = () => {
         <div className="left-content">
           <TravelTitle title={travelTitle} onChangeTitle={handleTitleChange} />
 
-        <div className="selector-text" onClick={() => setShowDatePopup(true)}>
-          날짜:{" "}
-          <span>
-            {startDate && endDate
-              ? `${startDate.toLocaleDateString()} ~ ${endDate.toLocaleDateString()}`
-              : "날짜를 선택하세요"}
-          </span>
-        </div>
+          <div className="selector-text" onClick={() => setShowDatePopup(true)}>
+            날짜:{" "}
+            <span>
+              {startDate && endDate
+                ? `${startDate.toLocaleDateString()} ~ ${endDate.toLocaleDateString()}`
+                : "날짜를 선택하세요"}
+            </span>
+          </div>
 
-        <div className="selector-text" onClick={() => setShowGenderPopup(true)}>
-          성별: <span>{selectedGender || "선택되지 않음"}</span>
-        </div>
+          <div
+            className="selector-text"
+            onClick={() => setShowGenderPopup(true)}
+          >
+            성별: <span>{selectedGender || "선택되지 않음"}</span>
+          </div>
 
-        <div className="selector-text" onClick={() => setShowAgePopup(true)}>
-          연령: <span>{selectedAge || "선택되지 않음"}</span>
-        </div>
+          <div className="selector-text" onClick={() => setShowAgePopup(true)}>
+            연령: <span>{selectedAge || "선택되지 않음"}</span>
+          </div>
 
-        <div className="selector-text" onClick={() => setShowBudgetPopup(true)}>
-          예산 합계:{" "}
-          <span>
-            {calculateTotalBudget() > 0
-              ? `${calculateTotalBudget().toLocaleString()}만원`
-              : "선택되지 않음"}
-          </span>
-        </div>
+          <div
+            className="selector-text"
+            onClick={() => setShowBudgetPopup(true)}
+          >
+            예산 합계:{" "}
+            <span>
+              {calculateTotalBudget() > 0
+                ? `${calculateTotalBudget().toLocaleString()}만원`
+                : "선택되지 않음"}
+            </span>
+          </div>
 
-        <div className="selector-text" onClick={() => setShowClusterPopup(true)}>
-          클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
-        </div>
-
+          <div
+            className="selector-text"
+            onClick={() => setShowClusterPopup(true)}
+          >
+            클러스터: <span>{selectedCluster || "선택되지 않음"}</span>
+          </div>
 
           <button className="submit-button" onClick={handleSubmit}>
             계획 생성

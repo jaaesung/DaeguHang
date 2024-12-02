@@ -10,7 +10,7 @@ const AgePopup = ({ selectedAge, onAgeSelect, onNext }) => {
 
   return (
     <div className="popup">
-      <h2 className="popup-title">연령 선택</h2>
+      <h2 className="popup-title">연령대가 어떻게 되시나요?</h2>
       <div className="popup-age-grid">
         {ageOptions.map((age) => (
           <button

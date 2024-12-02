@@ -1,0 +1,109 @@
+/* PlanCheckPopup 전용 스타일 */
+.plan-check-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.plan-check-popup-content {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  width: 900px;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
+}
+
+.plan-check-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 2rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.plan-check-date-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.plan-check-nav-button {
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border: 1px solid #ddd;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.plan-check-nav-button:hover {
+  background: #0056b3;
+}
+
+.plan-check-nav-button:disabled {
+  background: #ddd;
+  cursor: not-allowed;
+}
+
+.plan-check-schedule-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 15px;
+}
+
+.plan-check-schedule-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+.plan-check-schedule-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 12px;
+}
+
+.plan-check-schedule-details h4 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.plan-check-schedule-details h4 a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.plan-check-schedule-details h4 a:hover {
+  color: #0056b3;
+}
+
+.plan-check-schedule-details p {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #555;
+}

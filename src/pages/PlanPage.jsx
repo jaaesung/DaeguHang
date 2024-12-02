@@ -6,13 +6,14 @@ import RecommendedPlaces from "../components/RecommendedPlaces";
 import Schedule from "../components/Schedule";
 import { useSchedule } from "../hooks/useSchedule";
 import "./PlanPage.css";
-import axios from 'axios';
+import axios from "axios";
 
 const PlanPage = () => {
   const location = useLocation();
-  const { startDate, endDate, scheduleItems, clientInfo } = location.state || {};
+  const { startDate, endDate, scheduleItems, clientInfo } =
+    location.state || {};
   const userId = sessionStorage.getItem("userId");
-  console.log("ScheduleItems", scheduleItems)
+  console.log("ScheduleItems", scheduleItems);
   if (!userId) {
     alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
     return;
@@ -44,15 +45,16 @@ const PlanPage = () => {
       startDate,
       endDate,
       scheduleItems: scheduleItems,
-      clientInfo: clientInfo
+      clientInfo: clientInfo,
     };
 
-    console.log('userId:', userId);
+    console.log("userId:", userId);
     // console.log('planId:', planId);
-    
+
     // 이제 넘어온 clientInfo에서 이걸 갖고 plan을 만듦
     try {
-      const responseInitPlan = await axios.post( // plan 초기화
+      const responseInitPlan = await axios.post(
+        // plan 초기화
         `http://127.0.0.1:8080/api/plan/${userId}/new`,
         {
           userId: clientInfo.userId || userId,
@@ -61,19 +63,29 @@ const PlanPage = () => {
           endDate: clientInfo.endDate,
           sex: clientInfo.gender,
           age: clientInfo.age,
-          budget: clientInfo.spending["소매/쇼핑"] + clientInfo.spending.숙박 + clientInfo.spending["스포츠 및 문화"] + clientInfo.spending.외식 + clientInfo.spending.유흥
+          budget:
+            clientInfo.spending["소매/쇼핑"] +
+            clientInfo.spending.숙박 +
+            clientInfo.spending["스포츠 및 문화"] +
+            clientInfo.spending.외식 +
+            clientInfo.spending.유흥,
         }
-      )
-      
+      );
+
       const planId = responseInitPlan.data.planId; // 여기다가 스케줄 넣기
 
       // 스케줄 저장
-      console.log("스케줄 만들기 : ", scheduleItemsByDate)
+      console.log("스케줄 만들기 : ", scheduleItemsByDate);
       const dtos = Object.keys(scheduleItemsByDate).flatMap((date) =>
         scheduleItemsByDate[date].map((item) => ({
           planId,
-          startTime: new Date(date).setHours(item.startTime, 0, 0),
-          endTime: new Date(date).setHours(item.startTime + item.duration, 0, 0),
+          // 로컬 시간으로 변환
+          startTime: new Date(
+            new Date(date).setHours(item.startTime, 0, 0)
+          ).toISOString(),
+          endTime: new Date(
+            new Date(date).setHours(item.startTime + item.duration, 0, 0)
+          ).toISOString(),
           scheduleText: item.description || "",
           placeId: item.placeId,
           type: item.type || "PLACE",
@@ -84,7 +96,7 @@ const PlanPage = () => {
         }))
       );
 
-      console.log("반복문을 위한 DTO : ", dtos)
+      console.log("반복문을 위한 DTO : ", dtos);
 
       for (const dto of dtos) {
         await axios.post(

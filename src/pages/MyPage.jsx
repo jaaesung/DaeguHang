@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import PlanItem from "../components/PlanItem";
 import NameEditPopup from "../components/NameEditPopup";
 import RePasswordPopup from "../components/RePasswordPopup";
+import PlanCheckPopup from "./PlanCheckPopup";
 import axios from "axios";
 import "./Mypage.css";
 
@@ -17,6 +18,8 @@ const Mypage = () => {
   const [myPlans, setMyPlans] = useState([]);
   const [isNamePopupOpen, setIsNamePopupOpen] = useState(false);
   const [isPasswordPopupOpen, setIsPasswordPopupOpen] = useState(false);
+  const [isPlanPopupOpen, setIsPlanPopupOpen] = useState(false); // 팝업 상태 관리
+  const [selectedPlanId, setSelectedPlanId] = useState(null); // 선택된 planId 저장
 
   useEffect(() => {
     if (!userId) {
@@ -42,21 +45,32 @@ const Mypage = () => {
       }
     };
 
-    const fetchUserPlans = async () => {
+    const fetchPlans = async () => {
       try {
-        const plansResponse = await axios.get(
-          `http://localhost:8080/api/plan/${userId}/get`
+        const response = await axios.get(
+          `http://127.0.0.1:8080/api/plan/${userId}/get`
         );
-        setMyPlans(plansResponse.data); // Plan 데이터에는 id, title, date 등 필요한 정보 포함
+
+        // API에서 받은 데이터를 필요한 키로 매핑
+        const formattedPlans = response.data.map((plan) => ({
+          id: plan.planId, // PLAN_ID를 id로 매핑
+          title: plan.title || "제목 없음", // TITLE이 비어 있으면 기본값 설정
+          startDate: plan.startDate, // START_DATE 매핑
+          endDate: plan.endDate,
+          sex: plan.sex,
+          age: plan.age,
+          budget: plan.budget,
+        }));
+
+        setMyPlans(formattedPlans);
       } catch (error) {
         console.error("계획 데이터를 가져오는 중 오류 발생:", error);
-        alert("계획 데이터를 가져올 수 없습니다.");
       }
     };
 
     const fetchData = async () => {
       await fetchUserInfo();
-      await fetchUserPlans();
+      await fetchPlans();
     };
 
     fetchData();
@@ -86,6 +100,20 @@ const Mypage = () => {
     }
   };
 
+  const handleDeletePlan = async (planId) => {
+    try {
+      await axios.delete(
+        `http://127.0.0.1:8080/api/plan/${userId}/delete/${planId}`
+      );
+      alert("계획이 성공적으로 삭제되었습니다.");
+      // 삭제된 계획을 UI에서 제거
+      setMyPlans((prevPlans) => prevPlans.filter((plan) => plan.id !== planId));
+    } catch (error) {
+      console.error("계획 삭제 중 오류 발생:", error);
+      alert("계획 삭제 중 문제가 발생했습니다.");
+    }
+  };
+
   const handlePasswordSave = async (currentPassword, newPassword) => {
     try {
       const response = await axios.put(
@@ -107,6 +135,16 @@ const Mypage = () => {
       console.error("비밀번호 변경 중 오류 발생:", error);
       alert("비밀번호 변경 중 오류가 발생했습니다.");
     }
+  };
+
+  const handlePlanClick = (planId) => {
+    setSelectedPlanId(planId); // 선택된 planId 설정
+    setIsPlanPopupOpen(true); // 팝업 열기
+  };
+
+  const closePlanPopup = () => {
+    setIsPlanPopupOpen(false); // 팝업 닫기
+    setSelectedPlanId(null); // 선택된 planId 초기화
   };
 
   return (
@@ -178,23 +216,18 @@ const Mypage = () => {
                       key={plan.id}
                       id={plan.id}
                       title={plan.title}
-                      date={plan.date}
-                      image={plan.image} // 이미지 URL 추가 (선택 사항)
+                      sex={plan.sex}
+                      age={plan.age}
+                      startDate={plan.startDate}
+                      endDate={plan.endDate}
+                      budget={plan.budget}
+                      onClick={handlePlanClick}
                     />
                   ))
                 ) : (
                   <p className="no-plans">아직 등록된 계획이 없습니다.</p>
                 )}
               </div>
-
-              <button
-                className="scroll-button right"
-                onClick={() =>
-                  scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" })
-                }
-              >
-                ▶
-              </button>
             </div>
           </section>
           <NameEditPopup
@@ -208,6 +241,15 @@ const Mypage = () => {
             onClose={() => setIsPasswordPopupOpen(false)}
             onSave={handlePasswordSave}
           />
+
+          {/* PlanCheckPopup */}
+          {isPlanPopupOpen && (
+            <PlanCheckPopup
+              userId={userId}
+              planId={selectedPlanId}
+              onClose={closePlanPopup}
+            />
+          )}
         </main>
       </div>
     </div>

@@ -29,6 +29,7 @@
 .popup {
   width: 60vw;
   max-width: 600px;
+  min-height: 300px;
   height: auto;
   background: var(--white);
   border-radius: var(--border-radius);

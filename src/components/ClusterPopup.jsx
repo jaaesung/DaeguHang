@@ -24,7 +24,9 @@ const ClusterPopup = ({ selectedCluster, onClusterSelect, onNext }) => {
 
   return (
     <div className="popup popup-large">
-      <h2 className="popup-title">클러스터를 선택하세요</h2>
+      <h2 className="popup-title">
+        내가 생각하는 여행과 가장 가까운 이미지를 선택해주세요
+      </h2>
       <div className="popup-cluster-grid">
         {clusterOptions.map((cluster) => (
           <div
