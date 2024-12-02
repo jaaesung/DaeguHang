@@ -27,12 +27,12 @@ const RecommendedPlaces = ({ places, onAddToPlan, hiddenPlaces }) => {
             .map((place) => (
               <PlaceCard
                 key={place.id}
-                imageUrl={place.imageUrl}
+                imageURL={place.imageURL}
                 searchUrl={place.searchUrl}
                 name={place.name}
                 blogReviews={place.blogReviews}
                 visitorReviews={place.visitorReviews}
-                rating={place.rating}
+                rate={place.rate}
                 latitude={place.latitude}
                 longitude={place.longitude}
                 onAddToPlan={() => onAddToPlan(place)} // 여기에서 전달된 함수 호출

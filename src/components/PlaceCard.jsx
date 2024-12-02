@@ -7,7 +7,7 @@ const PlaceCard = ({
   name,
   blogReviews,
   visitorReviews,
-  rating,
+  rate,
   latitude,
   longitude,
   searchUrl,
@@ -24,7 +24,7 @@ const PlaceCard = ({
       name,
       blogReviews,
       visitorReviews,
-      rating,
+      rate,
       latitude,
       longitude,
       searchUrl,
@@ -35,7 +35,7 @@ const PlaceCard = ({
     name,
     blogReviews,
     visitorReviews,
-    rating,
+    rate,
     latitude,
     longitude,
     searchUrl,
@@ -75,7 +75,7 @@ const PlaceCard = ({
       imageURL,
       blogReviews,
       visitorReviews,
-      rating,
+      rate,
       latitude,
       longitude,
       searchUrl,
@@ -94,7 +94,7 @@ const PlaceCard = ({
         </h4>
         <p className="place-card-reviews">{blogReviews} 블로그 리뷰</p>
         <p className="place-card-reviews">{visitorReviews} 방문자 리뷰</p>
-        <p className="place-card-rating">⭐ {rating}</p>
+        <p className="place-card-rating">⭐ {rate}</p>
         {placeType && <p className="place-card-type">유형: {placeType}</p>}{" "}
         {/* 장소 유형 추가 */}
       </div>
