@@ -110,13 +110,16 @@ const PlanCheckPopup = ({ userId, planId, onClose }) => {
 
             <div className="plan-check-schedule-list">
               {schedulesByDate[selectedDate].map((schedule) => (
-                <div key={schedule.scheduleId} className="schedule-item">
+                <div
+                  key={schedule.scheduleId}
+                  className="plan-check-schedule-item"
+                >
                   <img
                     src={schedule.imageURL || "https://via.placeholder.com/150"}
                     alt={schedule.name}
-                    className="schedule-image"
+                    className="plan-check-schedule-image"
                   />
-                  <div className="schedule-details">
+                  <div className="plan-check-schedule-details">
                     <h4>
                       <a
                         href={`https://map.naver.com/v5/search/${encodeURIComponent(

@@ -222,6 +222,7 @@ const Mypage = () => {
                       endDate={plan.endDate}
                       budget={plan.budget}
                       onClick={handlePlanClick}
+                      onDelete={handleDeletePlan} // 삭제 핸들러 전달
                     />
                   ))
                 ) : (

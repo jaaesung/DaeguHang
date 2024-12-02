@@ -109,7 +109,6 @@ const InputPage = () => {
               : 0; // 기본값
           })(),
           visitorReviews: (() => {
-            // 별점이 없고 방문자 리뷰만 있는 경우도 고려
             const reviewText = decodedItem["리뷰 수"] || "";
             const visitorReviewMatch =
               decodedItem["별점"]?.match(/방문자 리뷰\s?([\d,]+)/) ||
@@ -120,19 +119,15 @@ const InputPage = () => {
           })(),
           rate: (() => {
             const ratingText = decodedItem["별점"] || ""; // null/undefined 방지
-            const ratingMatch = ratingText.match(/([\d.]+)점/); // 별점 값 추출
+
+            // 줄바꿈 제거 및 별점 값 추출
+            const cleanedRatingText = ratingText.replace(/\s/g, ""); // 모든 공백 제거
+            const ratingMatch = cleanedRatingText.match(/별점([\d.]+)/); // "별점" 뒤의 숫자 추출
             if (ratingMatch) {
               return parseFloat(ratingMatch[1]).toFixed(1); // 유효한 별점 반환
             }
 
-            // 별점이 없고 방문자 리뷰만 있는 경우
-            const visitorReviewMatch =
-              ratingText.match(/방문자 리뷰\s?([\d,]+)/);
-            if (visitorReviewMatch) {
-              return null; // 별점 대신 null 반환
-            }
-
-            return null; // 기본값
+            return "없음"; // 별점이 없을 경우 null 반환
           })(),
           latitude: parseFloat(decodedItem["위도"]) || 0.0,
           longitude: parseFloat(decodedItem["경도"]) || 0.0,
@@ -152,6 +147,14 @@ const InputPage = () => {
         }
       });
 
+      console.log("Data to send:", {
+        startDate,
+        endDate,
+        scheduleItems: categorizedPlaces,
+        clientInfo: clientInfo,
+        travelTitle,
+      });
+
       // PlanPage로 이동 (planId 포함)
       navigate("/plan", {
         state: {
@@ -159,8 +162,8 @@ const InputPage = () => {
           endDate,
           scheduleItems: categorizedPlaces,
           clientInfo: clientInfo,
+          travelTitle,
         },
-        travelTitle,
       });
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
@@ -243,7 +246,7 @@ const InputPage = () => {
           </div>
 
           <button className="submit-button" onClick={handleSubmit}>
-            계획 생성
+            추천 생성
           </button>
         </div>
 

@@ -1,65 +1,64 @@
 .plan-item {
-  width: 280px; /* 넓이를 살짝 증가 */
-  height: 400px; /* 높이를 조금 더 증가 */
+  width: 280px;
+  height: 400px;
   background-color: #ffffff;
-  border-radius: 16px; /* 더 둥글게 */
+  border-radius: 16px;
   overflow: hidden;
   text-align: center;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* 그림자 강화 */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 }
 
 .plan-item:hover {
-  transform: translateY(-8px); /* 살짝 위로 떠오르게 */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* hover 시 그림자 증가 */
-}
-
-.delete-button {
-  display: none;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: red;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background-color: darkred;
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .plan-image {
   width: 100%;
-  height: 260px; /* 이미지 높이 증가 */
+  height: 60%;
   object-fit: cover;
-  background-color: #f4f4f4; /* 더 밝은 배경색 */
   border-bottom: 1px solid #eaeaea;
 }
 
+.plan-item-content {
+  padding: 16px;
+}
+
 .plan-title {
-  font-size: 18px; /* 폰트 크기 증가 */
+  font-size: 18px;
   font-weight: bold;
-  color: #333333; /* 진한 회색으로 변경 */
-  margin: 12px 0 8px; /* 여백 조정 */
-  text-overflow: ellipsis; /* 텍스트가 길 경우 생략 */
+  color: #333333;
+  margin: 12px 0;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .plan-date {
-  font-size: 15px; /* 조금 더 키움 */
-  color: #777777; /* 부드러운 회색 */
-  margin-bottom: 16px; /* 아래쪽 여백 추가 */
-  font-style: italic; /* 날짜를 이탤릭체로 */
+  font-size: 15px;
+  color: #777777;
+  font-style: italic;
 }
 
-.plan-item:active {
-  transform: translateY(-4px); /* 클릭 시 약간만 움직임 */
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* 클릭 시 그림자 조정 */
+.delete-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #ff4b4b;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #d93636;
 }

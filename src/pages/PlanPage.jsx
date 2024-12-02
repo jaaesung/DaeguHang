@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import MapDisplay from "../components/MapDisplay";
 import RecommendedPlaces from "../components/RecommendedPlaces";
@@ -10,9 +10,10 @@ import axios from "axios";
 
 const PlanPage = () => {
   const location = useLocation();
-  const { startDate, endDate, scheduleItems, clientInfo } =
+  const { startDate, endDate, scheduleItems, clientInfo, traveltitle } =
     location.state || {};
   const userId = sessionStorage.getItem("userId");
+  const navigate = useNavigate();
   console.log("ScheduleItems", scheduleItems);
   if (!userId) {
     alert("로그인 정보가 없습니다. 다시 로그인해주세요.");
@@ -106,6 +107,7 @@ const PlanPage = () => {
       }
 
       alert("계획 및 일정이 성공적으로 저장되었습니다.");
+      navigate("/");
     } catch (error) {
       console.error("Error creating plan or schedules:", error);
       alert("계획 생성 중 오류가 발생했습니다.");

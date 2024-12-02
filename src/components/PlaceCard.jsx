@@ -99,7 +99,7 @@ const PlaceCard = ({
         {/* 장소 유형 추가 */}
       </div>
       <button className="place-card-button" onClick={handleAddPlace}>
-        일정에 추가
+        추가
       </button>
     </div>
   );
