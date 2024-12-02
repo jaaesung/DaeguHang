@@ -24,39 +24,37 @@ const MapDisplay = ({ scheduleItems, hoveredItemIndex }) => {
           item.latitude,
           item.longitude
         );
+
+        // Create a custom marker with dynamic size and color
         const marker = new window.naver.maps.Marker({
           position,
           map: map,
-          title: item.name,
           icon: {
-            url:
-              hoveredItemIndex === index
-                ? "https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png"
-                : "https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png",
-            size: new window.naver.maps.Size(
-              hoveredItemIndex === index ? 40 : 20,
-              hoveredItemIndex === index ? 40 : 20
-            ),
-            scaledSize: new window.naver.maps.Size(
-              hoveredItemIndex === index ? 40 : 20,
-              hoveredItemIndex === index ? 40 : 20
-            ),
+            content: `
+              <div style="
+                background-color: ${
+                  hoveredItemIndex === index ? "#ff5c5c" : "#5c85ff"
+                };
+                color: white;
+                font-size: ${hoveredItemIndex === index ? "18px" : "12px"};
+                font-weight: bold;
+                width: ${hoveredItemIndex === index ? "70px" : "40px"};
+                height: ${hoveredItemIndex === index ? "70px" : "40px"};
+                line-height: ${hoveredItemIndex === index ? "70px" : "40px"};
+                text-align: center;
+                border-radius: 50%;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                transform: translate(-50%, -50%);
+              ">
+                ${index + 1}
+              </div>
+            `,
+            anchor: new window.naver.maps.Point(20, 20),
           },
         });
 
         // Extend map bounds
         bounds.extend(position);
-
-        // Attach click event to navigate to the provided URL
-        window.naver.maps.Event.addListener(marker, "click", () => {
-          if (item.searchUrl) {
-            console.log("Navigating to URL:", item.searchUrl);
-            window.open(item.searchUrl, "_blank"); // Open the provided URL in a new tab
-          } else {
-            console.error("Search URL is missing for:", item);
-            alert("이 장소의 검색 URL이 제공되지 않았습니다.");
-          }
-        });
 
         return marker;
       });

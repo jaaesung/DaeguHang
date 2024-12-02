@@ -1,7 +1,13 @@
 import React from "react";
 import "./ScheduleCard.css";
 
-const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
+const ScheduleCard = ({
+  item,
+  index,
+  onUpdateDuration,
+  onRemoveItem,
+  setHoveredItemIndex,
+}) => {
   const formatTime = (hour) => {
     if (hour < 10) return `0${hour}:00`;
     if (hour >= 24) return "00:00";
@@ -9,7 +15,11 @@ const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
   };
 
   return (
-    <div className="schedule-card">
+    <div
+      className="schedule-card"
+      onMouseEnter={() => setHoveredItemIndex(index)}
+      onMouseLeave={() => setHoveredItemIndex(null)}
+    >
       <img
         src={item.imageURL}
         alt={item.name}
@@ -18,7 +28,7 @@ const ScheduleCard = ({ item, index, onUpdateDuration, onRemoveItem }) => {
       <div className="schedule-card-details">
         <strong>{item.name}</strong>
         <div>
-          {item.reviews} 리뷰 / ⭐ {item.rating}
+          {item.visitorReviews} 리뷰 / ⭐ {item.rate}
         </div>
       </div>
       <div className="schedule-card-time">
