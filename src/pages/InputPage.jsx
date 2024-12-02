@@ -127,7 +127,7 @@ const InputPage = () => {
               return parseFloat(ratingMatch[1]).toFixed(1); // 유효한 별점 반환
             }
 
-            return "없음"; // 별점이 없을 경우 null 반환
+            return null; // 별점이 없을 경우 null 반환
           })(),
           latitude: parseFloat(decodedItem["위도"]) || 0.0,
           longitude: parseFloat(decodedItem["경도"]) || 0.0,

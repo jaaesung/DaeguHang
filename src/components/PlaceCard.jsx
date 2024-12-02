@@ -16,8 +16,6 @@ const PlaceCard = ({
 }) => {
   const [placeDetails, setPlaceDetails] = useState(null); // API로 받은 상세 정보
   const [placeType, setPlaceType] = useState(""); // placeType을 내부 상태로만 관리
-  const [isRemoving, setIsRemoving] = useState(false);
-  // 콘솔 로그 추가: props로 전달된 데이터 확인
   useEffect(() => {
     console.log("PlaceCard Props:", {
       imageURL,
@@ -81,10 +79,6 @@ const PlaceCard = ({
       searchUrl,
       placeId,
     };
-    setIsRemoving(true); // removing 클래스 추가
-    setTimeout(() => {
-      onAddToPlan(); // 부모 컴포넌트에서 카드 제거
-    }, 300);
     console.log("Adding place to plan:", placeData); // 일정에 추가되는 데이터 로그
     onAddToPlan(placeData);
   };
@@ -98,7 +92,7 @@ const PlaceCard = ({
         </h4>
         <p className="place-card-reviews">{blogReviews} 블로그 리뷰</p>
         <p className="place-card-reviews">{visitorReviews} 방문자 리뷰</p>
-        <p className="place-card-rating">⭐ {rate}</p>
+        <p className="place-card-rating">⭐ {rate !== null ? rate : "없음"}</p>
         {placeType && <p className="place-card-type">유형: {placeType}</p>}{" "}
         {/* 장소 유형 추가 */}
       </div>

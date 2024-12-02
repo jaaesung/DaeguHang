@@ -2,6 +2,7 @@
   width: 280px;
   height: 400px;
   background-color: #ffffff;
+  border: 1px solid rgba(202, 202, 202, 0.753);
   border-radius: 16px;
   overflow: hidden;
   text-align: center;

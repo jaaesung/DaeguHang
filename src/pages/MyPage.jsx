@@ -197,18 +197,6 @@ const Mypage = () => {
           <section className="mypage-plans-section">
             <h3 className="plans-title">내 계획</h3>
             <div className="plans-carousel-wrapper">
-              <button
-                className="scroll-button left"
-                onClick={() =>
-                  scrollRef.current?.scrollBy({
-                    left: -300,
-                    behavior: "smooth",
-                  })
-                }
-              >
-                ◀
-              </button>
-
               <div className="plans-carousel" ref={scrollRef}>
                 {myPlans.length > 0 ? (
                   myPlans.map((plan) => (

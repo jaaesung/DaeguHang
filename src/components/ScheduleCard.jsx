@@ -15,11 +15,7 @@ const ScheduleCard = ({
   };
 
   return (
-    <div
-      className="schedule-card"
-      onMouseEnter={() => setHoveredItemIndex(index)}
-      onMouseLeave={() => setHoveredItemIndex(null)}
-    >
+    <div className="schedule-card">
       <img
         src={item.imageURL}
         alt={item.name}
