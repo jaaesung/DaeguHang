@@ -19,7 +19,10 @@ AI : https://github.com/Jkwange/daeguhaeng_recommend_AI
 프로그램 실행 전 아래 프로그램을 설치해주세요.
 
 • Node.js (https://nodejs.org/en/download/package-manager)
+• 주의사항
+   1. Linux nvm 형식으로 설치 시 터미널에서 ```sudo apt install curl ```, ```curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash``` 명령어 실행
 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
 ## **실행 방법**
 
 1. 해당 Repository의 URL을 복사한다.
