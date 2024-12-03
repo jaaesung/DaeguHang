@@ -27,10 +27,14 @@ AI : https://github.com/Jkwange/daeguhaeng_recommend_AI
 ## **실행 방법**
 
 1. 해당 Repository의 URL을 복사한다.
-2. git bash를 열어 해당 Repositor를 clone한다.\
+
+2. git bash를 열어 해당 Repositor를 clone한다.
 ```git clone -b yoonagi1210 --single-branch https://github.com/jaaesung/DaeguHang/```
+
 3. 해당 디렉토리에 접속하여 ```npm install``` 명령어를 입력하여 Node.js의 패키지 매니저인 npm(Node Package Manager)을 사용하여 필요한 패키지와 의존성을 설치한다.
+   
 4. 패키지 설치가 완료되면 ```npm run dev``` 명령어를 입력하여 프로젝트를 실행한다.
+   
 5. 프로젝트가 성공적으로 실행되었는지 확인한다.
 
 
