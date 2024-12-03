@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import "./Mainpage.css";
+import "./MainPage.css";
 
 const rotatingWords = ["선택", "친구", "도움", "계획"]; // 전환되는 단어 목록
 

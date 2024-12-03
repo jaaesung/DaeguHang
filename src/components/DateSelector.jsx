@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import "./popup.css";
+import "./Popup.css";
 
 const DateSelector = ({ onDateSelect, onNext }) => {
   const [dateRange, setDateRange] = useState([
